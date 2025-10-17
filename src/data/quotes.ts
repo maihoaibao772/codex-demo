@@ -1,0 +1,17 @@
+export const quotes = [
+  'Dreams are rehearsals for realities that haven\'t agreed to exist yet.',
+  'I build constellations out of glitches and call it progress.',
+  'Some doors open inward, some open sideways into fourth dimensions.',
+  'Chaos is a palette if you squint with your imagination.',
+  'We are all just frequencies pretending to be solid.',
+  'Design is the echo of future memories.',
+  'My favorite medium is impossible deadlines met gracefully.',
+  'Every pixel is a whisper from a parallel possibility.',
+  'Gravity is a recommendation, not a rule, in this studio.',
+  'Today I sculpted silence into a neon cathedral.',
+  'I choreograph photons until they hum in perfect gradients.',
+  'Innovation tastes like midnight coffee and unfamiliar synth chords.',
+  'Perfection is boring; give me shimmering anomalies instead.',
+  'I remix stardust with debugging logs for breakfast.',
+  'Reality is a prototype—my job is to keep iterating.',
+];
