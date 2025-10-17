@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light dark;
+}
+
+body {
+  font-family: 'Be Vietnam Pro', theme('fontFamily.sans');
+  min-height: 100vh;
+  background: linear-gradient(180deg, rgba(244, 247, 251, 1) 0%, rgba(229, 231, 235, 0.6) 100%);
+}
+
+.dark body {
+  background: radial-gradient(circle at top, rgba(30, 41, 59, 0.9), rgba(2, 6, 23, 1));
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(79, 70, 229, 0.4);
+  border-radius: 9999px;
+}
