@@ -15,7 +15,7 @@ Visit the local URL printed in the terminal (usually http://localhost:5173) to e
 
 - **Home** – Neon introduction, tagline, and quick jumps into the experience.
 - **Ảnh để đời 📸** – Responsive glassmorphism gallery with hover motion.
-- **Story Mode ⏳** – Timeline-driven scroll story with parallax gradients and cinematic copy.
+- **Story Mode ⏳** – Timeline-driven yearly cards with smooth transitions into detailed monthly stories.
 
 ## Customize the Gallery & Story
 
@@ -26,8 +26,14 @@ Visit the local URL printed in the terminal (usually http://localhost:5173) to e
 
 ### Story Mode
 1. Open `src/pages/Story.tsx`.
-2. Update the `timeline` array with your own `year`, `description`, and `image` values.
+2. Update the `timeline` array with your own `year`, `description`, `image`, and `note` values.
 3. Tailor the descriptive paragraph inside each timeline card to match your narrative.
+4. Dive into per-year details inside `src/pages/StoryYear.tsx` to curate monthly entries with custom photos and notes.
+
+### Story Expansion + Mobile Fix
+- Story Mode now routes to `/story/:year`, revealing month-by-month imagery and captions for each highlighted year.
+- Mobile typography auto-wraps with the new Outfit font, ensuring long captions and neon copy stay inside the viewport.
+- Global containers enforce `overflow-x-hidden` and responsive spacing so galleries, stories, and toggles remain thumb-friendly on 360px screens.
 
 ## Cinematic Layers & Toggles
 

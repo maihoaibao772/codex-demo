@@ -22,13 +22,13 @@ const cardVariants = {
 
 export function PicturePage() {
   return (
-    <section className="relative mx-auto flex w-full max-w-6xl flex-col gap-10 px-6 pt-28 pb-24">
+    <section className="relative mx-auto flex w-full max-w-6xl flex-col gap-10 pt-28 pb-24">
       <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: 'easeOut' }}
-          className="text-4xl font-semibold tracking-[0.3em] text-neon-cyan sm:text-5xl"
+          className="text-3xl font-semibold tracking-[0.3em] text-neon-cyan sm:text-4xl"
         >
           Ảnh để đời 📸
         </motion.h1>
@@ -42,7 +42,7 @@ export function PicturePage() {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
-        className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+        className="grid gap-6 sm:grid-cols-2 md:gap-8 lg:grid-cols-3"
       >
         {images.map((src, index) => (
           <motion.article
@@ -61,8 +61,8 @@ export function PicturePage() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
             </div>
-            <div className="flex items-center justify-between px-5 py-4 text-sm uppercase tracking-[0.3em] text-white/60">
-              <span>demo image</span>
+            <div className="flex items-center justify-between px-5 py-4 text-xs uppercase tracking-[0.3em] text-white/60 sm:text-sm">
+              <span className="break-words text-center">demo image</span>
               <motion.span
                 initial={{ opacity: 0, x: -10 }}
                 whileInView={{ opacity: 1, x: 0 }}

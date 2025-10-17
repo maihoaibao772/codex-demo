@@ -4,6 +4,9 @@ const config: Config = {
   darkMode: 'class',
   content: ['./index.html', './src/**/*.{ts,tsx,js,jsx}'],
   theme: {
+    fontFamily: {
+      sans: ['Outfit', 'sans-serif'],
+    },
     extend: {
       colors: {
         background: '#0a0a0a',
@@ -12,9 +15,6 @@ const config: Config = {
           purple: '#9b5bff',
           magenta: '#ff1f8f',
         },
-      },
-      fontFamily: {
-        sans: ['"Outfit"', '"Poppins"', 'sans-serif'],
       },
       backgroundImage: {
         'gradient-hue': 'linear-gradient(120deg, #0a0a0a, #0b0015, #100015)',

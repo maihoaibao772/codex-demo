@@ -22,20 +22,26 @@ const item = {
 
 export function HomePage() {
   return (
-    <div className="relative flex min-h-[calc(100vh-6rem)] flex-col items-center justify-center px-6 pt-24 text-center">
+    <div className="relative flex min-h-[calc(100vh-6rem)] flex-col items-center justify-center pt-24 text-center">
       <motion.div variants={container} initial="hidden" animate="show" className="space-y-6">
         <motion.p
           variants={item}
-          className="gradient-text text-5xl font-semibold tracking-[0.4em] uppercase md:text-6xl"
+          className="gradient-text text-4xl font-semibold tracking-[0.4em] uppercase sm:text-5xl lg:text-6xl"
         >
           mahiiruu_
         </motion.p>
-        <motion.div variants={item} className="space-y-2 text-lg text-white/70 md:text-xl">
+        <motion.div
+          variants={item}
+          className="space-y-2 break-words px-2 text-sm leading-relaxed text-white/70 sm:px-4 sm:text-base lg:text-lg"
+        >
           <p>“An artistic space by Hoài Bảo”</p>
           <p>“Born 2006, from Thanh Hóa, now in Hồ Chí Minh.”</p>
           <p>“Do rảnh nên ngồi nghịch 😆”</p>
         </motion.div>
-        <motion.p variants={item} className="text-sm uppercase tracking-[0.5em] text-neon-cyan/70">
+        <motion.p
+          variants={item}
+          className="break-words px-2 text-xs uppercase tracking-[0.5em] text-neon-cyan/70 sm:px-4 sm:text-sm"
+        >
           contact: mahiiruu@demo.com
         </motion.p>
         <motion.div

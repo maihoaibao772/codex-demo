@@ -6,8 +6,15 @@
   color-scheme: dark;
 }
 
+html,
 body {
-  @apply bg-background text-white font-sans overflow-x-hidden;
+  overflow-x: hidden;
+  word-break: break-word;
+  max-width: 100%;
+}
+
+body {
+  @apply bg-background text-white font-sans;
 }
 
 a {

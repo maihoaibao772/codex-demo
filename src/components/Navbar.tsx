@@ -19,14 +19,14 @@ export function Navbar() {
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className="fixed left-0 top-0 z-50 w-full bg-gradient-to-b from-black/70 via-black/30 to-transparent px-6 py-4"
+      className="fixed left-0 top-0 z-50 w-full bg-gradient-to-b from-black/70 via-black/30 to-transparent px-4 py-4 sm:px-6"
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between">
-        <Link to="/" className="gradient-text text-2xl font-semibold tracking-widest">
+        <Link to="/" className="gradient-text text-xl font-semibold tracking-widest sm:text-2xl">
           mahiiruu_
         </Link>
         <LayoutGroup>
-          <div className="flex items-center gap-6 text-sm uppercase tracking-[0.3em] text-white/60">
+          <div className="flex flex-wrap items-center justify-end gap-3 text-[0.65rem] uppercase tracking-[0.3em] text-white/60 sm:gap-6 sm:text-xs md:text-sm">
             {navItems.map((item, index) => (
               <motion.div
                 key={item.path}

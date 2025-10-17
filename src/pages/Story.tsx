@@ -1,21 +1,25 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const timeline = [
   {
     year: '2023',
     description: 'The quiet beginning.',
     image: 'https://images.unsplash.com/photo-1526312426976-f4d754fa9bd6?auto=format&fit=crop&w=1200&q=80',
+    note: 'Khởi đầu nhẹ nhàng, nhịp thở đầu tiên của ánh sáng.',
   },
   {
     year: '2024',
     description: 'The storm of creation.',
     image: 'https://images.unsplash.com/photo-1474433188271-d3f339f41911?auto=format&fit=crop&w=1200&q=80',
+    note: 'Cơn bão sắc màu và âm thanh nhào nặn nên câu chuyện.',
   },
   {
     year: '2025',
     description: 'The light finds form.',
     image: 'https://images.unsplash.com/photo-1470770903676-69b98201ea1c?auto=format&fit=crop&w=1200&q=80',
+    note: 'Nguồn sáng kết tinh, đường nét trở nên rõ ràng.',
   },
 ];
 
@@ -25,98 +29,80 @@ export function StoryPage() {
     target: containerRef,
     offset: ['start start', 'end end'],
   });
+  const navigate = useNavigate();
 
   const hueFilter = useTransform(scrollYProgress, [0, 1], ['hue-rotate(0deg)', 'hue-rotate(45deg)']);
   const gradientOpacity = useTransform(scrollYProgress, [0, 1], [0.4, 0.8]);
 
   return (
-    <section ref={containerRef} className="relative mx-auto flex w-full max-w-6xl px-6 pt-28 pb-32">
+    <section
+      ref={containerRef}
+      className="relative mx-auto flex w-full max-w-6xl flex-col gap-14 pt-28 pb-32 md:flex-row"
+    >
       <motion.div
         style={{ filter: hueFilter, opacity: gradientOpacity }}
         className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,_rgba(0,245,255,0.25),_transparent_60%),radial-gradient(circle_at_bottom_right,_rgba(155,91,255,0.3),_transparent_55%)] blur-3xl"
       />
-      <div className="grid w-full gap-12 md:grid-cols-[200px_1fr]">
-        <div className="md:sticky md:top-32 md:h-[calc(100vh-8rem)]">
-          <motion.h2
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-4xl font-semibold tracking-[0.35em] text-neon-cyan"
+      <div className="md:sticky md:top-32 md:h-[calc(100vh-8rem)] md:w-64">
+        <motion.h2
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="text-3xl font-semibold tracking-[0.35em] text-neon-cyan sm:text-4xl"
+        >
+          Story Mode ⏳
+        </motion.h2>
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.85 }}
+          transition={{ delay: 0.4, duration: 0.8 }}
+          className="mt-4 break-words px-2 text-center text-xs uppercase tracking-[0.4em] text-white/60 sm:px-4 sm:text-sm md:text-left"
+        >
+          Chạm để mở từng năm và lắng nghe câu chuyện.
+        </motion.p>
+        <motion.div
+          className="mt-10 hidden h-64 w-[3px] bg-gradient-to-b from-neon-cyan via-neon-magenta to-neon-purple md:block"
+          initial={{ scaleY: 0 }}
+          animate={{ scaleY: 1 }}
+          transition={{ duration: 1.2, ease: 'easeInOut' }}
+        />
+      </div>
+      <div className="flex-1 space-y-10">
+        {timeline.map((entry, index) => (
+          <motion.button
+            key={entry.year}
+            type="button"
+            onClick={() => navigate(`/story/${entry.year}`)}
+            initial={{ opacity: 0, y: 60 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.25 }}
+            transition={{ duration: 0.9, delay: index * 0.15, ease: [0.33, 1, 0.68, 1] }}
+            className="group relative flex w-full overflow-hidden rounded-3xl border border-white/10 text-left shadow-2xl transition-transform focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan"
+            aria-label={`Open story for ${entry.year}`}
           >
-            Story Mode ⏳
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.8 }}
-            transition={{ delay: 0.4, duration: 0.8 }}
-            className="mt-6 text-sm uppercase tracking-[0.4em] text-white/50"
-          >
-            Scroll to travel time
-          </motion.p>
-          <motion.div
-            className="mt-12 hidden h-64 w-[3px] bg-gradient-to-b from-neon-cyan via-neon-magenta to-neon-purple md:block"
-            initial={{ scaleY: 0 }}
-            animate={{ scaleY: 1 }}
-            transition={{ duration: 1.2, ease: 'easeInOut' }}
-          />
-        </div>
-        <div className="space-y-24">
-          {timeline.map((entry, index) => (
-            <motion.article
-              key={entry.year}
-              initial={{ opacity: 0, y: 60 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.9, delay: index * 0.15, ease: [0.33, 1, 0.68, 1] }}
-              className="glass-panel overflow-hidden rounded-3xl border border-white/10 shadow-2xl"
+            <motion.div
+              layout
+              className="absolute inset-0"
+              whileHover={{ scale: 1.05 }}
+              transition={{ duration: 1.2, ease: 'easeOut' }}
             >
-              <div className="grid gap-0 md:grid-cols-[1.2fr_1fr]">
-                <div className="p-8">
-                  <motion.span
-                    className="text-sm uppercase tracking-[0.5em] text-neon-magenta"
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true, amount: 0.5 }}
-                    transition={{ duration: 0.7, delay: 0.2 }}
-                  >
-                    {entry.year}
-                  </motion.span>
-                  <motion.h3
-                    className="mt-4 text-3xl font-semibold text-white"
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, amount: 0.5 }}
-                    transition={{ duration: 0.7, delay: 0.3 }}
-                  >
-                    {entry.description}
-                  </motion.h3>
-                  <motion.p
-                    className="mt-6 text-base leading-relaxed text-white/70"
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, amount: 0.5 }}
-                    transition={{ duration: 0.7, delay: 0.4 }}
-                  >
-                    A cinematic recollection of the creative pulse. Colors hummed in the dark, pixels
-                    whispered possibilities, and neon dreams took shape beneath midnight skies.
-                  </motion.p>
-                </div>
-                <div className="relative h-72 overflow-hidden">
-                  <motion.img
-                    src={entry.image}
-                    alt={`${entry.year} story frame`}
-                    className="h-full w-full object-cover"
-                    initial={{ scale: 1.1 }}
-                    whileInView={{ scale: 1 }}
-                    viewport={{ once: true, amount: 0.5 }}
-                    transition={{ duration: 1.2, ease: 'easeOut' }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
-                </div>
+              <img src={entry.image} alt={`${entry.year} background`} className="h-full w-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-black/60 to-transparent" />
+            </motion.div>
+            <div className="relative z-10 flex w-full flex-col gap-4 px-6 py-10 sm:flex-row sm:items-center sm:justify-between sm:px-10">
+              <div className="flex flex-col items-center gap-2 text-center sm:items-start sm:text-left">
+                <span className="text-xs font-semibold uppercase tracking-[0.5em] text-neon-magenta sm:text-sm">
+                  {entry.year}
+                </span>
+                <h3 className="break-words text-2xl font-semibold text-white sm:text-3xl">{entry.description}</h3>
               </div>
-            </motion.article>
-          ))}
-        </div>
+              <p className="break-words px-2 text-sm leading-relaxed text-white/80 transition-colors duration-300 group-hover:text-white sm:px-4 sm:text-base">
+                {entry.note}
+              </p>
+              <span className="text-2xl text-neon-cyan transition-transform duration-300 group-hover:translate-x-2">↗</span>
+            </div>
+          </motion.button>
+        ))}
       </div>
     </section>
   );

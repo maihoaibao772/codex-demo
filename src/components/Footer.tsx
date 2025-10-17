@@ -15,13 +15,13 @@ export function Footer({ showFX, toggleFX, showWave, toggleWave }: FooterProps) 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.8, duration: 0.6 }}
-      className="relative z-30 border-t border-white/10 bg-black/40 px-6 py-6 backdrop-blur"
+      className="relative z-30 border-t border-white/10 bg-black/40 px-4 py-6 backdrop-blur sm:px-6"
     >
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <p className="text-sm tracking-[0.4em] text-white/50">
+        <p className="break-words text-center text-xs tracking-[0.3em] text-white/50 sm:text-sm md:text-left">
           © mahiiruu_ 2025 | crafted in chaos.
         </p>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center justify-center gap-3 md:justify-end">
           <Button
             type="button"
             variant={showFX ? 'default' : 'outline'}

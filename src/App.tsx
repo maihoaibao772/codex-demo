@@ -8,11 +8,12 @@ import { MusicWave } from './components/MusicWave';
 import { HomePage } from './pages/Home';
 import { PicturePage } from './pages/Picture';
 import { StoryPage } from './pages/Story';
+import { StoryYearPage } from './pages/StoryYear';
 
 function PageWrapper({ children }: { children: ReactNode }) {
   return (
     <motion.main
-      className="flex-1"
+      className="flex-1 w-full min-h-full overflow-x-hidden break-words px-4 sm:px-8"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
@@ -29,7 +30,7 @@ export default function App() {
   const [showWave, setShowWave] = useState(true);
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-background text-white">
+    <div className="relative w-full min-h-screen overflow-hidden bg-background font-sans text-white">
       {showFX && <BackgroundFX />}
       <div className="relative z-10 flex min-h-screen flex-col">
         <Navbar />
@@ -39,6 +40,7 @@ export default function App() {
               <Route path="/" element={<HomePage />} />
               <Route path="/picture" element={<PicturePage />} />
               <Route path="/story" element={<StoryPage />} />
+              <Route path="/story/:year" element={<StoryYearPage />} />
             </Routes>
           </PageWrapper>
         </AnimatePresence>
