@@ -382,21 +382,202 @@
       display: flex;
     }
     .modal {
-      background: var(--card);
-      width: min(480px, 100%);
-      border-radius: 24px;
-      padding: 24px;
-      box-shadow: var(--shadow);
+      position: relative;
+      background: color-mix(in srgb, var(--card) 92%, transparent);
+      width: min(620px, 100%);
+      border-radius: 28px;
+      padding: clamp(20px, 4vw, 32px);
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+      border: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
+      overflow: hidden;
+    }
+    .modal::before,
+    .modal::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.25;
+      pointer-events: none;
+    }
+    .modal::before {
+      width: 320px;
+      height: 320px;
+      right: -120px;
+      top: -160px;
+      background: radial-gradient(circle at center, var(--accent), transparent 70%);
+    }
+    .modal::after {
+      width: 260px;
+      height: 260px;
+      left: -110px;
+      bottom: -140px;
+      background: radial-gradient(circle at center, var(--brand), transparent 70%);
+    }
+    .auth-layout {
+      position: relative;
       display: grid;
-      gap: 16px;
-      border: 1px solid var(--border);
+      grid-template-columns: minmax(0, 1fr);
+      gap: 24px;
+      z-index: 1;
+    }
+    @media (min-width: 720px) {
+      .auth-layout {
+        grid-template-columns: 0.9fr 1fr;
+        align-items: stretch;
+      }
+    }
+    .auth-hero {
+      background: linear-gradient(160deg,
+          color-mix(in srgb, var(--accent) 60%, transparent),
+          color-mix(in srgb, var(--brand) 70%, transparent));
+      border-radius: 20px;
+      padding: clamp(18px, 3vw, 26px);
+      color: var(--bg);
+      display: grid;
+      gap: 12px;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+    }
+    :root.light .auth-hero {
+      color: var(--ink);
+      box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.16);
+    }
+    .auth-hero h3 {
+      margin: 0;
+      font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+      line-height: 1.25;
+    }
+    .auth-hero p {
+      margin: 0;
+      font-size: 0.95rem;
+      opacity: 0.9;
+    }
+    .auth-art {
+      display: grid;
+      place-items: center;
+      background: rgba(255, 255, 255, 0.16);
+      color: var(--bg);
+      border-radius: 18px;
+      padding: 16px;
+      font-size: clamp(1.4rem, 4vw, 1.8rem);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-align: center;
+      line-height: 1.3;
+    }
+    .auth-art span {
+      display: block;
+    }
+    :root.light .auth-art {
+      color: var(--accent);
+      background: rgba(37, 99, 235, 0.12);
+    }
+    .auth-panel {
+      background: color-mix(in srgb, var(--bg) 20%, transparent);
+      border-radius: 20px;
+      padding: clamp(18px, 3vw, 26px);
+      display: grid;
+      gap: 20px;
+      box-shadow: inset 0 0 0 1px var(--border);
+    }
+    :root.light .auth-panel {
+      background: color-mix(in srgb, var(--card) 92%, transparent);
     }
     .tabs {
       display: flex;
       gap: 8px;
+      background: color-mix(in srgb, var(--card) 70%, transparent);
+      padding: 6px;
+      border-radius: 16px;
+      border: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
     }
     .tabs button {
       flex: 1;
+    }
+    .auth-forms {
+      display: grid;
+      gap: 20px;
+    }
+    .auth-form {
+      display: grid;
+      gap: 16px;
+    }
+    .auth-form label {
+      display: grid;
+      gap: 6px;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+    .auth-form input[type="text"],
+    .auth-form input[type="password"] {
+      width: 100%;
+      border-radius: 14px;
+      padding: 12px 16px;
+      border: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
+      background: color-mix(in srgb, var(--card) 82%, transparent);
+      color: var(--ink);
+      font-size: 1rem;
+      transition: border 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+    .auth-form input[type="text"]:focus,
+    .auth-form input[type="password"]:focus {
+      outline: none;
+      border-color: color-mix(in srgb, var(--accent) 60%, transparent);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent);
+      background: color-mix(in srgb, var(--card) 92%, transparent);
+    }
+    .auth-form button.primary {
+      width: 100%;
+      padding-block: 12px;
+      font-size: 1rem;
+    }
+    .auth-form .remember {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 500;
+      background: color-mix(in srgb, var(--chip) 80%, transparent);
+      padding: 8px 12px;
+      border-radius: 12px;
+      cursor: pointer;
+      width: fit-content;
+    }
+    .auth-form .remember input {
+      accent-color: var(--accent);
+      width: 18px;
+      height: 18px;
+    }
+    #authFeedback {
+      justify-self: center;
+      font-weight: 600;
+      text-align: center;
+      min-height: 36px;
+    }
+    .auth-perks {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 8px;
+    }
+    .auth-perks li {
+      background: rgba(255, 255, 255, 0.18);
+      color: var(--bg);
+      padding: 8px 12px;
+      border-radius: 12px;
+      font-size: 0.92rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    :root.light .auth-perks li {
+      background: rgba(37, 99, 235, 0.12);
+      color: var(--ink);
+    }
+    .auth-progress {
+      height: 4px;
+      width: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent), var(--brand));
     }
     .hidden {
       display: none !important;
@@ -591,24 +772,52 @@
 
   <div class="modal-backdrop" id="authModal">
     <div class="modal">
-      <div class="tabs">
-        <button id="tabLogin" class="primary">Đăng nhập</button>
-        <button id="tabSignup" class="ghost">Đăng ký</button>
-      </div>
-      <div id="authForms">
-        <div id="loginForm">
-          <label>Tên đăng nhập<input id="loginUser" type="text" autocomplete="username" /></label>
-          <label>Mật khẩu<input id="loginPass" type="password" autocomplete="current-password" /></label>
-          <label class="chip" style="cursor:pointer;"><input type="checkbox" id="rememberMe" /> Nhớ tôi</label>
-          <button id="loginSubmit" class="primary">Đăng nhập</button>
+      <div class="auth-layout">
+        <aside class="auth-hero">
+          <div class="auth-art">
+            <span>你&nbsp;好</span>
+            <span>越 ⇄ 中</span>
+          </div>
+          <h3>Gia nhập lớp Học Trung ⇄ Việt</h3>
+          <p>Đăng nhập để lưu điểm, ôn sai và tiếp tục hành trình học gọn nhẹ mọi lúc mọi nơi.</p>
+          <ul class="auth-perks">
+            <li>📝 Đồng bộ tiến độ ôn tập</li>
+            <li>⚡ Luyện lại câu sai nhanh</li>
+            <li>🌗 Ghi nhớ Dark/Light & phiên</li>
+          </ul>
+        </aside>
+        <div class="auth-panel">
+          <div class="tabs">
+            <button id="tabLogin" class="primary">Đăng nhập</button>
+            <button id="tabSignup" class="ghost">Đăng ký</button>
+          </div>
+          <div id="authForms" class="auth-forms">
+            <div id="loginForm" class="auth-form">
+              <label for="loginUser">Tên đăng nhập
+                <input id="loginUser" type="text" autocomplete="username" />
+              </label>
+              <label for="loginPass">Mật khẩu
+                <input id="loginPass" type="password" autocomplete="current-password" />
+              </label>
+              <label class="remember" for="rememberMe">
+                <input type="checkbox" id="rememberMe" /> Nhớ tôi trên thiết bị này
+              </label>
+              <button id="loginSubmit" class="primary">Đăng nhập</button>
+            </div>
+            <div id="signupForm" class="auth-form hidden">
+              <label for="signupUser">Tên đăng nhập
+                <input id="signupUser" type="text" autocomplete="username" />
+              </label>
+              <label for="signupPass">Mật khẩu (≥6 ký tự)
+                <input id="signupPass" type="password" autocomplete="new-password" />
+              </label>
+              <button id="signupSubmit" class="primary">Đăng ký</button>
+            </div>
+          </div>
+          <div id="authFeedback" class="chip"></div>
+          <div class="auth-progress"></div>
         </div>
-        <div id="signupForm" class="hidden">
-          <label>Tên đăng nhập<input id="signupUser" type="text" autocomplete="username" /></label>
-          <label>Mật khẩu (≥6 ký tự)<input id="signupPass" type="password" autocomplete="new-password" /></label>
-          <button id="signupSubmit" class="primary">Đăng ký</button>
-        </div>
       </div>
-      <div id="authFeedback" class="chip"></div>
     </div>
   </div>
 
