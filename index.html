@@ -474,10 +474,10 @@
     .accordion-item .body {
       max-height: 0;
       overflow: hidden;
-      transition: max-height 0.3s ease;
+      transition: max-height 0.35s ease;
+      padding: 0 16px;
     }
     .accordion-item.open .body {
-      max-height: 600px;
       padding: 16px;
     }
     .data-grid {
@@ -1932,6 +1932,28 @@
     const sentenceList = document.getElementById('sentenceList');
     const toggleBankPinyin = document.getElementById('toggleBankPinyin');
     const accordionToggle = document.getElementById('accordionToggle');
+    let accordState = {};
+
+    function applyAccordionState(item, open) {
+      const body = item.querySelector('.body');
+      item.classList.toggle('open', open);
+      if (open) {
+        body.style.maxHeight = body.scrollHeight + 'px';
+      } else {
+        body.style.maxHeight = '0px';
+      }
+    }
+
+    function updateAccordionHeights() {
+      document.querySelectorAll('.accordion-item').forEach(item => {
+        const body = item.querySelector('.body');
+        if (item.classList.contains('open')) {
+          body.style.maxHeight = body.scrollHeight + 'px';
+        } else {
+          body.style.maxHeight = '0px';
+        }
+      });
+    }
 
     function renderBank() {
       vocabList.innerHTML = '';
@@ -1949,6 +1971,7 @@
         row.innerHTML = `<div><strong>${idx + 1}. ${item.han}</strong><div class="sentence-meta">${pinyinSpan}<span>${item.vi}</span></div></div>`;
         sentenceList.appendChild(row);
       });
+      requestAnimationFrame(updateAccordionHeights);
     }
 
     toggleBankPinyin.addEventListener('change', () => {
@@ -1959,31 +1982,44 @@
     function restoreBankSettings() {
       const show = localStorage.getItem(STORAGE_KEYS.bankShowPinyin) === 'true';
       toggleBankPinyin.checked = show;
-      const accordState = JSON.parse(localStorage.getItem(STORAGE_KEYS.bankAccords) || '{}');
-      document.querySelectorAll('.accordion-item').forEach(item => {
+      const storedAccords = localStorage.getItem(STORAGE_KEYS.bankAccords);
+      accordState = storedAccords ? JSON.parse(storedAccords) : {};
+      const items = document.querySelectorAll('.accordion-item');
+      items.forEach(item => {
         const key = item.dataset.accord;
-        if (accordState[key]) {
-          item.classList.add('open');
-        }
         const header = item.querySelector('header');
         header.addEventListener('click', () => {
-          item.classList.toggle('open');
-          accordState[key] = item.classList.contains('open');
+          const nextState = !item.classList.contains('open');
+          applyAccordionState(item, nextState);
+          accordState[key] = nextState;
           localStorage.setItem(STORAGE_KEYS.bankAccords, JSON.stringify(accordState));
+          requestAnimationFrame(updateAccordionHeights);
         });
       });
       renderBank();
+      requestAnimationFrame(() => {
+        items.forEach(item => {
+          const key = item.dataset.accord;
+          const shouldOpen = accordState[key] !== undefined ? accordState[key] : true;
+          applyAccordionState(item, shouldOpen);
+        });
+        updateAccordionHeights();
+      });
     }
 
     accordionToggle.addEventListener('click', () => {
       const items = document.querySelectorAll('.accordion-item');
       const shouldOpen = Array.from(items).some(item => !item.classList.contains('open'));
-      const accordState = {};
       items.forEach(item => {
-        item.classList.toggle('open', shouldOpen);
+        applyAccordionState(item, shouldOpen);
         accordState[item.dataset.accord] = shouldOpen;
       });
       localStorage.setItem(STORAGE_KEYS.bankAccords, JSON.stringify(accordState));
+      requestAnimationFrame(updateAccordionHeights);
+    });
+
+    window.addEventListener('resize', () => {
+      requestAnimationFrame(updateAccordionHeights);
     });
 
     // UTILITIES
