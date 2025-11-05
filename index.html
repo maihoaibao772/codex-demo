@@ -816,6 +816,14 @@
     .account-option h4 {
       margin: 0 0 8px 0;
     }
+    .coin-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: color-mix(in srgb, var(--accent) 12%, transparent);
+      color: var(--accent);
+      font-weight: 600;
+    }
     .avatar-options,
     .frame-options {
       display: flex;
@@ -860,6 +868,148 @@
     .account-leaderboard {
       display: grid;
       gap: 16px;
+    }
+    .account-store {
+      display: grid;
+      gap: 16px;
+    }
+    .store-head {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .store-grid {
+      display: grid;
+      gap: 12px;
+    }
+    @media (min-width: 720px) {
+      .store-grid {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      }
+    }
+    .store-item {
+      border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+      border-radius: 20px;
+      padding: 16px;
+      display: grid;
+      gap: 10px;
+      background: color-mix(in srgb, var(--chip) 75%, transparent);
+      position: relative;
+      overflow: hidden;
+    }
+    .store-item h4 {
+      margin: 0;
+      font-size: 1rem;
+    }
+    .store-preview {
+      display: grid;
+      place-items: center;
+      height: 120px;
+      border-radius: 16px;
+      background: color-mix(in srgb, var(--bg) 82%, transparent);
+      position: relative;
+      box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--border) 50%, transparent);
+    }
+    .avatar-emoji {
+      display: inline-block;
+    }
+    .store-preview .avatar-emoji {
+      font-size: 2.4rem;
+      display: grid;
+      place-items: center;
+      width: 72px;
+      height: 72px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, rgba(77,163,255,0.2), rgba(154,230,180,0.25));
+      box-shadow: 0 12px 24px rgba(0,0,0,0.25);
+      border: 3px solid color-mix(in srgb, var(--accent) 35%, transparent);
+    }
+    .store-preview .frame-ring {
+      width: 92px;
+      height: 92px;
+      border-radius: 28px;
+      border: 4px solid rgba(231,236,247,0.35);
+      position: relative;
+      display: grid;
+      place-items: center;
+      box-shadow: 0 18px 38px rgba(0,0,0,0.25);
+      background: linear-gradient(135deg, rgba(77,163,255,0.18), rgba(11,18,32,0.65));
+      overflow: hidden;
+    }
+    .store-preview .frame-ring::after {
+      content: '';
+      position: absolute;
+      inset: -30%;
+      background: conic-gradient(from 0deg, rgba(77,163,255,0.45), rgba(154,230,180,0.35), rgba(77,163,255,0.45));
+      filter: blur(12px);
+      opacity: 0.65;
+      animation: frameGlow 4s linear infinite;
+    }
+    .store-price {
+      font-weight: 600;
+      color: var(--accent);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .store-item button {
+      justify-self: start;
+    }
+    .store-item .owned-label {
+      font-weight: 600;
+      color: var(--ok);
+    }
+    .store-item.locked {
+      opacity: 0.75;
+    }
+    .store-item.locked .store-preview {
+      filter: grayscale(0.2) saturate(0.85);
+    }
+    .store-item.locked .store-price {
+      color: var(--muted);
+    }
+    .store-feedback {
+      min-height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+    }
+    .avatar-emoji[data-anim="float"] {
+      animation: float 3.6s ease-in-out infinite;
+    }
+    .avatar-emoji[data-anim="pulse"] {
+      animation: pulse 2.8s ease-in-out infinite;
+    }
+    .avatar-emoji[data-anim="twist"] {
+      animation: twist 4.6s ease-in-out infinite;
+    }
+    .avatar-emoji[data-anim="spark"] {
+      animation: spark 3s ease-in-out infinite;
+      text-shadow: 0 0 12px rgba(77,163,255,0.65);
+    }
+    @keyframes frameGlow {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+    @keyframes twist {
+      0% { transform: rotate(-4deg); }
+      50% { transform: rotate(4deg); }
+      100% { transform: rotate(-4deg); }
+    }
+    @keyframes spark {
+      0%, 100% { transform: translateY(0) scale(1); opacity: 0.9; }
+      50% { transform: translateY(-6px) scale(1.05); opacity: 1; }
     }
     .leaderboard {
       list-style: none;
@@ -1172,6 +1322,26 @@
       display: grid;
       gap: 16px;
     }
+    .auth-note {
+      background: color-mix(in srgb, var(--chip) 85%, transparent);
+      border-radius: 16px;
+      padding: 16px 18px;
+      display: grid;
+      gap: 10px;
+      font-size: 0.95rem;
+    }
+    .auth-note strong {
+      color: var(--accent);
+    }
+    .auth-accounts {
+      margin: 0;
+      padding-left: 18px;
+      display: grid;
+      gap: 6px;
+    }
+    .auth-accounts li {
+      font-weight: 600;
+    }
     .auth-form label {
       display: grid;
       gap: 6px;
@@ -1286,7 +1456,6 @@
         <button class="ghost" data-route="faq">FAQ</button>
         <button class="primary" data-route="app">Vào học</button>
         <button id="themeToggle" class="ghost" aria-label="Đổi theme">Dark · Light</button>
-        <button id="signupBtn" class="ghost">Đăng ký</button>
         <button id="loginBtn" class="ghost">Đăng nhập</button>
         <button id="userBadge" class="chip chip-button hidden" type="button" data-route="account" aria-label="Hồ sơ tài khoản">
           <span class="avatar-circle" id="userAvatarBadge" aria-hidden="true">🐼</span>
@@ -1608,11 +1777,12 @@
         <div class="card account-overview">
           <div class="account-heading">
             <div class="account-avatar" id="accountAvatarFrame">
-              <span id="accountAvatar">🐼</span>
+              <span id="accountAvatar" class="avatar-emoji">🐼</span>
             </div>
             <div>
               <h2 id="accountDisplayName">Tài khoản của bạn</h2>
               <p class="muted" id="accountSince">Tham gia từ hôm nay</p>
+              <span class="chip coin-chip">💰 Xu: <span id="accountCoins">0</span></span>
             </div>
           </div>
           <div class="account-form-grid">
@@ -1631,6 +1801,22 @@
             </div>
           </div>
           <span id="accountProfileFeedback" class="chip"></span>
+        </div>
+        <div class="card account-store">
+          <div class="store-head">
+            <h3>Cửa hàng khung & avatar</h3>
+            <span class="chip coin-chip">💰 Xu: <span id="storeCoins">0</span></span>
+          </div>
+          <p class="muted">Mua khung phong cách Steam và avatar động bằng xu tích luỹ khi luyện tập để cá nhân hoá hồ sơ.</p>
+          <div class="account-option">
+            <h4>Avatar động</h4>
+            <div class="store-grid" id="storeAvatarList"></div>
+          </div>
+          <div class="account-option">
+            <h4>Khung viền đặc biệt</h4>
+            <div class="store-grid" id="storeFrameList"></div>
+          </div>
+          <span id="storeFeedback" class="chip store-feedback"></span>
         </div>
         <div class="card account-security">
           <h3>Bảo mật</h3>
@@ -1673,8 +1859,7 @@
         </aside>
         <div class="auth-panel">
           <div class="tabs">
-            <button id="tabLogin" class="primary">Đăng nhập</button>
-            <button id="tabSignup" class="ghost">Đăng ký</button>
+            <button id="tabLogin" class="primary" disabled>Đăng nhập</button>
           </div>
           <div id="authForms" class="auth-forms">
             <div id="loginForm" class="auth-form">
@@ -1689,14 +1874,13 @@
               </label>
               <button id="loginSubmit" class="primary">Đăng nhập</button>
             </div>
-            <div id="signupForm" class="auth-form hidden">
-              <label for="signupUser">Tên đăng nhập
-                <input id="signupUser" type="text" autocomplete="username" />
-              </label>
-              <label for="signupPass">Mật khẩu (≥6 ký tự)
-                <input id="signupPass" type="password" autocomplete="new-password" />
-              </label>
-              <button id="signupSubmit" class="primary">Đăng ký</button>
+            <div class="auth-note">
+              <p>Ứng dụng học chỉ mở cho tài khoản được Hoài Bảo cấp. Vui lòng dùng một trong hai thông tin dưới đây để đăng nhập.</p>
+              <ul class="auth-accounts">
+                <li><strong>TK:</strong> 243524 · <strong>MK:</strong> a1234bc</li>
+                <li><strong>TK:</strong> b1234 · <strong>MK:</strong> b1234cd</li>
+              </ul>
+              <p class="muted">Nếu cần thêm tài khoản, hãy liên hệ Hoài Bảo để được hỗ trợ.</p>
             </div>
           </div>
           <div id="authFeedback" class="chip"></div>
@@ -1973,35 +2157,49 @@
 
     const ALL_SENTENCES = [...SENTENCES.easy, ...SENTENCES.hard];
 
-    const PROFILE_AVATARS = ['🐼', '🐉', '🧧', '🀄️', '🌸', '🐯', '🪁', '🐢'];
+    const STORE_AVATARS = [
+      { id: 'panda', emoji: '🐼', label: 'Gấu trúc chăm học', price: 0, anim: 'float' },
+      { id: 'dragon', emoji: '🐉', label: 'Thanh long linh hoạt', price: 240, anim: 'twist' },
+      { id: 'lantern', emoji: '🧧', label: 'Đèn lồng may mắn', price: 200, anim: 'pulse' },
+      { id: 'mahjong', emoji: '🀄️', label: 'Quân bài thắng lợi', price: 180, anim: 'spark' },
+      { id: 'sakura', emoji: '🌸', label: 'Hoa anh đào nhẹ gió', price: 160, anim: 'pulse' },
+      { id: 'tiger', emoji: '🐯', label: 'Hổ kiêu hãnh', price: 260, anim: 'twist' },
+      { id: 'kite', emoji: '🪁', label: 'Diều mùa xuân', price: 150, anim: 'float' },
+      { id: 'turtle', emoji: '🐢', label: 'Rùa trường thọ', price: 140, anim: 'float' }
+    ];
+
+    const PROFILE_AVATARS = STORE_AVATARS.map(item => item.emoji);
 
     const PROFILE_FRAMES = [
       {
         id: 'jade',
-        label: 'Jade',
+        label: 'Ngọc bích',
         gradient: 'linear-gradient(135deg, #16a34a, #4ade80)',
         badge: 'linear-gradient(135deg, #16a34a, #4ade80)',
         ring: '#bbf7d0',
         text: '#041b0a',
-        shadow: '0 18px 36px rgba(34, 197, 94, 0.35)'
+        shadow: '0 18px 36px rgba(34, 197, 94, 0.35)',
+        price: 0
       },
       {
         id: 'aurora',
-        label: 'Aurora',
+        label: 'Cực quang',
         gradient: 'linear-gradient(135deg, #38bdf8, #6366f1)',
         badge: 'linear-gradient(135deg, #38bdf8, #6366f1)',
         ring: '#c7d2fe',
         text: '#061327',
-        shadow: '0 18px 36px rgba(99, 102, 241, 0.32)'
+        shadow: '0 18px 36px rgba(99, 102, 241, 0.32)',
+        price: 260
       },
       {
         id: 'sunset',
-        label: 'Sunset',
+        label: 'Hoàng hôn',
         gradient: 'linear-gradient(135deg, #f97316, #f43f5e)',
         badge: 'linear-gradient(135deg, #f97316, #f43f5e)',
         ring: '#fecaca',
         text: '#2c0a0f',
-        shadow: '0 18px 36px rgba(244, 63, 94, 0.28)'
+        shadow: '0 18px 36px rgba(244, 63, 94, 0.28)',
+        price: 220
       },
       {
         id: 'onyx',
@@ -2010,9 +2208,24 @@
         badge: 'linear-gradient(135deg, #1e293b, #0f172a)',
         ring: '#334155',
         text: '#e7ecf7',
-        shadow: '0 18px 36px rgba(15, 23, 42, 0.45)'
+        shadow: '0 18px 36px rgba(15, 23, 42, 0.45)',
+        price: 210
       }
     ];
+
+    const DEFAULT_START_COINS = 600;
+    const PRACTICE_COIN_REWARD = 12;
+
+    const AUTHORIZED_ACCOUNTS = {
+      '243524': {
+        hash: '6467559765982a6218e5aa5198fdf66eb95fb00f87b7f7c1edc1b525febe9efb',
+        displayName: 'Học viên 243524'
+      },
+      'b1234': {
+        hash: '9df826c15f29838113f8c90937de48468bb1d91d1abf1aa20adb85434f09e399',
+        displayName: 'Học viên b1234'
+      }
+    };
 
     const JOINED_FORMATTER = new Intl.DateTimeFormat('vi-VN', {
       day: 'numeric',
@@ -2102,20 +2315,15 @@
     // AUTH
     const authModal = document.getElementById('authModal');
     const loginBtn = document.getElementById('loginBtn');
-    const signupBtn = document.getElementById('signupBtn');
     const logoutBtn = document.getElementById('logoutBtn');
     const userBadge = document.getElementById('userBadge');
     const userNameLabel = document.getElementById('userName');
     const userAvatarBadge = document.getElementById('userAvatarBadge');
     const authFeedback = document.getElementById('authFeedback');
     const tabLogin = document.getElementById('tabLogin');
-    const tabSignup = document.getElementById('tabSignup');
     const loginForm = document.getElementById('loginForm');
-    const signupForm = document.getElementById('signupForm');
     const loginUser = document.getElementById('loginUser');
     const loginPass = document.getElementById('loginPass');
-    const signupUser = document.getElementById('signupUser');
-    const signupPass = document.getElementById('signupPass');
     const rememberMe = document.getElementById('rememberMe');
 
     function getUsers() {
@@ -2140,6 +2348,45 @@
         record.frame = PROFILE_FRAMES[0].id;
         changed = true;
       }
+      const ownedAvatars = Array.isArray(record.ownedAvatars)
+        ? record.ownedAvatars.filter(av => PROFILE_AVATARS.includes(av))
+        : [];
+      if (!ownedAvatars.includes(PROFILE_AVATARS[0])) ownedAvatars.unshift(PROFILE_AVATARS[0]);
+      if (!ownedAvatars.includes(record.avatar)) ownedAvatars.unshift(record.avatar);
+      const dedupAvatars = Array.from(new Set(ownedAvatars));
+      if (!record.ownedAvatars || record.ownedAvatars.length !== dedupAvatars.length || record.ownedAvatars.some((v, i) => v !== dedupAvatars[i])) {
+        record.ownedAvatars = dedupAvatars;
+        changed = true;
+      }
+      const ownedFrames = Array.isArray(record.ownedFrames)
+        ? record.ownedFrames.filter(id => PROFILE_FRAMES.some(frame => frame.id === id))
+        : [];
+      if (!ownedFrames.includes(PROFILE_FRAMES[0].id)) ownedFrames.unshift(PROFILE_FRAMES[0].id);
+      if (!ownedFrames.includes(record.frame)) ownedFrames.unshift(record.frame);
+      const dedupFrames = Array.from(new Set(ownedFrames));
+      if (!record.ownedFrames || record.ownedFrames.length !== dedupFrames.length || record.ownedFrames.some((v, i) => v !== dedupFrames[i])) {
+        record.ownedFrames = dedupFrames;
+        changed = true;
+      }
+      const coinsValue = Number(record.coins);
+      if (!Number.isFinite(coinsValue) || coinsValue < 0) {
+        record.coins = DEFAULT_START_COINS;
+        changed = true;
+      } else {
+        const normalized = Math.floor(coinsValue);
+        if (normalized !== coinsValue) {
+          record.coins = normalized;
+          changed = true;
+        }
+      }
+      if (!record.ownedAvatars.includes(record.avatar)) {
+        record.avatar = record.ownedAvatars[0];
+        changed = true;
+      }
+      if (!record.ownedFrames.includes(record.frame)) {
+        record.frame = record.ownedFrames[0];
+        changed = true;
+      }
       if (!record.created) {
         record.created = Date.now();
         changed = true;
@@ -2159,74 +2406,54 @@
       return { username, users, record };
     }
 
+    function bootstrapAuthorizedUsers() {
+      const stored = getUsers();
+      const seeded = {};
+      const now = Date.now();
+      Object.entries(AUTHORIZED_ACCOUNTS).forEach(([username, config]) => {
+        const existing = stored[username] || {};
+        const record = { ...existing };
+        record.pass = config.hash;
+        record.displayName = existing.displayName || config.displayName || username;
+        record.created = existing.created || now;
+        record.avatar = existing.avatar && PROFILE_AVATARS.includes(existing.avatar) ? existing.avatar : PROFILE_AVATARS[0];
+        record.frame = existing.frame && PROFILE_FRAMES.some(frame => frame.id === existing.frame) ? existing.frame : PROFILE_FRAMES[0].id;
+        const avatarBag = Array.isArray(existing.ownedAvatars)
+          ? existing.ownedAvatars.filter(av => PROFILE_AVATARS.includes(av))
+          : [];
+        if (!avatarBag.includes(record.avatar)) avatarBag.push(record.avatar);
+        if (!avatarBag.includes(PROFILE_AVATARS[0])) avatarBag.unshift(PROFILE_AVATARS[0]);
+        record.ownedAvatars = Array.from(new Set(avatarBag));
+        const frameBag = Array.isArray(existing.ownedFrames)
+          ? existing.ownedFrames.filter(id => PROFILE_FRAMES.some(frame => frame.id === id))
+          : [];
+        if (!frameBag.includes(record.frame)) frameBag.push(record.frame);
+        if (!frameBag.includes(PROFILE_FRAMES[0].id)) frameBag.unshift(PROFILE_FRAMES[0].id);
+        record.ownedFrames = Array.from(new Set(frameBag));
+        const coinsValue = Number(existing.coins);
+        record.coins = Number.isFinite(coinsValue) && coinsValue >= 0 ? Math.floor(coinsValue) : DEFAULT_START_COINS;
+        seeded[username] = record;
+      });
+      setUsers(seeded);
+    }
+
+    bootstrapAuthorizedUsers();
+
     async function hashPass(str) {
       const enc = new TextEncoder().encode(str);
       const digest = await crypto.subtle.digest('SHA-256', enc);
       return Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2, '0')).join('');
     }
 
-    function openAuth(tab = 'login') {
+    function openAuth() {
       closeNav();
       authModal.classList.add('active');
-      setAuthTab(tab);
       authFeedback.textContent = '';
-      if (tab === 'login') {
-        loginUser.focus();
-      } else {
-        signupUser.focus();
-      }
+      requestAnimationFrame(() => loginUser.focus());
     }
 
     function closeAuth() {
       authModal.classList.remove('active');
-    }
-
-    function setAuthTab(tab) {
-      if (tab === 'login') {
-        tabLogin.classList.add('primary');
-        tabSignup.classList.remove('primary');
-        tabSignup.classList.add('ghost');
-        signupForm.classList.add('hidden');
-        loginForm.classList.remove('hidden');
-      } else {
-        tabSignup.classList.add('primary');
-        tabLogin.classList.remove('primary');
-        tabLogin.classList.add('ghost');
-        loginForm.classList.add('hidden');
-        signupForm.classList.remove('hidden');
-      }
-    }
-
-    async function handleSignup() {
-      const username = signupUser.value.trim();
-      const password = signupPass.value;
-      if (!username || password.length < 6) {
-        showAuthFeedback('Tên hoặc mật khẩu chưa hợp lệ.', true);
-        return;
-      }
-      const users = getUsers();
-      if (users[username]) {
-        showAuthFeedback('Tên đã tồn tại, hãy chọn tên khác.', true);
-        return;
-      }
-      const hashed = await hashPass(password);
-      users[username] = {
-        pass: hashed,
-        created: Date.now(),
-        displayName: username,
-        avatar: PROFILE_AVATARS[0],
-        frame: PROFILE_FRAMES[0].id
-      };
-      setUsers(users);
-      signupUser.value = '';
-      signupPass.value = '';
-      localStorage.setItem(STORAGE_KEYS.session, username);
-      showAuthFeedback('Đăng ký thành công!', false);
-      setTimeout(() => {
-        closeAuth();
-        updateAuthUI();
-        goRoute('app');
-      }, 500);
     }
 
     async function handleLogin() {
@@ -2310,12 +2537,10 @@
         userBadge.classList.remove('hidden');
         logoutBtn.classList.remove('hidden');
         loginBtn.classList.add('hidden');
-        signupBtn.classList.add('hidden');
       } else {
         userBadge.classList.add('hidden');
         logoutBtn.classList.add('hidden');
         loginBtn.classList.remove('hidden');
-        signupBtn.classList.remove('hidden');
         userNameLabel.textContent = '';
         if (userAvatarBadge) {
           userAvatarBadge.textContent = '🐼';
@@ -2325,15 +2550,12 @@
       syncHeaderOffset();
     }
 
-    loginBtn.addEventListener('click', () => openAuth('login'));
-    signupBtn.addEventListener('click', () => openAuth('signup'));
+    loginBtn.addEventListener('click', () => openAuth());
     authModal.addEventListener('click', (e) => {
       if (e.target === authModal) closeAuth();
     });
-    tabLogin.addEventListener('click', () => setAuthTab('login'));
-    tabSignup.addEventListener('click', () => setAuthTab('signup'));
+    tabLogin.addEventListener('click', () => loginUser.focus());
     document.getElementById('loginSubmit').addEventListener('click', handleLogin);
-    document.getElementById('signupSubmit').addEventListener('click', handleSignup);
     logoutBtn.addEventListener('click', () => {
       closeNav();
       localStorage.removeItem(STORAGE_KEYS.session);
@@ -2342,9 +2564,11 @@
     });
 
     const remembered = localStorage.getItem(STORAGE_KEYS.remember);
-    if (remembered) {
+    if (remembered && getUsers()[remembered]) {
       loginUser.value = remembered;
       rememberMe.checked = true;
+    } else if (remembered) {
+      localStorage.removeItem(STORAGE_KEYS.remember);
     }
 
     // LAYOUT
@@ -2393,7 +2617,7 @@
       const requiresAuth = route === 'app' || route === 'account';
       const session = localStorage.getItem(STORAGE_KEYS.session);
       if (requiresAuth && !session) {
-        openAuth('login');
+        openAuth();
         return;
       }
       Object.entries(sections).forEach(([key, section]) => {
@@ -2452,6 +2676,7 @@
     const accountSince = document.getElementById('accountSince');
     const accountAvatarFrame = document.getElementById('accountAvatarFrame');
     const accountAvatar = document.getElementById('accountAvatar');
+    const accountCoins = document.getElementById('accountCoins');
     const accountProfileFeedback = document.getElementById('accountProfileFeedback');
     const accountPassFeedback = document.getElementById('accountPassFeedback');
     const accountPassNew = document.getElementById('accountPassNew');
@@ -2460,6 +2685,10 @@
     const accountSavePassword = document.getElementById('accountSavePassword');
     const avatarOptions = document.getElementById('avatarOptions');
     const frameOptions = document.getElementById('frameOptions');
+    const storeCoins = document.getElementById('storeCoins');
+    const storeAvatarList = document.getElementById('storeAvatarList');
+    const storeFrameList = document.getElementById('storeFrameList');
+    const storeFeedback = document.getElementById('storeFeedback');
     const leaderboardList = document.getElementById('leaderboardList');
 
     const flashState = {
@@ -2469,8 +2698,232 @@
 
     const accountState = {
       avatar: PROFILE_AVATARS[0],
-      frame: PROFILE_FRAMES[0].id
+      frame: PROFILE_FRAMES[0].id,
+      ownedAvatars: [PROFILE_AVATARS[0]],
+      ownedFrames: [PROFILE_FRAMES[0].id],
+      coins: DEFAULT_START_COINS
     };
+
+    function getAvatarMeta(value) {
+      return STORE_AVATARS.find(item => item.emoji === value || item.id === value) || STORE_AVATARS[0];
+    }
+
+    function updateCoinsUI() {
+      if (accountCoins) accountCoins.textContent = accountState.coins;
+      if (storeCoins) storeCoins.textContent = accountState.coins;
+    }
+
+    function setStoreFeedback(message, isError = false) {
+      if (!storeFeedback) return;
+      storeFeedback.textContent = message;
+      storeFeedback.className = `chip store-feedback ${isError ? 'badge-bad' : 'badge-ok'}`;
+    }
+
+    function renderStore() {
+      if (storeAvatarList) {
+        storeAvatarList.innerHTML = '';
+        const ownedSet = new Set(accountState.ownedAvatars);
+        STORE_AVATARS.forEach(item => {
+          const card = document.createElement('div');
+          const owned = ownedSet.has(item.emoji);
+          const affordable = accountState.coins >= item.price;
+          card.className = `store-item${!owned && item.price > 0 && !affordable ? ' locked' : ''}`;
+          const preview = document.createElement('div');
+          preview.className = 'store-preview';
+          const avatarSpan = document.createElement('span');
+          avatarSpan.className = 'avatar-emoji';
+          if (item.anim) avatarSpan.dataset.anim = item.anim;
+          avatarSpan.textContent = item.emoji;
+          preview.appendChild(avatarSpan);
+          card.appendChild(preview);
+          const title = document.createElement('h4');
+          title.textContent = item.label;
+          card.appendChild(title);
+          const price = document.createElement('span');
+          price.className = 'store-price';
+          price.textContent = `💰 ${item.price} xu`;
+          card.appendChild(price);
+          if (item.price === 0) {
+            const baseLabel = document.createElement('span');
+            baseLabel.className = 'owned-label';
+            baseLabel.textContent = 'Có sẵn';
+            card.appendChild(baseLabel);
+          } else if (owned) {
+            const ownedLabel = document.createElement('span');
+            ownedLabel.className = 'owned-label';
+            ownedLabel.textContent = accountState.avatar === item.emoji ? 'Đang dùng' : 'Đã sở hữu';
+            card.appendChild(ownedLabel);
+          } else {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            if (!affordable) {
+              btn.className = 'ghost';
+              btn.textContent = 'Thiếu xu';
+              btn.disabled = true;
+            } else {
+              btn.className = 'primary';
+              btn.textContent = 'Mua avatar';
+              btn.addEventListener('click', () => purchaseAvatar(item));
+            }
+            card.appendChild(btn);
+          }
+          storeAvatarList.appendChild(card);
+        });
+      }
+      if (storeFrameList) {
+        storeFrameList.innerHTML = '';
+        const ownedSet = new Set(accountState.ownedFrames);
+        PROFILE_FRAMES.forEach(frame => {
+          const owned = ownedSet.has(frame.id);
+          const affordable = accountState.coins >= frame.price;
+          const card = document.createElement('div');
+          card.className = `store-item${!owned && frame.price > 0 && !affordable ? ' locked' : ''}`;
+          const preview = document.createElement('div');
+          preview.className = 'store-preview';
+          const ring = document.createElement('div');
+          ring.className = 'frame-ring';
+          ring.style.borderColor = frame.ring;
+          ring.style.boxShadow = frame.shadow;
+          ring.style.background = frame.gradient;
+          const avatarSpan = document.createElement('span');
+          avatarSpan.className = 'avatar-emoji';
+          const currentMeta = getAvatarMeta(accountState.avatar);
+          avatarSpan.dataset.anim = currentMeta.anim || '';
+          avatarSpan.textContent = currentMeta.emoji;
+          ring.appendChild(avatarSpan);
+          preview.appendChild(ring);
+          card.appendChild(preview);
+          const title = document.createElement('h4');
+          title.textContent = frame.label;
+          card.appendChild(title);
+          const price = document.createElement('span');
+          price.className = 'store-price';
+          price.textContent = `💰 ${frame.price} xu`;
+          card.appendChild(price);
+          if (frame.price === 0) {
+            const baseLabel = document.createElement('span');
+            baseLabel.className = 'owned-label';
+            baseLabel.textContent = 'Có sẵn';
+            card.appendChild(baseLabel);
+          } else if (owned) {
+            const ownedLabel = document.createElement('span');
+            ownedLabel.className = 'owned-label';
+            ownedLabel.textContent = accountState.frame === frame.id ? 'Đang dùng' : 'Đã sở hữu';
+            card.appendChild(ownedLabel);
+          } else {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            if (!affordable) {
+              btn.className = 'ghost';
+              btn.textContent = 'Thiếu xu';
+              btn.disabled = true;
+            } else {
+              btn.className = 'primary';
+              btn.textContent = 'Mua khung';
+              btn.addEventListener('click', () => purchaseFrame(frame));
+            }
+            card.appendChild(btn);
+          }
+          storeFrameList.appendChild(card);
+        });
+      }
+    }
+
+    function persistAccountRecord(updateFn) {
+      const session = localStorage.getItem(STORAGE_KEYS.session);
+      if (!session) return null;
+      const bundle = getProfileBundle(session);
+      if (!bundle) return null;
+      const { users, record } = bundle;
+      const changed = updateFn(record);
+      if (changed) {
+        users[session] = record;
+        setUsers(users);
+      }
+      return { session, record, changed };
+    }
+
+    function purchaseAvatar(item) {
+      if (accountState.ownedAvatars.includes(item.emoji)) {
+        setStoreFeedback('Avatar này đã có trong kho của bạn.');
+        return;
+      }
+      if (accountState.coins < item.price) {
+        setStoreFeedback('Bạn chưa đủ xu để mua avatar này.', true);
+        return;
+      }
+      const bundle = persistAccountRecord(record => {
+        accountState.coins -= item.price;
+        record.coins = accountState.coins;
+        accountState.ownedAvatars.push(item.emoji);
+        record.ownedAvatars = Array.from(new Set(accountState.ownedAvatars));
+        accountState.avatar = item.emoji;
+        record.avatar = item.emoji;
+        return true;
+      });
+      if (!bundle) {
+        setStoreFeedback('Cần đăng nhập để mua vật phẩm.', true);
+        return;
+      }
+      accountState.ownedAvatars = Array.from(new Set(accountState.ownedAvatars));
+      updateCoinsUI();
+      updateAccountPreview();
+      renderAvatarOptions();
+      renderStore();
+      setStoreFeedback(`Đã mua avatar ${item.label}!`);
+      syncHeaderProfile();
+      renderLeaderboard();
+    }
+
+    function purchaseFrame(frame) {
+      if (accountState.ownedFrames.includes(frame.id)) {
+        setStoreFeedback('Bạn đã sở hữu khung này.');
+        return;
+      }
+      if (accountState.coins < frame.price) {
+        setStoreFeedback('Bạn chưa đủ xu để mua khung này.', true);
+        return;
+      }
+      const bundle = persistAccountRecord(record => {
+        accountState.coins -= frame.price;
+        record.coins = accountState.coins;
+        accountState.ownedFrames.push(frame.id);
+        record.ownedFrames = Array.from(new Set(accountState.ownedFrames));
+        accountState.frame = frame.id;
+        record.frame = frame.id;
+        return true;
+      });
+      if (!bundle) {
+        setStoreFeedback('Cần đăng nhập để mua vật phẩm.', true);
+        return;
+      }
+      accountState.ownedFrames = Array.from(new Set(accountState.ownedFrames));
+      updateCoinsUI();
+      updateAccountPreview();
+      renderFrameOptions();
+      renderStore();
+      setStoreFeedback(`Đã mua khung ${frame.label}!`);
+      syncHeaderProfile();
+      renderLeaderboard();
+    }
+
+    function adjustCoins(amount) {
+      if (!amount) return false;
+      const bundle = persistAccountRecord(record => {
+        const current = Number(record.coins) || 0;
+        const next = Math.max(0, current + amount);
+        if (next === current) return false;
+        record.coins = next;
+        accountState.coins = next;
+        return true;
+      });
+      if (bundle && bundle.changed) {
+        updateCoinsUI();
+        renderStore();
+        return true;
+      }
+      return false;
+    }
 
     function renderFlashcard() {
       if (!flashcardEl || !flashFront || !flashBack) return;
@@ -2649,21 +3102,29 @@
       accountAvatarFrame.style.background = frame.gradient;
       accountAvatarFrame.style.boxShadow = frame.shadow;
       accountAvatarFrame.style.borderColor = frame.ring;
-      accountAvatar.textContent = accountState.avatar;
+      const avatarMeta = getAvatarMeta(accountState.avatar);
+      accountAvatar.textContent = avatarMeta.emoji;
+      if (avatarMeta.anim) {
+        accountAvatar.dataset.anim = avatarMeta.anim;
+      } else {
+        accountAvatar.removeAttribute('data-anim');
+      }
     }
 
     function renderAvatarOptions() {
       if (!avatarOptions) return;
       avatarOptions.innerHTML = '';
-      PROFILE_AVATARS.forEach(emoji => {
+      const owned = accountState.ownedAvatars.filter(av => PROFILE_AVATARS.includes(av));
+      owned.forEach(emoji => {
+        const meta = getAvatarMeta(emoji);
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = `avatar-choice${accountState.avatar === emoji ? ' active' : ''}`;
         btn.setAttribute('role', 'radio');
         btn.setAttribute('aria-checked', String(accountState.avatar === emoji));
-        btn.setAttribute('aria-label', `Chọn avatar ${emoji}`);
-        btn.title = `Avatar ${emoji}`;
-        btn.textContent = emoji;
+        btn.setAttribute('aria-label', `Chọn avatar ${meta.label}`);
+        btn.title = meta.label;
+        btn.innerHTML = `<span class="avatar-emoji" data-anim="${meta.anim || ''}">${meta.emoji}</span>`;
         btn.addEventListener('click', () => {
           accountState.avatar = emoji;
           renderAvatarOptions();
@@ -2676,7 +3137,8 @@
     function renderFrameOptions() {
       if (!frameOptions) return;
       frameOptions.innerHTML = '';
-      PROFILE_FRAMES.forEach(frame => {
+      const owned = accountState.ownedFrames.filter(id => PROFILE_FRAMES.some(frame => frame.id === id));
+      PROFILE_FRAMES.filter(frame => owned.includes(frame.id)).forEach(frame => {
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = `frame-choice${accountState.frame === frame.id ? ' active' : ''}`;
@@ -2711,6 +3173,10 @@
         accountPassFeedback.textContent = '';
         accountPassFeedback.className = 'chip';
       }
+      if (storeFeedback) {
+        storeFeedback.textContent = '';
+        storeFeedback.className = 'chip store-feedback';
+      }
     }
 
     function populateAccount(resetFeedback = false) {
@@ -2725,11 +3191,20 @@
       if (accountSince) {
         accountSince.textContent = `Tham gia từ ${JOINED_FORMATTER.format(joined)}`;
       }
-      accountState.avatar = record.avatar && PROFILE_AVATARS.includes(record.avatar) ? record.avatar : PROFILE_AVATARS[0];
-      accountState.frame = record.frame && PROFILE_FRAMES.some(f => f.id === record.frame) ? record.frame : PROFILE_FRAMES[0].id;
+      const ownedAvatars = Array.isArray(record.ownedAvatars) ? record.ownedAvatars.filter(av => PROFILE_AVATARS.includes(av)) : [];
+      if (!ownedAvatars.includes(PROFILE_AVATARS[0])) ownedAvatars.unshift(PROFILE_AVATARS[0]);
+      accountState.ownedAvatars = Array.from(new Set(ownedAvatars));
+      const ownedFrames = Array.isArray(record.ownedFrames) ? record.ownedFrames.filter(id => PROFILE_FRAMES.some(f => f.id === id)) : [];
+      if (!ownedFrames.includes(PROFILE_FRAMES[0].id)) ownedFrames.unshift(PROFILE_FRAMES[0].id);
+      accountState.ownedFrames = Array.from(new Set(ownedFrames));
+      accountState.avatar = accountState.ownedAvatars.includes(record.avatar) ? record.avatar : accountState.ownedAvatars[0];
+      accountState.frame = accountState.ownedFrames.includes(record.frame) ? record.frame : accountState.ownedFrames[0];
+      accountState.coins = Number.isFinite(Number(record.coins)) && Number(record.coins) >= 0 ? Math.floor(Number(record.coins)) : DEFAULT_START_COINS;
       updateAccountPreview();
       renderAvatarOptions();
       renderFrameOptions();
+      updateCoinsUI();
+      renderStore();
       if (resetFeedback) {
         clearAccountFeedback();
       }
@@ -2829,7 +3304,7 @@
       accountSaveProfile.addEventListener('click', () => {
         const session = localStorage.getItem(STORAGE_KEYS.session);
         if (!session) {
-          openAuth('login');
+          openAuth();
           return;
         }
         const bundle = getProfileBundle(session);
@@ -2843,12 +3318,16 @@
         record.displayName = name;
         record.avatar = accountState.avatar;
         record.frame = accountState.frame;
+        record.ownedAvatars = Array.from(new Set(accountState.ownedAvatars));
+        record.ownedFrames = Array.from(new Set(accountState.ownedFrames));
+        record.coins = accountState.coins;
         users[session] = record;
         setUsers(users);
         setAccountFeedback(accountProfileFeedback, 'Đã lưu hồ sơ cá nhân!', false);
         accountDisplayName.textContent = record.displayName;
         syncHeaderProfile();
         updateAccountPreview();
+        renderStore();
         const entries = getLeaderboard();
         const idx = entries.findIndex(item => item.user === session);
         if (idx !== -1) {
@@ -2865,7 +3344,7 @@
       accountSavePassword.addEventListener('click', async () => {
         const session = localStorage.getItem(STORAGE_KEYS.session);
         if (!session) {
-          openAuth('login');
+          openAuth();
           return;
         }
         const bundle = getProfileBundle(session);
@@ -3002,17 +3481,11 @@
         prompt = q.vi;
         hint = 'Viết lại bằng chữ Hán và pinyin nếu nhớ.';
       }
-      const isHanPrompt = prompt === q.han;
       promptText.textContent = prompt;
       promptHint.textContent = hint;
       promptHint.style.display = hint ? 'inline-flex' : 'none';
-      if (isHanPrompt) {
-        promptPinyin.textContent = q.pinyinTone || q.pinyin;
-        promptPinyin.style.display = 'block';
-      } else {
-        promptPinyin.style.display = 'none';
-        promptPinyin.textContent = '';
-      }
+      promptPinyin.style.display = 'none';
+      promptPinyin.textContent = '';
       resetTimer();
       if (practiceState.autoResume) {
         startTimer();
@@ -3096,7 +3569,13 @@
       if (isCorrect) {
         practiceState.stats.correct += 1;
         practiceState.stats.streak += 1;
-        practiceFeedback.textContent = '🎉 Chính xác!';
+        let rewardNote = '';
+        if (!timeUp && PRACTICE_COIN_REWARD > 0) {
+          if (adjustCoins(PRACTICE_COIN_REWARD)) {
+            rewardNote = ` +${PRACTICE_COIN_REWARD} xu`;
+          }
+        }
+        practiceFeedback.textContent = `🎉 Chính xác!${rewardNote}`;
         practiceFeedback.className = 'chip badge-ok';
         const existingIndex = wrongPool.indexOf(key);
         if (existingIndex !== -1) {
