@@ -367,6 +367,16 @@
         filter: blur(0);
       }
     }
+    @keyframes fadeSlide {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
     .hero {
       position: relative;
       display: grid;
@@ -761,29 +771,149 @@
     }
     .account-wrapper {
       display: grid;
-      gap: 20px;
+      gap: 24px;
     }
-    .account-overview {
+    .account-hero {
       display: grid;
       gap: 20px;
     }
     .account-heading {
       display: flex;
-      gap: 16px;
-      align-items: center;
+      gap: 20px;
+      align-items: stretch;
       flex-wrap: wrap;
     }
     .account-avatar {
-      width: 96px;
-      height: 96px;
-      border-radius: 28px;
+      width: 110px;
+      height: 110px;
+      border-radius: 32px;
       display: grid;
       place-items: center;
-      font-size: 2.8rem;
+      font-size: 3rem;
       background: linear-gradient(135deg, var(--accent), var(--brand));
       color: var(--bg);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+      box-shadow: 0 24px 48px rgba(0,0,0,0.28);
       border: 4px solid color-mix(in srgb, var(--bg) 75%, transparent);
+    }
+    .account-info {
+      display: grid;
+      gap: 10px;
+      flex: 1;
+      min-width: 240px;
+    }
+    .account-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+    .coin-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: color-mix(in srgb, var(--accent) 12%, transparent);
+      color: var(--accent);
+      font-weight: 600;
+    }
+    .vip-chip {
+      background: linear-gradient(135deg, #facc15, #fb7185);
+      color: #361504;
+      font-weight: 700;
+      box-shadow: 0 12px 24px rgba(250, 204, 21, 0.35);
+    }
+    .vip-chip.hidden {
+      display: none;
+    }
+    .account-credential {
+      display: inline-flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+    button.ghost.small {
+      font-size: 0.85rem;
+      padding: 6px 12px;
+    }
+    .note {
+      font-size: 0.9rem;
+    }
+    .loadout-row {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      margin-top: 12px;
+    }
+    .loadout-preview {
+      border-radius: 20px;
+      padding: 14px;
+      border: 1px solid color-mix(in srgb, var(--border) 65%, transparent);
+      background: color-mix(in srgb, var(--chip) 80%, transparent);
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      font-weight: 600;
+    }
+    .loadout-preview span {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .loadout-preview .avatar-emoji {
+      font-size: 2rem;
+    }
+    .loadout-preview .effect-chip {
+      font-size: 0.9rem;
+      padding: 8px 14px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.18);
+    }
+    .account-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 10px;
+      border-radius: 20px;
+      background: color-mix(in srgb, var(--chip) 85%, transparent);
+      border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+    }
+    .account-tab {
+      flex: 1 1 140px;
+      border-radius: 14px;
+      border: 1px solid transparent;
+      background: transparent;
+      padding: 10px 16px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    .account-tab.active {
+      background: color-mix(in srgb, var(--accent) 16%, transparent);
+      color: var(--accent);
+      border-color: color-mix(in srgb, var(--accent) 35%, transparent);
+      box-shadow: 0 12px 24px rgba(77, 163, 255, 0.18);
+    }
+    .account-panel-stack {
+      display: grid;
+      gap: 20px;
+    }
+    .account-panel {
+      display: none;
+      animation: fadeSlide 0.4s ease;
+    }
+    .account-panel.active {
+      display: block;
+    }
+    .account-grid {
+      display: grid;
+      gap: 20px;
+    }
+    .account-overview {
+      display: grid;
+      gap: 16px;
+    }
+    .account-issued {
+      display: grid;
+      gap: 14px;
     }
     .account-form-grid {
       display: grid;
@@ -816,22 +946,41 @@
     .account-option h4 {
       margin: 0 0 8px 0;
     }
-    .coin-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: color-mix(in srgb, var(--accent) 12%, transparent);
-      color: var(--accent);
+    .credential-list {
+      display: grid;
+      gap: 12px;
+    }
+    .credential-list .credential-row {
+      display: grid;
+      gap: 4px;
+    }
+    .credential-list dt {
+      margin: 0;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .credential-list dd {
+      margin: 0;
       font-weight: 600;
+      font-size: 1rem;
+    }
+    .credential-note {
+      font-size: 0.9rem;
+      color: var(--muted);
     }
     .avatar-options,
-    .frame-options {
+    .frame-options,
+    .effect-options {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
     }
     .avatar-choice,
-    .frame-choice {
+    .frame-choice,
+    .effect-choice {
       border: 1px solid var(--border);
       background: transparent;
       padding: 10px 14px;
@@ -850,8 +999,13 @@
       min-width: 120px;
       justify-content: center;
     }
+    .effect-choice {
+      min-width: 120px;
+      justify-content: center;
+    }
     .avatar-choice.active,
-    .frame-choice.active {
+    .frame-choice.active,
+    .effect-choice.active {
       border-color: var(--accent);
       box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent);
       transform: translateY(-2px);
@@ -902,6 +1056,11 @@
     .store-item h4 {
       margin: 0;
       font-size: 1rem;
+    }
+    .store-item p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--muted);
     }
     .store-preview {
       display: grid;
@@ -976,6 +1135,167 @@
       align-items: center;
       justify-content: center;
       font-weight: 600;
+    }
+    .account-inventory {
+      display: grid;
+      gap: 18px;
+    }
+    .inventory-grid {
+      display: grid;
+      gap: 16px;
+    }
+    @media (min-width: 720px) {
+      .inventory-grid {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      }
+    }
+    .inventory-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      min-height: 54px;
+    }
+    .inventory-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 14px;
+      border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+      background: color-mix(in srgb, var(--chip) 85%, transparent);
+      font-weight: 600;
+    }
+    .inventory-item.active {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 30%, transparent);
+    }
+    .inventory-item .avatar-emoji {
+      font-size: 1.4rem;
+    }
+    .inventory-item.vip {
+      background: linear-gradient(135deg, rgba(250, 204, 21, 0.25), rgba(251, 113, 133, 0.18));
+      border-color: rgba(250, 204, 21, 0.45);
+      color: #facc15;
+      text-shadow: 0 0 10px rgba(250, 204, 21, 0.35);
+    }
+    .inventory-item.effect {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(244, 114, 182, 0.12));
+      border-color: rgba(59, 130, 246, 0.25);
+    }
+    .inventory-empty {
+      font-style: italic;
+      color: var(--muted);
+    }
+    .effect-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.18);
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      position: relative;
+      overflow: hidden;
+      text-transform: none;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.22);
+    }
+    .effect-chip.effect-aurora {
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.85), rgba(129, 140, 248, 0.92));
+      color: #041326;
+      background-size: 160% 160%;
+      animation: auroraFlow 6s ease-in-out infinite;
+    }
+    .effect-chip.effect-nebula {
+      background: linear-gradient(135deg, rgba(236, 72, 153, 0.88), rgba(34, 211, 238, 0.88));
+      color: #0b1220;
+      background-size: 140% 140%;
+      animation: nebulaPulse 5.5s ease-in-out infinite;
+    }
+    .effect-chip.effect-comet {
+      background: linear-gradient(135deg, rgba(250, 204, 21, 0.92), rgba(249, 115, 22, 0.88));
+      color: #2c1204;
+      background-size: 200% 200%;
+      animation: cometStreak 4.2s linear infinite;
+    }
+    .store-preview .effect-chip {
+      border-color: rgba(255,255,255,0.32);
+      padding: 14px 20px;
+      font-size: 1rem;
+    }
+    @keyframes auroraFlow {
+      0% { filter: hue-rotate(0deg); }
+      50% { filter: hue-rotate(25deg); }
+      100% { filter: hue-rotate(0deg); }
+    }
+    @keyframes nebulaPulse {
+      0%, 100% { transform: scale(1); opacity: 0.92; }
+      50% { transform: scale(1.05); opacity: 1; }
+    }
+    @keyframes cometStreak {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
+    }
+    .translate-card {
+      display: grid;
+      gap: 20px;
+    }
+    .translate-head {
+      display: grid;
+      gap: 8px;
+    }
+    .translate-form {
+      display: grid;
+      gap: 16px;
+    }
+    .translate-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: flex-end;
+    }
+    .translate-controls label {
+      display: grid;
+      gap: 6px;
+      font-weight: 600;
+    }
+    .translate-controls select {
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--chip) 90%, transparent);
+      color: var(--ink);
+      font-weight: 600;
+    }
+    .translate-fields {
+      display: grid;
+      gap: 16px;
+    }
+    .translate-fields label {
+      display: grid;
+      gap: 8px;
+      font-weight: 600;
+    }
+    .translate-fields textarea {
+      padding: 14px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--card) 92%, transparent);
+      color: var(--ink);
+      font-size: 1rem;
+      resize: vertical;
+      min-height: 120px;
+      font-family: inherit;
+    }
+    .translate-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+    #translateStatus.chip:empty {
+      display: none;
     }
     .avatar-emoji[data-anim="float"] {
       animation: float 3.6s ease-in-out infinite;
@@ -1060,6 +1380,9 @@
       }
       .account-option {
         min-height: 100px;
+      }
+      .credential-list {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       }
     }
     @media (min-width: 960px) {
@@ -1631,6 +1954,7 @@
         <button class="app-tab active" data-panel="study">Ôn bài</button>
         <button class="app-tab" data-panel="flash">Flashcard</button>
         <button class="app-tab" data-panel="practice">Bài tập</button>
+        <button class="app-tab" data-panel="translate">GG Dịch</button>
         <button class="app-tab" data-panel="bank">Sổ tay</button>
       </div>
       <div class="panel study active" id="panel-study">
@@ -1712,6 +2036,49 @@
           </div>
         </div>
       </div>
+      <div class="panel translate" id="panel-translate">
+        <div class="card translate-card">
+          <div class="translate-head">
+            <h3>Google Dịch mini</h3>
+            <p class="muted">Tham khảo nhanh nghĩa qua Google Dịch ngay trong ứng dụng. Kết quả chỉ mang tính tham khảo.</p>
+          </div>
+          <form id="translateForm" class="translate-form">
+            <div class="translate-controls">
+              <label>
+                <span>Từ</span>
+                <select id="translateFrom">
+                  <option value="zh-CN">Trung</option>
+                  <option value="vi">Việt</option>
+                  <option value="en">Anh</option>
+                </select>
+              </label>
+              <button type="button" id="translateSwap" class="ghost">⇄</button>
+              <label>
+                <span>Sang</span>
+                <select id="translateTo">
+                  <option value="vi">Việt</option>
+                  <option value="zh-CN">Trung</option>
+                  <option value="en">Anh</option>
+                </select>
+              </label>
+            </div>
+            <div class="translate-fields">
+              <label>
+                <span>Nội dung cần dịch</span>
+                <textarea id="translateInput" rows="4" placeholder="Nhập chữ Hán, Pinyin hoặc tiếng Việt..."></textarea>
+              </label>
+              <label>
+                <span>Kết quả</span>
+                <textarea id="translateOutput" rows="4" readonly></textarea>
+              </label>
+            </div>
+            <div class="translate-actions">
+              <button type="submit" class="primary">Dịch ngay</button>
+              <span id="translateStatus" class="chip"></span>
+            </div>
+          </form>
+        </div>
+      </div>
       <div class="panel" id="panel-bank">
         <div class="practice-controls" style="margin-bottom:16px;">
           <button id="accordionToggle">Thu gọn / Mở rộng</button>
@@ -1774,68 +2141,148 @@
     </section>
     <section id="account">
       <div class="account-wrapper">
-        <div class="card account-overview">
+        <div class="card account-hero">
           <div class="account-heading">
             <div class="account-avatar" id="accountAvatarFrame">
               <span id="accountAvatar" class="avatar-emoji">🐼</span>
             </div>
-            <div>
+            <div class="account-info">
               <h2 id="accountDisplayName">Tài khoản của bạn</h2>
               <p class="muted" id="accountSince">Tham gia từ hôm nay</p>
-              <span class="chip coin-chip">💰 Xu: <span id="accountCoins">0</span></span>
+              <div class="account-badges">
+                <span class="chip coin-chip">💰 Xu: <span id="accountCoins">0</span></span>
+                <span class="chip vip-chip hidden" id="accountVipBadge">VIP</span>
+              </div>
+              <div class="account-credential">
+                <span class="muted">Tên đăng nhập: <strong id="accountUsername">--</strong></span>
+                <button id="copyAccountUser" type="button" class="ghost small">Sao chép</button>
+              </div>
+              <p class="muted note">Tài khoản được Hoài Bảo cấp. Hãy đổi tên hiển thị hoặc mật khẩu để cá nhân hoá.</p>
+              <div class="loadout-row">
+                <div>
+                  <h4>Avatar đang dùng</h4>
+                  <div class="loadout-preview" id="accountLoadoutAvatar"></div>
+                </div>
+                <div>
+                  <h4>Khung đang dùng</h4>
+                  <div class="loadout-preview" id="accountLoadoutFrame"></div>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="account-form-grid">
-            <label>
-              <span>Tên hiển thị</span>
-              <input type="text" id="accountNameInput" placeholder="Nhập tên muốn hiển thị" />
-            </label>
-            <button id="accountSaveProfile" class="primary" type="button">Lưu hồ sơ</button>
-            <div class="account-option">
-              <h4>Avatar</h4>
-              <div class="avatar-options" id="avatarOptions" role="radiogroup"></div>
+        </div>
+        <div class="account-tabs" role="tablist" aria-label="Tùy chọn tài khoản">
+          <button class="account-tab active" data-account-panel="profile" role="tab" aria-selected="true">Thông tin</button>
+          <button class="account-tab" data-account-panel="store" role="tab" aria-selected="false">Cửa hàng</button>
+          <button class="account-tab" data-account-panel="inventory" role="tab" aria-selected="false">Kho đồ</button>
+        </div>
+        <div class="account-panel-stack">
+          <div class="account-panel active" id="account-panel-profile" role="tabpanel">
+            <div class="account-grid">
+              <div class="card account-overview">
+                <div class="account-form-grid">
+                  <label>
+                    <span>Tên hiển thị</span>
+                    <input type="text" id="accountNameInput" placeholder="Nhập tên muốn hiển thị" />
+                  </label>
+                  <button id="accountSaveProfile" class="primary" type="button">Lưu hồ sơ</button>
+                  <div class="account-option">
+                    <h4>Avatar</h4>
+                    <div class="avatar-options" id="avatarOptions" role="radiogroup"></div>
+                  </div>
+                  <div class="account-option">
+                    <h4>Khung viền</h4>
+                    <div class="frame-options" id="frameOptions" role="radiogroup"></div>
+                  </div>
+                  <div class="account-option">
+                    <h4>Hiệu ứng</h4>
+                    <div class="effect-options" id="effectOptions" role="radiogroup"></div>
+                  </div>
+                </div>
+                <span id="accountProfileFeedback" class="chip"></span>
+              </div>
+              <div class="card account-issued">
+                <h3>Thông tin tài khoản được cấp</h3>
+                <p class="muted">Xem lại thông tin đăng nhập do Hoài Bảo cung cấp cho lớp của bạn.</p>
+                <dl class="credential-list">
+                  <div class="credential-row">
+                    <dt>Tên đăng nhập</dt>
+                    <dd id="accountIssuedUser">--</dd>
+                  </div>
+                  <div class="credential-row">
+                    <dt>Mật khẩu hiện tại</dt>
+                    <dd id="accountIssuedHint">Đã mã hoá để bảo mật.</dd>
+                  </div>
+                  <div class="credential-row">
+                    <dt>Cập nhật gần nhất</dt>
+                    <dd id="accountIssuedUpdated">--</dd>
+                  </div>
+                </dl>
+                <p class="credential-note" id="accountIssuedNote">Nếu quên mật khẩu, hãy liên hệ Hoài Bảo để được đặt lại.</p>
+              </div>
+              <div class="card account-security">
+                <h3>Bảo mật</h3>
+                <p class="muted">Đổi mật khẩu mới (≥ 6 ký tự) để bảo vệ tài khoản của bạn.</p>
+                <label>
+                  <span>Mật khẩu mới</span>
+                  <input type="password" id="accountPassNew" autocomplete="new-password" />
+                </label>
+                <label>
+                  <span>Nhập lại mật khẩu</span>
+                  <input type="password" id="accountPassConfirm" autocomplete="new-password" />
+                </label>
+                <button id="accountSavePassword" type="button">Cập nhật mật khẩu</button>
+                <span id="accountPassFeedback" class="chip"></span>
+              </div>
+              <div class="card account-leaderboard">
+                <h3>Bảng xếp hạng cá nhân</h3>
+                <p class="muted">Thứ hạng dựa trên số câu đúng, độ chính xác và chuỗi đúng dài nhất.</p>
+                <ol id="leaderboardList" class="leaderboard"></ol>
+              </div>
             </div>
-            <div class="account-option">
-              <h4>Khung viền</h4>
-              <div class="frame-options" id="frameOptions" role="radiogroup"></div>
+          </div>
+          <div class="account-panel" id="account-panel-store" role="tabpanel" aria-hidden="true">
+            <div class="card account-store">
+              <div class="store-head">
+                <h3>Cửa hàng tài khoản</h3>
+                <span class="chip coin-chip">💰 Xu: <span id="storeCoins">0</span></span>
+              </div>
+              <p class="muted">Mua avatar động, khung hiệu ứng giống Steam và gói VIP để làm nổi bật hồ sơ.</p>
+              <div class="account-option">
+                <h4>Avatar động</h4>
+                <div class="store-grid" id="storeAvatarList"></div>
+              </div>
+              <div class="account-option">
+                <h4>Khung viền đặc biệt</h4>
+                <div class="store-grid" id="storeFrameList"></div>
+              </div>
+              <div class="account-option">
+                <h4>Gói VIP & Hiệu ứng</h4>
+                <div class="store-grid" id="storePerkList"></div>
+              </div>
+              <span id="storeFeedback" class="chip store-feedback"></span>
             </div>
           </div>
-          <span id="accountProfileFeedback" class="chip"></span>
-        </div>
-        <div class="card account-store">
-          <div class="store-head">
-            <h3>Cửa hàng khung & avatar</h3>
-            <span class="chip coin-chip">💰 Xu: <span id="storeCoins">0</span></span>
+          <div class="account-panel" id="account-panel-inventory" role="tabpanel" aria-hidden="true">
+            <div class="card account-inventory">
+              <h3>Tủ đồ của bạn</h3>
+              <p class="muted">Xem lại các avatar, khung và hiệu ứng đã sở hữu.</p>
+              <div class="inventory-grid">
+                <section>
+                  <h4>Avatar</h4>
+                  <div id="inventoryAvatarList" class="inventory-list"></div>
+                </section>
+                <section>
+                  <h4>Khung viền</h4>
+                  <div id="inventoryFrameList" class="inventory-list"></div>
+                </section>
+                <section>
+                  <h4>Hiệu ứng & VIP</h4>
+                  <div id="inventoryPerkList" class="inventory-list"></div>
+                </section>
+              </div>
+            </div>
           </div>
-          <p class="muted">Mua khung phong cách Steam và avatar động bằng xu tích luỹ khi luyện tập để cá nhân hoá hồ sơ.</p>
-          <div class="account-option">
-            <h4>Avatar động</h4>
-            <div class="store-grid" id="storeAvatarList"></div>
-          </div>
-          <div class="account-option">
-            <h4>Khung viền đặc biệt</h4>
-            <div class="store-grid" id="storeFrameList"></div>
-          </div>
-          <span id="storeFeedback" class="chip store-feedback"></span>
-        </div>
-        <div class="card account-security">
-          <h3>Bảo mật</h3>
-          <p class="muted">Đổi mật khẩu mới (≥ 6 ký tự) để bảo vệ tài khoản của bạn.</p>
-          <label>
-            <span>Mật khẩu mới</span>
-            <input type="password" id="accountPassNew" autocomplete="new-password" />
-          </label>
-          <label>
-            <span>Nhập lại mật khẩu</span>
-            <input type="password" id="accountPassConfirm" autocomplete="new-password" />
-          </label>
-          <button id="accountSavePassword" type="button">Cập nhật mật khẩu</button>
-          <span id="accountPassFeedback" class="chip"></span>
-        </div>
-        <div class="card account-leaderboard">
-          <h3>Bảng xếp hạng cá nhân</h3>
-          <p class="muted">Thứ hạng dựa trên số câu đúng, độ chính xác và chuỗi đúng dài nhất.</p>
-          <ol id="leaderboardList" class="leaderboard"></ol>
         </div>
       </div>
     </section>
@@ -1875,12 +2322,8 @@
               <button id="loginSubmit" class="primary">Đăng nhập</button>
             </div>
             <div class="auth-note">
-              <p>Ứng dụng học chỉ mở cho tài khoản được Hoài Bảo cấp. Vui lòng dùng một trong hai thông tin dưới đây để đăng nhập.</p>
-              <ul class="auth-accounts">
-                <li><strong>TK:</strong> 243524 · <strong>MK:</strong> a1234bc</li>
-                <li><strong>TK:</strong> b1234 · <strong>MK:</strong> b1234cd</li>
-              </ul>
-              <p class="muted">Nếu cần thêm tài khoản, hãy liên hệ Hoài Bảo để được hỗ trợ.</p>
+              <p>Ứng dụng học chỉ mở cho tài khoản được Hoài Bảo cấp. Nếu bạn chưa nhận được thông tin đăng nhập, hãy liên hệ trực tiếp để được cấp tài khoản.</p>
+              <p class="muted">Chi tiết tài khoản của bạn sẽ hiển thị trong khu vực Tài khoản sau khi đăng nhập thành công.</p>
             </div>
           </div>
           <div id="authFeedback" class="chip"></div>
@@ -2213,6 +2656,55 @@
       }
     ];
 
+    const EFFECT_PRESETS = [
+      {
+        id: 'none',
+        label: 'Không hiệu ứng',
+        price: 0,
+        swatch: 'linear-gradient(135deg, rgba(77,163,255,0.18), rgba(154,230,180,0.18))',
+        text: 'var(--ink)',
+        className: '',
+        description: 'Giữ giao diện giản lược, không thêm hiệu ứng.'
+      },
+      {
+        id: 'aurora',
+        label: 'Vệt cực quang',
+        price: 230,
+        swatch: 'linear-gradient(135deg, rgba(59,130,246,0.85), rgba(129,140,248,0.85))',
+        text: '#061327',
+        className: 'effect-aurora',
+        description: 'Dải cực quang chuyển màu bao quanh avatar.'
+      },
+      {
+        id: 'nebula',
+        label: 'Hào quang ngân hà',
+        price: 260,
+        swatch: 'linear-gradient(135deg, rgba(236,72,153,0.85), rgba(34,211,238,0.85))',
+        text: '#0b1220',
+        className: 'effect-nebula',
+        description: 'Khói ngân hà xoáy nhẹ tạo chiều sâu.'
+      },
+      {
+        id: 'comet',
+        label: 'Sao băng bốc lửa',
+        price: 250,
+        swatch: 'linear-gradient(135deg, rgba(250,204,21,0.9), rgba(249,115,22,0.9))',
+        text: '#2b1204',
+        className: 'effect-comet',
+        description: 'Vệt sao băng sáng rực quét quanh khung.'
+      }
+    ];
+
+    const STORE_PERKS = [
+      {
+        id: 'vip-gold',
+        label: 'VIP vàng',
+        description: 'Mở huy hiệu VIP và thưởng thêm 20% xu mỗi câu đúng.',
+        price: 420,
+        type: 'vip'
+      }
+    ];
+
     const DEFAULT_START_COINS = 600;
     const PRACTICE_COIN_REWARD = 12;
 
@@ -2225,6 +2717,11 @@
         hash: '9df826c15f29838113f8c90937de48468bb1d91d1abf1aa20adb85434f09e399',
         displayName: 'Học viên b1234'
       }
+    };
+
+    const ACCOUNT_ISSUED_NOTES = {
+      '243524': 'Tài khoản lớp 243524. Liên hệ Hoài Bảo nếu cần hỗ trợ đặt lại mật khẩu.',
+      'b1234': 'Tài khoản lớp b1234. Liên hệ Hoài Bảo nếu cần hỗ trợ đặt lại mật khẩu.'
     };
 
     const JOINED_FORMATTER = new Intl.DateTimeFormat('vi-VN', {
@@ -2379,6 +2876,23 @@
           changed = true;
         }
       }
+      const ownedEffects = Array.isArray(record.ownedEffects)
+        ? record.ownedEffects.filter(id => EFFECT_PRESETS.some(effect => effect.id === id))
+        : [];
+      if (!ownedEffects.includes('none')) ownedEffects.unshift('none');
+      const dedupEffects = Array.from(new Set(ownedEffects));
+      if (!record.ownedEffects || record.ownedEffects.length !== dedupEffects.length || record.ownedEffects.some((v, i) => v !== dedupEffects[i])) {
+        record.ownedEffects = dedupEffects;
+        changed = true;
+      }
+      if (!record.effect || !record.ownedEffects.includes(record.effect)) {
+        record.effect = 'none';
+        changed = true;
+      }
+      if (typeof record.vip !== 'boolean') {
+        record.vip = false;
+        changed = true;
+      }
       if (!record.ownedAvatars.includes(record.avatar)) {
         record.avatar = record.ownedAvatars[0];
         changed = true;
@@ -2387,8 +2901,18 @@
         record.frame = record.ownedFrames[0];
         changed = true;
       }
-      if (!record.created) {
+      const createdValue = Number(record.created);
+      if (Number.isFinite(createdValue)) {
+        record.created = createdValue;
+      } else {
         record.created = Date.now();
+        changed = true;
+      }
+      const passUpdatedValue = Number(record.passUpdated);
+      if (Number.isFinite(passUpdatedValue)) {
+        record.passUpdated = passUpdatedValue;
+      } else {
+        record.passUpdated = record.created || Date.now();
         changed = true;
       }
       return changed;
@@ -2415,7 +2939,10 @@
         const record = { ...existing };
         record.pass = config.hash;
         record.displayName = existing.displayName || config.displayName || username;
-        record.created = existing.created || now;
+        const created = Number(existing.created);
+        record.created = Number.isFinite(created) ? created : now;
+        const passUpdated = Number(existing.passUpdated);
+        record.passUpdated = Number.isFinite(passUpdated) ? passUpdated : record.created;
         record.avatar = existing.avatar && PROFILE_AVATARS.includes(existing.avatar) ? existing.avatar : PROFILE_AVATARS[0];
         record.frame = existing.frame && PROFILE_FRAMES.some(frame => frame.id === existing.frame) ? existing.frame : PROFILE_FRAMES[0].id;
         const avatarBag = Array.isArray(existing.ownedAvatars)
@@ -2430,6 +2957,14 @@
         if (!frameBag.includes(record.frame)) frameBag.push(record.frame);
         if (!frameBag.includes(PROFILE_FRAMES[0].id)) frameBag.unshift(PROFILE_FRAMES[0].id);
         record.ownedFrames = Array.from(new Set(frameBag));
+        const effectBag = Array.isArray(existing.ownedEffects)
+          ? existing.ownedEffects.filter(id => EFFECT_PRESETS.some(effect => effect.id === id))
+          : [];
+        if (existing.effect && !effectBag.includes(existing.effect)) effectBag.push(existing.effect);
+        if (!effectBag.includes('none')) effectBag.unshift('none');
+        record.ownedEffects = Array.from(new Set(effectBag.filter(Boolean)));
+        record.effect = record.ownedEffects.includes(existing.effect) ? existing.effect : 'none';
+        record.vip = Boolean(existing.vip);
         const coinsValue = Number(existing.coins);
         record.coins = Number.isFinite(coinsValue) && coinsValue >= 0 ? Math.floor(coinsValue) : DEFAULT_START_COINS;
         seeded[username] = record;
@@ -2624,6 +3159,7 @@
         if (section) section.classList.toggle('active', key === route);
       });
       if (route === 'account') {
+        activateAccountPanel('profile');
         populateAccount(true);
       }
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -2676,6 +3212,11 @@
     const accountSince = document.getElementById('accountSince');
     const accountAvatarFrame = document.getElementById('accountAvatarFrame');
     const accountAvatar = document.getElementById('accountAvatar');
+    const accountVipBadge = document.getElementById('accountVipBadge');
+    const accountUsername = document.getElementById('accountUsername');
+    const copyAccountUser = document.getElementById('copyAccountUser');
+    const accountLoadoutAvatar = document.getElementById('accountLoadoutAvatar');
+    const accountLoadoutFrame = document.getElementById('accountLoadoutFrame');
     const accountCoins = document.getElementById('accountCoins');
     const accountProfileFeedback = document.getElementById('accountProfileFeedback');
     const accountPassFeedback = document.getElementById('accountPassFeedback');
@@ -2683,13 +3224,32 @@
     const accountPassConfirm = document.getElementById('accountPassConfirm');
     const accountSaveProfile = document.getElementById('accountSaveProfile');
     const accountSavePassword = document.getElementById('accountSavePassword');
+    const accountIssuedUser = document.getElementById('accountIssuedUser');
+    const accountIssuedHint = document.getElementById('accountIssuedHint');
+    const accountIssuedUpdated = document.getElementById('accountIssuedUpdated');
+    const accountIssuedNote = document.getElementById('accountIssuedNote');
     const avatarOptions = document.getElementById('avatarOptions');
     const frameOptions = document.getElementById('frameOptions');
+    const effectOptions = document.getElementById('effectOptions');
     const storeCoins = document.getElementById('storeCoins');
     const storeAvatarList = document.getElementById('storeAvatarList');
     const storeFrameList = document.getElementById('storeFrameList');
+    const storePerkList = document.getElementById('storePerkList');
     const storeFeedback = document.getElementById('storeFeedback');
     const leaderboardList = document.getElementById('leaderboardList');
+    const inventoryAvatarList = document.getElementById('inventoryAvatarList');
+    const inventoryFrameList = document.getElementById('inventoryFrameList');
+    const inventoryPerkList = document.getElementById('inventoryPerkList');
+    const accountTabs = Array.from(document.querySelectorAll('.account-tab'));
+    const accountPanels = Array.from(document.querySelectorAll('.account-panel'));
+
+    const translateForm = document.getElementById('translateForm');
+    const translateInput = document.getElementById('translateInput');
+    const translateOutput = document.getElementById('translateOutput');
+    const translateFrom = document.getElementById('translateFrom');
+    const translateTo = document.getElementById('translateTo');
+    const translateSwap = document.getElementById('translateSwap');
+    const translateStatus = document.getElementById('translateStatus');
 
     const flashState = {
       current: null,
@@ -2701,12 +3261,122 @@
       frame: PROFILE_FRAMES[0].id,
       ownedAvatars: [PROFILE_AVATARS[0]],
       ownedFrames: [PROFILE_FRAMES[0].id],
+      ownedEffects: ['none'],
+      effect: 'none',
+      vip: false,
       coins: DEFAULT_START_COINS
     };
 
     function getAvatarMeta(value) {
       return STORE_AVATARS.find(item => item.emoji === value || item.id === value) || STORE_AVATARS[0];
     }
+
+    function getEffectMeta(id) {
+      return EFFECT_PRESETS.find(effect => effect.id === id) || EFFECT_PRESETS[0];
+    }
+
+    function activateAccountPanel(panelName = 'profile') {
+      accountTabs.forEach(tab => {
+        const active = tab.dataset.accountPanel === panelName;
+        tab.classList.toggle('active', active);
+        tab.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+      accountPanels.forEach(panel => {
+        const active = panel.id === `account-panel-${panelName}`;
+        panel.classList.toggle('active', active);
+        panel.setAttribute('aria-hidden', active ? 'false' : 'true');
+      });
+    }
+
+    accountTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        activateAccountPanel(tab.dataset.accountPanel);
+      });
+    });
+
+    activateAccountPanel('profile');
+
+    function resetTranslateStatus() {
+      if (!translateStatus) return;
+      translateStatus.textContent = '';
+      translateStatus.className = 'chip';
+    }
+
+    async function handleTranslate(event) {
+      event.preventDefault();
+      if (!translateInput || !translateOutput || !translateFrom || !translateTo) return;
+      const text = translateInput.value.trim();
+      if (!text) {
+        if (translateStatus) {
+          translateStatus.textContent = 'Vui lòng nhập nội dung cần dịch.';
+          translateStatus.className = 'chip badge-bad';
+        }
+        return;
+      }
+      if (translateFrom.value === translateTo.value) {
+        if (translateStatus) {
+          translateStatus.textContent = 'Hãy chọn hai ngôn ngữ khác nhau.';
+          translateStatus.className = 'chip badge-bad';
+        }
+        return;
+      }
+      if (translateStatus) {
+        translateStatus.textContent = 'Đang kết nối Google Dịch…';
+        translateStatus.className = 'chip';
+      }
+      translateOutput.value = '';
+      try {
+        const params = new URLSearchParams({
+          client: 'gtx',
+          sl: translateFrom.value,
+          tl: translateTo.value,
+          dt: 't',
+          q: text
+        });
+        const response = await fetch(`https://translate.googleapis.com/translate_a/single?${params.toString()}`);
+        if (!response.ok) {
+          throw new Error('HTTP_ERROR');
+        }
+        const data = await response.json();
+        const sentences = Array.isArray(data?.[0]) ? data[0].map(chunk => chunk[0]).filter(Boolean) : [];
+        const translated = sentences.join(' ').trim();
+        translateOutput.value = translated || '';
+        if (translateStatus) {
+          if (translated) {
+            translateStatus.textContent = 'Đã dịch xong.';
+            translateStatus.className = 'chip badge-ok';
+          } else {
+            translateStatus.textContent = 'Không nhận được kết quả. Thử câu khác nhé!';
+            translateStatus.className = 'chip badge-bad';
+          }
+        }
+      } catch (error) {
+        if (translateStatus) {
+          translateStatus.textContent = 'Không thể kết nối Google Dịch. Thử lại sau.';
+          translateStatus.className = 'chip badge-bad';
+        }
+      }
+    }
+
+    if (translateSwap && translateFrom && translateTo) {
+      translateSwap.addEventListener('click', () => {
+        const from = translateFrom.value;
+        translateFrom.value = translateTo.value;
+        translateTo.value = from;
+        resetTranslateStatus();
+        if (translateInput) translateInput.focus();
+      });
+    }
+
+    if (translateForm) {
+      translateForm.addEventListener('submit', handleTranslate);
+    }
+
+    [translateInput, translateFrom, translateTo].forEach(control => {
+      if (!control) return;
+      control.addEventListener('input', resetTranslateStatus);
+      control.addEventListener('change', resetTranslateStatus);
+    });
 
     function updateCoinsUI() {
       if (accountCoins) accountCoins.textContent = accountState.coins;
@@ -2827,6 +3497,168 @@
           storeFrameList.appendChild(card);
         });
       }
+      if (storePerkList) {
+        storePerkList.innerHTML = '';
+        const ownedEffects = new Set(accountState.ownedEffects);
+        EFFECT_PRESETS.filter(effect => effect.price > 0).forEach(effect => {
+          const card = document.createElement('div');
+          const owned = ownedEffects.has(effect.id);
+          const affordable = accountState.coins >= effect.price;
+          card.className = `store-item${!owned && effect.price > 0 && !affordable ? ' locked' : ''}`;
+          const preview = document.createElement('div');
+          preview.className = 'store-preview';
+          const chip = document.createElement('div');
+          chip.className = `effect-chip ${effect.className || ''}`;
+          chip.style.background = effect.swatch;
+          chip.style.color = effect.text || 'var(--ink)';
+          chip.textContent = effect.label;
+          preview.appendChild(chip);
+          card.appendChild(preview);
+          const title = document.createElement('h4');
+          title.textContent = effect.label;
+          card.appendChild(title);
+          if (effect.description) {
+            const desc = document.createElement('p');
+            desc.textContent = effect.description;
+            card.appendChild(desc);
+          }
+          const price = document.createElement('span');
+          price.className = 'store-price';
+          price.textContent = `💰 ${effect.price} xu`;
+          card.appendChild(price);
+          if (owned) {
+            const ownedLabel = document.createElement('span');
+            ownedLabel.className = 'owned-label';
+            ownedLabel.textContent = accountState.effect === effect.id ? 'Đang dùng' : 'Đã sở hữu';
+            card.appendChild(ownedLabel);
+          } else {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            if (!affordable) {
+              btn.className = 'ghost';
+              btn.textContent = 'Thiếu xu';
+              btn.disabled = true;
+            } else {
+              btn.className = 'primary';
+              btn.textContent = 'Mua hiệu ứng';
+              btn.addEventListener('click', () => purchaseEffect(effect));
+            }
+            card.appendChild(btn);
+          }
+          storePerkList.appendChild(card);
+        });
+        STORE_PERKS.forEach(perk => {
+          const card = document.createElement('div');
+          const owned = !!accountState.vip;
+          const affordable = accountState.coins >= perk.price;
+          card.className = `store-item${!owned && perk.price > 0 && !affordable ? ' locked' : ''}`;
+          const preview = document.createElement('div');
+          preview.className = 'store-preview';
+          const vipChip = document.createElement('div');
+          vipChip.className = 'effect-chip effect-comet';
+          vipChip.textContent = 'VIP';
+          preview.appendChild(vipChip);
+          card.appendChild(preview);
+          const title = document.createElement('h4');
+          title.textContent = perk.label;
+          card.appendChild(title);
+          if (perk.description) {
+            const desc = document.createElement('p');
+            desc.textContent = perk.description;
+            card.appendChild(desc);
+          }
+          const price = document.createElement('span');
+          price.className = 'store-price';
+          price.textContent = `💰 ${perk.price} xu`;
+          card.appendChild(price);
+          if (owned) {
+            const ownedLabel = document.createElement('span');
+            ownedLabel.className = 'owned-label';
+            ownedLabel.textContent = 'Đang hoạt động';
+            card.appendChild(ownedLabel);
+          } else {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            if (!affordable) {
+              btn.className = 'ghost';
+              btn.textContent = 'Thiếu xu';
+              btn.disabled = true;
+            } else {
+              btn.className = 'primary';
+              btn.textContent = 'Mua VIP';
+              btn.addEventListener('click', () => purchaseVip(perk));
+            }
+            card.appendChild(btn);
+          }
+          storePerkList.appendChild(card);
+        });
+        if (!storePerkList.children.length) {
+          const empty = document.createElement('p');
+          empty.className = 'muted';
+          empty.textContent = 'Bạn đã sở hữu toàn bộ vật phẩm đặc biệt!';
+          storePerkList.appendChild(empty);
+        }
+      }
+    }
+
+    function renderInventory() {
+      if (!inventoryAvatarList || !inventoryFrameList || !inventoryPerkList) return;
+      inventoryAvatarList.innerHTML = '';
+      if (accountState.ownedAvatars.length) {
+        accountState.ownedAvatars.forEach(emoji => {
+          const meta = getAvatarMeta(emoji);
+          const item = document.createElement('span');
+          item.className = `inventory-item${accountState.avatar === emoji ? ' active' : ''}`;
+          item.innerHTML = `<span class="avatar-emoji" data-anim="${meta.anim || ''}">${meta.emoji}</span><span>${meta.label}</span>`;
+          inventoryAvatarList.appendChild(item);
+        });
+      } else {
+        const empty = document.createElement('span');
+        empty.className = 'inventory-empty';
+        empty.textContent = 'Chưa có avatar nào.';
+        inventoryAvatarList.appendChild(empty);
+      }
+
+      inventoryFrameList.innerHTML = '';
+      if (accountState.ownedFrames.length) {
+        accountState.ownedFrames.forEach(id => {
+          const frame = PROFILE_FRAMES.find(f => f.id === id);
+          if (!frame) return;
+          const item = document.createElement('span');
+          item.className = `inventory-item${accountState.frame === id ? ' active' : ''}`;
+          item.textContent = frame.label;
+          inventoryFrameList.appendChild(item);
+        });
+      } else {
+        const empty = document.createElement('span');
+        empty.className = 'inventory-empty';
+        empty.textContent = 'Chưa có khung nào.';
+        inventoryFrameList.appendChild(empty);
+      }
+
+      inventoryPerkList.innerHTML = '';
+      if (accountState.vip) {
+        const vipItem = document.createElement('span');
+        vipItem.className = 'inventory-item vip active';
+        vipItem.textContent = 'VIP vàng đang hoạt động';
+        inventoryPerkList.appendChild(vipItem);
+      }
+      const ownedEffects = accountState.ownedEffects.filter(id => id !== 'none');
+      if (ownedEffects.length) {
+        ownedEffects.forEach(id => {
+          const effect = getEffectMeta(id);
+          const item = document.createElement('span');
+          item.className = `inventory-item effect${accountState.effect === id ? ' active' : ''}`;
+          item.innerHTML = `<span class="effect-chip ${effect.className || ''}" style="background:${effect.swatch};color:${effect.text || 'var(--ink)'};">${effect.label}</span>`;
+          inventoryPerkList.appendChild(item);
+        });
+      }
+      if (!inventoryPerkList.children.length) {
+        const empty = document.createElement('span');
+        empty.className = 'inventory-empty';
+        empty.textContent = 'Chưa có hiệu ứng nào.';
+        inventoryPerkList.appendChild(empty);
+      }
     }
 
     function persistAccountRecord(updateFn) {
@@ -2870,6 +3702,7 @@
       updateAccountPreview();
       renderAvatarOptions();
       renderStore();
+      renderInventory();
       setStoreFeedback(`Đã mua avatar ${item.label}!`);
       syncHeaderProfile();
       renderLeaderboard();
@@ -2902,16 +3735,81 @@
       updateAccountPreview();
       renderFrameOptions();
       renderStore();
+      renderInventory();
       setStoreFeedback(`Đã mua khung ${frame.label}!`);
       syncHeaderProfile();
       renderLeaderboard();
     }
 
+    function purchaseEffect(effect) {
+      if (accountState.ownedEffects.includes(effect.id)) {
+        setStoreFeedback('Hiệu ứng này đã có trong kho của bạn.');
+        return;
+      }
+      if (accountState.coins < effect.price) {
+        setStoreFeedback('Bạn chưa đủ xu để mua hiệu ứng này.', true);
+        return;
+      }
+      const bundle = persistAccountRecord(record => {
+        accountState.coins -= effect.price;
+        record.coins = accountState.coins;
+        accountState.ownedEffects.push(effect.id);
+        record.ownedEffects = Array.from(new Set(accountState.ownedEffects));
+        accountState.effect = effect.id;
+        record.effect = effect.id;
+        return true;
+      });
+      if (!bundle) {
+        setStoreFeedback('Cần đăng nhập để mua vật phẩm.', true);
+        return;
+      }
+      accountState.ownedEffects = Array.from(new Set(accountState.ownedEffects));
+      updateCoinsUI();
+      updateAccountPreview();
+      renderEffectOptions();
+      renderStore();
+      renderInventory();
+      setStoreFeedback(`Đã mua hiệu ứng ${effect.label}!`);
+      syncHeaderProfile();
+    }
+
+    function purchaseVip(perk) {
+      if (accountState.vip) {
+        setStoreFeedback('Bạn đã là VIP rồi!');
+        return;
+      }
+      if (accountState.coins < perk.price) {
+        setStoreFeedback('Bạn chưa đủ xu để mua gói VIP.', true);
+        return;
+      }
+      const bundle = persistAccountRecord(record => {
+        accountState.coins -= perk.price;
+        record.coins = accountState.coins;
+        accountState.vip = true;
+        record.vip = true;
+        return true;
+      });
+      if (!bundle) {
+        setStoreFeedback('Cần đăng nhập để mua vật phẩm.', true);
+        return;
+      }
+      updateCoinsUI();
+      updateAccountPreview();
+      renderStore();
+      renderInventory();
+      setStoreFeedback('Chúc mừng! VIP đã được kích hoạt.');
+      syncHeaderProfile();
+    }
+
     function adjustCoins(amount) {
-      if (!amount) return false;
+      if (!amount) return 0;
+      let delta = amount;
+      if (amount > 0 && accountState.vip) {
+        delta = Math.ceil(amount * 1.2);
+      }
       const bundle = persistAccountRecord(record => {
         const current = Number(record.coins) || 0;
-        const next = Math.max(0, current + amount);
+        const next = Math.max(0, current + delta);
         if (next === current) return false;
         record.coins = next;
         accountState.coins = next;
@@ -2920,9 +3818,10 @@
       if (bundle && bundle.changed) {
         updateCoinsUI();
         renderStore();
-        return true;
+        renderInventory();
+        return delta;
       }
-      return false;
+      return 0;
     }
 
     function renderFlashcard() {
@@ -3109,6 +4008,16 @@
       } else {
         accountAvatar.removeAttribute('data-anim');
       }
+      if (accountVipBadge) {
+        accountVipBadge.classList.toggle('hidden', !accountState.vip);
+      }
+      if (accountLoadoutAvatar) {
+        accountLoadoutAvatar.innerHTML = `<span class="avatar-emoji" data-anim="${avatarMeta.anim || ''}">${avatarMeta.emoji}</span><span>${avatarMeta.label}</span>`;
+      }
+      if (accountLoadoutFrame) {
+        const effectMeta = getEffectMeta(accountState.effect);
+        accountLoadoutFrame.innerHTML = `<span class="effect-chip ${effectMeta.className || ''}" style="background:${effectMeta.swatch};color:${effectMeta.text};">${frame.label}${effectMeta.id !== 'none' ? ' · ' + effectMeta.label : ''}</span>`;
+      }
     }
 
     function renderAvatarOptions() {
@@ -3158,6 +4067,31 @@
       });
     }
 
+    function renderEffectOptions() {
+      if (!effectOptions) return;
+      effectOptions.innerHTML = '';
+      const owned = accountState.ownedEffects.filter(id => EFFECT_PRESETS.some(effect => effect.id === id));
+      owned.forEach(id => {
+        const effect = getEffectMeta(id);
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = `effect-choice${accountState.effect === id ? ' active' : ''}`;
+        btn.style.background = effect.swatch;
+        btn.style.color = effect.text || 'var(--ink)';
+        btn.textContent = effect.label;
+        btn.setAttribute('role', 'radio');
+        btn.setAttribute('aria-checked', String(accountState.effect === id));
+        btn.setAttribute('aria-label', `Chọn hiệu ứng ${effect.label}`);
+        btn.title = `Hiệu ứng ${effect.label}`;
+        btn.addEventListener('click', () => {
+          accountState.effect = id;
+          renderEffectOptions();
+          updateAccountPreview();
+        });
+        effectOptions.appendChild(btn);
+      });
+    }
+
     function setAccountFeedback(el, message, isError) {
       if (!el) return;
       el.textContent = message;
@@ -3187,9 +4121,31 @@
       const { record } = bundle;
       accountDisplayName.textContent = record.displayName || session;
       accountNameInput.value = record.displayName || session;
-      const joined = record.created ? new Date(record.created) : new Date();
+      if (accountUsername) {
+        accountUsername.textContent = session;
+      }
+      if (accountIssuedUser) {
+        accountIssuedUser.textContent = session;
+      }
+      const createdTime = Number(record.created);
+      const joined = Number.isFinite(createdTime) ? new Date(createdTime) : new Date();
       if (accountSince) {
         accountSince.textContent = `Tham gia từ ${JOINED_FORMATTER.format(joined)}`;
+      }
+      const updatedTime = Number(record.passUpdated);
+      const updated = Number.isFinite(updatedTime) ? new Date(updatedTime) : joined;
+      if (accountIssuedUpdated) {
+        accountIssuedUpdated.textContent = JOINED_FORMATTER.format(updated);
+      }
+      if (accountIssuedHint) {
+        if (Number.isFinite(updatedTime) && Number.isFinite(createdTime) && updatedTime > createdTime) {
+          accountIssuedHint.textContent = 'Bạn đã đổi mật khẩu sau khi nhận tài khoản.';
+        } else {
+          accountIssuedHint.textContent = 'Đang dùng mật khẩu Hoài Bảo đã cấp, hãy đổi để bảo mật hơn.';
+        }
+      }
+      if (accountIssuedNote) {
+        accountIssuedNote.textContent = ACCOUNT_ISSUED_NOTES[session] || 'Nếu quên mật khẩu, hãy liên hệ Hoài Bảo để được đặt lại.';
       }
       const ownedAvatars = Array.isArray(record.ownedAvatars) ? record.ownedAvatars.filter(av => PROFILE_AVATARS.includes(av)) : [];
       if (!ownedAvatars.includes(PROFILE_AVATARS[0])) ownedAvatars.unshift(PROFILE_AVATARS[0]);
@@ -3199,12 +4155,18 @@
       accountState.ownedFrames = Array.from(new Set(ownedFrames));
       accountState.avatar = accountState.ownedAvatars.includes(record.avatar) ? record.avatar : accountState.ownedAvatars[0];
       accountState.frame = accountState.ownedFrames.includes(record.frame) ? record.frame : accountState.ownedFrames[0];
+      accountState.ownedEffects = Array.isArray(record.ownedEffects) ? record.ownedEffects.filter(id => EFFECT_PRESETS.some(effect => effect.id === id)) : ['none'];
+      if (!accountState.ownedEffects.includes('none')) accountState.ownedEffects.unshift('none');
+      accountState.effect = accountState.ownedEffects.includes(record.effect) ? record.effect : 'none';
+      accountState.vip = Boolean(record.vip);
       accountState.coins = Number.isFinite(Number(record.coins)) && Number(record.coins) >= 0 ? Math.floor(Number(record.coins)) : DEFAULT_START_COINS;
       updateAccountPreview();
       renderAvatarOptions();
       renderFrameOptions();
+      renderEffectOptions();
       updateCoinsUI();
       renderStore();
+      renderInventory();
       if (resetFeedback) {
         clearAccountFeedback();
       }
@@ -3320,6 +4282,9 @@
         record.frame = accountState.frame;
         record.ownedAvatars = Array.from(new Set(accountState.ownedAvatars));
         record.ownedFrames = Array.from(new Set(accountState.ownedFrames));
+        record.ownedEffects = Array.from(new Set(accountState.ownedEffects));
+        record.effect = accountState.effect;
+        record.vip = accountState.vip;
         record.coins = accountState.coins;
         users[session] = record;
         setUsers(users);
@@ -3328,6 +4293,7 @@
         syncHeaderProfile();
         updateAccountPreview();
         renderStore();
+        renderInventory();
         const entries = getLeaderboard();
         const idx = entries.findIndex(item => item.user === session);
         if (idx !== -1) {
@@ -3361,11 +4327,33 @@
           return;
         }
         record.pass = await hashPass(newPass);
+        record.passUpdated = Date.now();
         users[session] = record;
         setUsers(users);
         accountPassNew.value = '';
         accountPassConfirm.value = '';
         setAccountFeedback(accountPassFeedback, 'Đã cập nhật mật khẩu!', false);
+        populateAccount();
+      });
+    }
+
+    if (copyAccountUser) {
+      copyAccountUser.addEventListener('click', async () => {
+        const session = localStorage.getItem(STORAGE_KEYS.session);
+        if (!session) {
+          openAuth();
+          return;
+        }
+        try {
+          await navigator.clipboard.writeText(session);
+          const original = copyAccountUser.textContent;
+          copyAccountUser.textContent = 'Đã sao chép';
+          setTimeout(() => {
+            copyAccountUser.textContent = original || 'Sao chép';
+          }, 1800);
+        } catch (error) {
+          setAccountFeedback(accountProfileFeedback, 'Không thể sao chép, hãy ghi nhớ thủ công.', true);
+        }
       });
     }
 
@@ -3571,8 +4559,9 @@
         practiceState.stats.streak += 1;
         let rewardNote = '';
         if (!timeUp && PRACTICE_COIN_REWARD > 0) {
-          if (adjustCoins(PRACTICE_COIN_REWARD)) {
-            rewardNote = ` +${PRACTICE_COIN_REWARD} xu`;
+          const gained = adjustCoins(PRACTICE_COIN_REWARD);
+          if (gained) {
+            rewardNote = ` +${gained} xu${accountState.vip ? ' · VIP' : ''}`;
           }
         }
         practiceFeedback.textContent = `🎉 Chính xác!${rewardNote}`;
