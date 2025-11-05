@@ -431,6 +431,13 @@
       display: grid;
       gap: 16px;
     }
+    .practice-pinyin {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: color-mix(in srgb, var(--muted) 55%, var(--ink) 45%);
+      letter-spacing: 0.01em;
+      margin-top: -8px;
+    }
     .stat-badges {
       display: flex;
       gap: 8px;
@@ -817,7 +824,7 @@
                 <rect x="14" y="50" width="36" height="10" rx="5" fill="rgba(231,236,247,0.55)" />
                 <rect x="52" y="50" width="14" height="10" rx="5" fill="rgba(154,230,180,0.55)" />
               </svg>
-              <figcaption>Ngân hàng</figcaption>
+              <figcaption>Sổ tay</figcaption>
             </figure>
           </div>
         </div>
@@ -829,7 +836,7 @@
       </div>
       <div class="card">
         <h3>Demo tính năng</h3>
-        <p>Ôn bài với flashcard Hán/Pinyin/Việt, kiểm tra nhanh, phát âm tiếng Trung. Bài tập đa chế độ, timer 60s, lưu câu sai để ôn. Ngân hàng từ & câu đầy đủ, hỗ trợ ẩn/hiện pinyin.</p>
+        <p>Ôn bài với flashcard Hán/Pinyin/Việt, kiểm tra nhanh, phát âm tiếng Trung. Bài tập đa chế độ, timer 60s, lưu câu sai để ôn. Sổ tay từ & câu đầy đủ, hỗ trợ ẩn/hiện pinyin.</p>
       </div>
       <div class="screen-gallery">
         <figure>
@@ -881,7 +888,7 @@
             <rect x="40" y="130" width="40" height="10" rx="5" fill="rgba(154,230,180,0.45)" />
             <rect x="88" y="130" width="120" height="10" rx="5" fill="rgba(231,236,247,0.28)" />
           </svg>
-          <figcaption>Ngân hàng từ & câu dạng accordion, hỗ trợ ẩn/hiện pinyin tức thì.</figcaption>
+          <figcaption>Sổ tay từ & câu dạng accordion, hỗ trợ ẩn/hiện pinyin tức thì.</figcaption>
         </figure>
       </div>
     </section>
@@ -916,7 +923,7 @@
       <div class="app-tabs">
         <button class="app-tab active" data-panel="study">Ôn bài</button>
         <button class="app-tab" data-panel="practice">Bài tập</button>
-        <button class="app-tab" data-panel="bank">Ngân hàng</button>
+        <button class="app-tab" data-panel="bank">Sổ tay</button>
       </div>
       <div class="panel study active" id="panel-study">
         <div class="grid-two">
@@ -973,6 +980,7 @@
           <div class="card" id="practicePrompt">
             <h3 id="promptText">Bắt đầu luyện tập nào!</h3>
             <p id="promptHint" class="muted">Chọn chế độ và nhóm để luyện.</p>
+            <p id="promptPinyin" class="practice-pinyin" style="display:none"></p>
           </div>
           <div class="quick-check">
             <label for="practiceAnswer">Câu trả lời</label>
@@ -995,10 +1003,11 @@
           <button id="accordionToggle">Thu gọn / Mở rộng</button>
           <label class="chip" style="cursor:pointer;"><input type="checkbox" id="toggleBankPinyin" /> Hiện pinyin</label>
         </div>
+        <p class="muted" style="margin-top:-8px;">Sổ tay điện tử giúp bạn rà soát nhanh toàn bộ từ vựng và câu ví dụ, có thể bật pinyin có dấu chỉ với một lần chạm.</p>
         <div class="accordion">
           <div class="accordion-item" data-accord="vocab">
             <header>
-              <h3>Ngân hàng từ vựng</h3>
+              <h3>Sổ tay từ vựng</h3>
               <span class="chip">41 mục</span>
             </header>
             <div class="body">
@@ -1007,7 +1016,7 @@
           </div>
           <div class="accordion-item" data-accord="sentences">
             <header>
-              <h3>Ngân hàng câu</h3>
+              <h3>Sổ tay câu</h3>
               <span class="chip">60 câu</span>
             </header>
             <div class="body">
@@ -1119,7 +1128,6 @@
       {"han":"寄","pinyin":"ji","vi":"gửi"},
       {"han":"信","pinyin":"xin","vi":"thư"}
     ];
-
     const EASY_SENTENCES = [
       "你好吗?|ni hao ma?|bạn khoẻ phải không?",
       "我很好。|wo hen hao.|tôi rất khoẻ.",
@@ -1186,6 +1194,137 @@
       "我也很好。|wo ye hen hao.|tôi cũng rất khoẻ."
     ];
 
+    const HAN_PINYIN_TONE = {
+      '你': 'nǐ',
+      '好': 'hǎo',
+      '吗': 'ma',
+      '我': 'wǒ',
+      '很': 'hěn',
+      '忙': 'máng',
+      '他': 'tā',
+      '她': 'tā',
+      '也': 'yě',
+      '饿': 'è',
+      '汉': 'hàn',
+      '语': 'yǔ',
+      '英': 'yīng',
+      '不': 'bù',
+      '学': 'xué',
+      '去': 'qù',
+      '邮': 'yóu',
+      '局': 'jú',
+      '寄': 'jì',
+      '信': 'xìn',
+      '明': 'míng',
+      '天': 'tiān',
+      '见': 'jiàn',
+      '爸': 'bà',
+      '妈': 'mā',
+      '哥': 'gē',
+      '弟': 'dì',
+      '妹': 'mèi',
+      '白': 'bái',
+      '马': 'mǎ',
+      '大': 'dà',
+      '对': 'duì',
+      '太': 'tài',
+      '得': 'de',
+      '法': 'fǎ',
+      '韩': 'hán',
+      '国': 'guó',
+      '日': 'rì',
+      '难': 'nán',
+      '男': 'nán',
+      '人': 'rén',
+      '口': 'kǒu',
+      '八': 'bā',
+      '五': 'wǔ',
+      '对': 'duì'
+    };
+
+    const PINYIN_SYLLABLE_TONE = {
+      ni: 'nǐ',
+      hao: 'hǎo',
+      ma: 'ma',
+      wo: 'wǒ',
+      hen: 'hěn',
+      ta: 'tā',
+      mang: 'máng',
+      ye: 'yě',
+      e: 'è',
+      han: 'hàn',
+      yu: 'yǔ',
+      ying: 'yīng',
+      bu: 'bù',
+      xue: 'xué',
+      you: 'yóu',
+      ju: 'jú',
+      ji: 'jì',
+      xin: 'xìn',
+      ming: 'míng',
+      tian: 'tiān',
+      jian: 'jiàn',
+      ba: 'bà',
+      ge: 'gē',
+      di: 'dì',
+      mei: 'mèi',
+      da: 'dà',
+      bai: 'bái',
+      dui: 'duì',
+      qu: 'qù',
+      tai: 'tài',
+      de: 'de',
+      fa: 'fǎ',
+      guo: 'guó',
+      ri: 'rì',
+      nan: 'nán',
+      ren: 'rén',
+      kou: 'kǒu',
+      wu: 'wǔ'
+    };
+
+    const HAN_CHAR_REGEX = /[\u4e00-\u9fff]/;
+
+    function toneForChar(char) {
+      return HAN_PINYIN_TONE[char];
+    }
+
+    function buildToneForHan(han) {
+      const tones = Array.from(han).filter(ch => HAN_CHAR_REGEX.test(ch)).map(ch => toneForChar(ch)).filter(Boolean);
+      return tones.length ? tones.join(' ') : '';
+    }
+
+    function prettifySentencePinyin(han, raw) {
+      const trimmed = raw.trim();
+      if (!trimmed) return trimmed;
+      const hanChars = Array.from(han).filter(ch => HAN_CHAR_REGEX.test(ch));
+      if (!hanChars.length) return trimmed;
+      let cursor = 0;
+      return trimmed.split(/\s+/).map(token => {
+        const match = token.match(/^([a-zü]+)([^a-zü]*)$/i);
+        if (!match) return token;
+        const base = match[1];
+        const rest = match[2] || '';
+        const currentChar = hanChars[cursor];
+        let toned = base;
+        if (currentChar) {
+          const fromChar = toneForChar(currentChar);
+          if (fromChar) {
+            toned = fromChar;
+          } else if (PINYIN_SYLLABLE_TONE[base]) {
+            toned = PINYIN_SYLLABLE_TONE[base];
+          }
+          cursor += 1;
+        }
+        return `${toned}${rest}`;
+      }).join(' ');
+    }
+
+    VOCAB.forEach(item => {
+      const tone = buildToneForHan(item.han);
+      item.pinyinTone = tone || item.pinyin;
+    });
+
     const SENTENCES = {
       easy: EASY_SENTENCES.map((row, idx) => parseSentence(row, 'easy', idx)),
       hard: HARD_SENTENCES.map((row, idx) => parseSentence(row, 'hard', idx)),
@@ -1193,7 +1332,16 @@
 
     function parseSentence(row, level, idx) {
       const [han, pinyin, vi] = row.split('|');
-      return { han: han.trim(), pinyin: pinyin.trim(), vi: vi.trim(), level, idx };
+      const cleanHan = han.trim();
+      const cleanPinyin = pinyin.trim();
+      return {
+        han: cleanHan,
+        pinyin: cleanPinyin,
+        pinyinTone: prettifySentencePinyin(cleanHan, cleanPinyin),
+        vi: vi.trim(),
+        level,
+        idx
+      };
     }
 
     const ALL_SENTENCES = [...SENTENCES.easy, ...SENTENCES.hard];
@@ -1445,7 +1593,8 @@
       const item = studyState.list[studyState.index];
       if (!item) return;
       studyHan.innerHTML = `<div><strong>${item.han}</strong><br/><small>Hán</small></div>`;
-      studyPinyin.innerHTML = studyState.showPinyin ? `<div>${item.pinyin}<br/><small>Pinyin</small></div>` : '<small>Đang ẩn pinyin</small>';
+      const pinyinDisplay = item.pinyinTone || item.pinyin;
+      studyPinyin.innerHTML = studyState.showPinyin ? `<div>${pinyinDisplay}<br/><small>Pinyin</small></div>` : '<small>Đang ẩn pinyin</small>';
       studyVi.innerHTML = studyState.showVi ? `<div>${item.vi}<br/><small>Tiếng Việt</small></div>` : '<small>Đang ẩn nghĩa</small>';
       toggleVi.textContent = studyState.showVi ? 'Ẩn nghĩa' : 'Hiện nghĩa';
       togglePinyin.textContent = studyState.showPinyin ? 'Ẩn pinyin' : 'Hiện pinyin';
@@ -1534,6 +1683,7 @@
     const practiceAnswer = document.getElementById('practiceAnswer');
     const practiceFeedback = document.getElementById('practiceFeedback');
     const practicePrompt = document.getElementById('practicePrompt');
+    const promptPinyin = document.getElementById('promptPinyin');
     const promptText = document.getElementById('promptText');
     const promptHint = document.getElementById('promptHint');
     const timerEl = document.getElementById('timer');
@@ -1607,6 +1757,8 @@
       if (!q) {
         practiceState.autoResume = false;
         updateTimerButton();
+        promptPinyin.style.display = 'none';
+        promptPinyin.textContent = '';
         return;
       }
       practiceAnswer.focus();
@@ -1623,8 +1775,16 @@
         prompt = q.vi;
         hint = 'Viết lại bằng chữ Hán và pinyin nếu nhớ.';
       }
+      const isHanPrompt = prompt === q.han;
       promptText.textContent = prompt;
       promptHint.textContent = hint;
+      if (isHanPrompt) {
+        promptPinyin.textContent = q.pinyinTone || q.pinyin;
+        promptPinyin.style.display = 'block';
+      } else {
+        promptPinyin.style.display = 'none';
+        promptPinyin.textContent = '';
+      }
       resetTimer();
       if (practiceState.autoResume) {
         startTimer();
@@ -1718,7 +1878,8 @@
       } else {
         practiceState.stats.wrong += 1;
         practiceState.stats.streak = 0;
-        practiceFeedback.textContent = `Đáp án: ${q.han} ⇄ ${q.vi}`;
+        const tone = q.pinyinTone || q.pinyin;
+        practiceFeedback.textContent = `Đáp án: ${q.han} (${tone}) ⇄ ${q.vi}`;
         practiceFeedback.className = 'chip badge-bad';
         if (!wrongPool.includes(key)) {
           wrongPool.push(key);
@@ -1739,7 +1900,8 @@
     });
     document.getElementById('showAnswer').addEventListener('click', () => {
       if (!practiceState.current) return;
-      practiceFeedback.textContent = `${practiceState.current.han} ⇄ ${practiceState.current.vi}`;
+      const tone = practiceState.current.pinyinTone || practiceState.current.pinyin;
+      practiceFeedback.textContent = `${practiceState.current.han} (${tone}) ⇄ ${practiceState.current.vi}`;
       practiceFeedback.className = 'chip';
       practiceAnswer.focus();
     });
@@ -1776,14 +1938,14 @@
       VOCAB.forEach((item, idx) => {
         const row = document.createElement('div');
         row.className = 'vocab-row';
-        row.innerHTML = `<strong>${idx + 1}. ${item.han}</strong><span>${item.pinyin}</span><span>${item.vi}</span>`;
+        row.innerHTML = `<strong>${idx + 1}. ${item.han}</strong><span>${item.pinyinTone || item.pinyin}</span><span>${item.vi}</span>`;
         vocabList.appendChild(row);
       });
       sentenceList.innerHTML = '';
       ALL_SENTENCES.forEach((item, idx) => {
         const row = document.createElement('div');
         row.className = 'sentence-row';
-        const pinyinSpan = toggleBankPinyin.checked ? `<span>${item.pinyin}</span>` : '';
+        const pinyinSpan = toggleBankPinyin.checked ? `<span>${item.pinyinTone || item.pinyin}</span>` : '';
         row.innerHTML = `<div><strong>${idx + 1}. ${item.han}</strong><div class="sentence-meta">${pinyinSpan}<span>${item.vi}</span></div></div>`;
         sentenceList.appendChild(row);
       });
