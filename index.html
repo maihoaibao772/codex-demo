@@ -311,6 +311,37 @@
       gap: 6px;
       font-size: 14px;
     }
+    .chip-button {
+      padding: 6px 12px;
+      background: color-mix(in srgb, var(--chip) 92%, transparent);
+      border: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      box-shadow: none;
+    }
+    .chip-button:hover {
+      transform: translateY(-1px);
+      background: color-mix(in srgb, var(--chip) 96%, transparent);
+    }
+    .chip-button:focus-visible {
+      outline: 2px solid color-mix(in srgb, var(--accent) 55%, transparent);
+      outline-offset: 2px;
+    }
+    .avatar-circle {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--accent), var(--brand));
+      color: var(--bg);
+      font-size: 1rem;
+      box-shadow: 0 0 0 2px color-mix(in srgb, var(--bg) 80%, transparent);
+    }
     main {
       flex: 1;
       display: flex;
@@ -509,10 +540,11 @@
     }
     .panel {
       display: none;
-      gap: 24px;
     }
     .panel.active {
-      display: grid;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
     }
     .panel h2 {
       margin-top: 0;
@@ -555,18 +587,10 @@
       gap: 8px;
       flex-wrap: wrap;
     }
-    .flashcard-stack {
-      display: grid;
-      gap: 12px;
-    }
-    .flashcard-stack h3 {
-      margin: 0;
-      font-size: 1.1rem;
-    }
     .flashcard {
       position: relative;
       perspective: 1200px;
-      height: 180px;
+      height: 220px;
     }
     .flash-face {
       position: absolute;
@@ -581,6 +605,44 @@
       backface-visibility: hidden;
       transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
       box-shadow: var(--shadow);
+    }
+    .flash-layout {
+      display: grid;
+      gap: 20px;
+    }
+    .flash-hero {
+      display: grid;
+      gap: 16px;
+    }
+    .flash-header h3 {
+      margin: 0 0 4px 0;
+    }
+    .flash-header p {
+      margin: 0;
+    }
+    .flashcard-controls {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .flash-meta {
+      display: grid;
+      gap: 12px;
+      align-content: start;
+    }
+    .flash-meta ul {
+      margin: 0;
+      padding-left: 20px;
+      display: grid;
+      gap: 6px;
+    }
+    .flash-meta button {
+      justify-content: flex-start;
+    }
+    @media (min-width: 960px) {
+      .flash-layout {
+        grid-template-columns: 2fr 1fr;
+      }
     }
     @media (prefers-reduced-motion: reduce) {
       .flash-face {
@@ -605,11 +667,6 @@
     }
     .flashcard.flipped .flash-face.back {
       transform: rotateY(360deg);
-    }
-    .flashcard-controls {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
     }
     .list-scroll {
       max-height: 240px;
@@ -636,6 +693,7 @@
     }
     .quick-check input:focus {
       outline: 2px solid var(--accent);
+      outline-offset: 2px;
     }
     .practice-controls, .practice-meta {
       display: flex;
@@ -700,6 +758,167 @@
       color: color-mix(in srgb, var(--muted) 55%, var(--ink) 45%);
       letter-spacing: 0.01em;
       margin-top: -8px;
+    }
+    .account-wrapper {
+      display: grid;
+      gap: 20px;
+    }
+    .account-overview {
+      display: grid;
+      gap: 20px;
+    }
+    .account-heading {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .account-avatar {
+      width: 96px;
+      height: 96px;
+      border-radius: 28px;
+      display: grid;
+      place-items: center;
+      font-size: 2.8rem;
+      background: linear-gradient(135deg, var(--accent), var(--brand));
+      color: var(--bg);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+      border: 4px solid color-mix(in srgb, var(--bg) 75%, transparent);
+    }
+    .account-form-grid {
+      display: grid;
+      gap: 16px;
+    }
+    .account-form-grid label,
+    .account-security label {
+      display: grid;
+      gap: 8px;
+      font-weight: 600;
+    }
+    .account-form-grid input,
+    .account-security input {
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--ink);
+      font-size: 1rem;
+    }
+    .account-form-grid input:focus,
+    .account-security input:focus {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+    .account-option {
+      display: grid;
+      gap: 10px;
+    }
+    .account-option h4 {
+      margin: 0 0 8px 0;
+    }
+    .avatar-options,
+    .frame-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .avatar-choice,
+    .frame-choice {
+      border: 1px solid var(--border);
+      background: transparent;
+      padding: 10px 14px;
+      border-radius: 16px;
+      font-weight: 600;
+      transition: transform 0.2s ease, border 0.2s ease, box-shadow 0.2s ease;
+    }
+    .avatar-choice {
+      width: 56px;
+      height: 56px;
+      display: grid;
+      place-items: center;
+      font-size: 1.6rem;
+    }
+    .frame-choice {
+      min-width: 120px;
+      justify-content: center;
+    }
+    .avatar-choice.active,
+    .frame-choice.active {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent);
+      transform: translateY(-2px);
+    }
+    .account-overview .chip:empty,
+    .account-security .chip:empty {
+      display: none;
+    }
+    .account-security {
+      display: grid;
+      gap: 16px;
+      align-content: start;
+    }
+    .account-leaderboard {
+      display: grid;
+      gap: 16px;
+    }
+    .leaderboard {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 12px;
+    }
+    .leaderboard li {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--card) 94%, transparent);
+    }
+    .leaderboard li.empty {
+      justify-content: center;
+      color: var(--muted);
+      font-style: italic;
+    }
+    .leaderboard li .meta {
+      display: grid;
+      gap: 2px;
+    }
+    .leaderboard .rank {
+      font-weight: 700;
+      font-size: 1.2rem;
+      min-width: 32px;
+    }
+    .leaderboard .score {
+      font-weight: 600;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    @media (min-width: 640px) {
+      .account-form-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-items: start;
+      }
+      .account-form-grid label {
+        grid-column: 1 / -1;
+      }
+      #accountSaveProfile {
+        justify-self: start;
+      }
+      .account-option {
+        min-height: 100px;
+      }
+    }
+    @media (min-width: 960px) {
+      .account-wrapper {
+        grid-template-columns: minmax(0, 2fr) minmax(0, 1.3fr);
+      }
+      .account-leaderboard {
+        grid-column: 1 / -1;
+      }
     }
     .stat-badges {
       display: flex;
@@ -1069,7 +1288,10 @@
         <button id="themeToggle" class="ghost" aria-label="Đổi theme">Dark · Light</button>
         <button id="signupBtn" class="ghost">Đăng ký</button>
         <button id="loginBtn" class="ghost">Đăng nhập</button>
-        <span id="userBadge" class="chip hidden">👤 <span id="userName"></span></span>
+        <button id="userBadge" class="chip chip-button hidden" type="button" data-route="account" aria-label="Hồ sơ tài khoản">
+          <span class="avatar-circle" id="userAvatarBadge" aria-hidden="true">🐼</span>
+          <span id="userName"></span>
+        </button>
         <button id="logoutBtn" class="ghost hidden">Đăng xuất</button>
       </nav>
     </div>
@@ -1238,6 +1460,7 @@
     <section id="app">
       <div class="app-tabs">
         <button class="app-tab active" data-panel="study">Ôn bài</button>
+        <button class="app-tab" data-panel="flash">Flashcard</button>
         <button class="app-tab" data-panel="practice">Bài tập</button>
         <button class="app-tab" data-panel="bank">Sổ tay</button>
       </div>
@@ -1261,22 +1484,6 @@
               <div class="practice-controls">
                 <button id="checkStudy">Kiểm tra</button>
                 <span id="studyFeedback" class="chip"></span>
-              </div>
-            </div>
-            <div class="flashcard-stack">
-              <h3>Flash card luyện phản xạ</h3>
-              <div class="flashcard" id="flashcard" aria-live="polite">
-                <div class="flash-face front">
-                  <div id="flashFront">Chạm “Lật thẻ” để bắt đầu</div>
-                </div>
-                <div class="flash-face back">
-                  <div id="flashBack">Đáp án sẽ hiển thị tại đây</div>
-                </div>
-              </div>
-              <div class="flashcard-controls">
-                <button id="flashFlip">Lật thẻ</button>
-                <button id="flashNext">Thẻ tiếp</button>
-                <button id="flashMode">Hiện mặt Việt trước</button>
               </div>
             </div>
           </div>
@@ -1361,6 +1568,88 @@
               <div class="data-grid" id="sentenceList"></div>
             </div>
           </div>
+        </div>
+      </div>
+      <div class="panel flash" id="panel-flash">
+        <div class="flash-layout">
+          <div class="flash-hero card">
+            <div class="flash-header">
+              <h3>Flashcard siêu tốc</h3>
+              <p class="muted">Lật thẻ để xem nghĩa và pinyin có dấu. Xáo trộn mọi lần để kích hoạt phản xạ hai chiều.</p>
+            </div>
+            <div class="flashcard" id="flashcard" aria-live="polite">
+              <div class="flash-face front">
+                <div id="flashFront">Chạm “Lật thẻ” để bắt đầu</div>
+              </div>
+              <div class="flash-face back">
+                <div id="flashBack">Đáp án sẽ hiển thị tại đây</div>
+              </div>
+            </div>
+            <div class="flashcard-controls">
+              <button id="flashFlip">Lật thẻ</button>
+              <button id="flashNext">Thẻ tiếp</button>
+              <button id="flashMode">Hiện mặt Việt trước</button>
+            </div>
+          </div>
+          <aside class="flash-meta card">
+            <h4>Mẹo luyện hiệu quả</h4>
+            <ul>
+              <li>🎯 Đặt mục tiêu 10 thẻ đúng liên tiếp.</li>
+              <li>🔁 Kết hợp với chế độ Bài tập để ghi nhớ lâu.</li>
+              <li>🔊 Nghe phát âm trong Ôn bài trước khi lật.</li>
+            </ul>
+            <button id="flashStudyLink" class="ghost" type="button" data-panel-target="study">Quay lại Ôn bài</button>
+          </aside>
+        </div>
+      </div>
+    </section>
+    <section id="account">
+      <div class="account-wrapper">
+        <div class="card account-overview">
+          <div class="account-heading">
+            <div class="account-avatar" id="accountAvatarFrame">
+              <span id="accountAvatar">🐼</span>
+            </div>
+            <div>
+              <h2 id="accountDisplayName">Tài khoản của bạn</h2>
+              <p class="muted" id="accountSince">Tham gia từ hôm nay</p>
+            </div>
+          </div>
+          <div class="account-form-grid">
+            <label>
+              <span>Tên hiển thị</span>
+              <input type="text" id="accountNameInput" placeholder="Nhập tên muốn hiển thị" />
+            </label>
+            <button id="accountSaveProfile" class="primary" type="button">Lưu hồ sơ</button>
+            <div class="account-option">
+              <h4>Avatar</h4>
+              <div class="avatar-options" id="avatarOptions" role="radiogroup"></div>
+            </div>
+            <div class="account-option">
+              <h4>Khung viền</h4>
+              <div class="frame-options" id="frameOptions" role="radiogroup"></div>
+            </div>
+          </div>
+          <span id="accountProfileFeedback" class="chip"></span>
+        </div>
+        <div class="card account-security">
+          <h3>Bảo mật</h3>
+          <p class="muted">Đổi mật khẩu mới (≥ 6 ký tự) để bảo vệ tài khoản của bạn.</p>
+          <label>
+            <span>Mật khẩu mới</span>
+            <input type="password" id="accountPassNew" autocomplete="new-password" />
+          </label>
+          <label>
+            <span>Nhập lại mật khẩu</span>
+            <input type="password" id="accountPassConfirm" autocomplete="new-password" />
+          </label>
+          <button id="accountSavePassword" type="button">Cập nhật mật khẩu</button>
+          <span id="accountPassFeedback" class="chip"></span>
+        </div>
+        <div class="card account-leaderboard">
+          <h3>Bảng xếp hạng cá nhân</h3>
+          <p class="muted">Thứ hạng dựa trên số câu đúng, độ chính xác và chuỗi đúng dài nhất.</p>
+          <ol id="leaderboardList" class="leaderboard"></ol>
         </div>
       </div>
     </section>
@@ -1684,6 +1973,53 @@
 
     const ALL_SENTENCES = [...SENTENCES.easy, ...SENTENCES.hard];
 
+    const PROFILE_AVATARS = ['🐼', '🐉', '🧧', '🀄️', '🌸', '🐯', '🪁', '🐢'];
+
+    const PROFILE_FRAMES = [
+      {
+        id: 'jade',
+        label: 'Jade',
+        gradient: 'linear-gradient(135deg, #16a34a, #4ade80)',
+        badge: 'linear-gradient(135deg, #16a34a, #4ade80)',
+        ring: '#bbf7d0',
+        text: '#041b0a',
+        shadow: '0 18px 36px rgba(34, 197, 94, 0.35)'
+      },
+      {
+        id: 'aurora',
+        label: 'Aurora',
+        gradient: 'linear-gradient(135deg, #38bdf8, #6366f1)',
+        badge: 'linear-gradient(135deg, #38bdf8, #6366f1)',
+        ring: '#c7d2fe',
+        text: '#061327',
+        shadow: '0 18px 36px rgba(99, 102, 241, 0.32)'
+      },
+      {
+        id: 'sunset',
+        label: 'Sunset',
+        gradient: 'linear-gradient(135deg, #f97316, #f43f5e)',
+        badge: 'linear-gradient(135deg, #f97316, #f43f5e)',
+        ring: '#fecaca',
+        text: '#2c0a0f',
+        shadow: '0 18px 36px rgba(244, 63, 94, 0.28)'
+      },
+      {
+        id: 'onyx',
+        label: 'Onyx',
+        gradient: 'linear-gradient(135deg, #1e293b, #0f172a)',
+        badge: 'linear-gradient(135deg, #1e293b, #0f172a)',
+        ring: '#334155',
+        text: '#e7ecf7',
+        shadow: '0 18px 36px rgba(15, 23, 42, 0.45)'
+      }
+    ];
+
+    const JOINED_FORMATTER = new Intl.DateTimeFormat('vi-VN', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+
     const STORAGE_KEYS = {
       users: 'usersDB',
       session: 'sessionUser',
@@ -1696,7 +2032,8 @@
       studyShowPinyin: 'studyShowPinyin',
       wrongPool: 'wrongPool',
       bankShowPinyin: 'bankShowPinyin',
-      bankAccords: 'bankAccords'
+      bankAccords: 'bankAccords',
+      leaderboard: 'leaderboard'
     };
 
     // NAV
@@ -1769,6 +2106,7 @@
     const logoutBtn = document.getElementById('logoutBtn');
     const userBadge = document.getElementById('userBadge');
     const userNameLabel = document.getElementById('userName');
+    const userAvatarBadge = document.getElementById('userAvatarBadge');
     const authFeedback = document.getElementById('authFeedback');
     const tabLogin = document.getElementById('tabLogin');
     const tabSignup = document.getElementById('tabSignup');
@@ -1786,6 +2124,39 @@
 
     function setUsers(users) {
       localStorage.setItem(STORAGE_KEYS.users, JSON.stringify(users));
+    }
+
+    function applyUserDefaults(username, record) {
+      let changed = false;
+      if (!record.displayName) {
+        record.displayName = username;
+        changed = true;
+      }
+      if (!record.avatar || !PROFILE_AVATARS.includes(record.avatar)) {
+        record.avatar = PROFILE_AVATARS[0];
+        changed = true;
+      }
+      if (!record.frame || !PROFILE_FRAMES.some(frame => frame.id === record.frame)) {
+        record.frame = PROFILE_FRAMES[0].id;
+        changed = true;
+      }
+      if (!record.created) {
+        record.created = Date.now();
+        changed = true;
+      }
+      return changed;
+    }
+
+    function getProfileBundle(username) {
+      const users = getUsers();
+      const record = users[username];
+      if (!record) return null;
+      const changed = applyUserDefaults(username, record);
+      if (changed) {
+        users[username] = record;
+        setUsers(users);
+      }
+      return { username, users, record };
     }
 
     async function hashPass(str) {
@@ -1839,7 +2210,13 @@
         return;
       }
       const hashed = await hashPass(password);
-      users[username] = { pass: hashed, created: Date.now() };
+      users[username] = {
+        pass: hashed,
+        created: Date.now(),
+        displayName: username,
+        avatar: PROFILE_AVATARS[0],
+        frame: PROFILE_FRAMES[0].id
+      };
       setUsers(users);
       signupUser.value = '';
       signupPass.value = '';
@@ -1865,6 +2242,11 @@
         showAuthFeedback('Mật khẩu chưa đúng.', true);
         return;
       }
+      const record = users[username];
+      if (applyUserDefaults(username, record)) {
+        users[username] = record;
+        setUsers(users);
+      }
       localStorage.setItem(STORAGE_KEYS.session, username);
       if (rememberMe.checked) {
         localStorage.setItem(STORAGE_KEYS.remember, username);
@@ -1886,11 +2268,45 @@
       authFeedback.classList.toggle('badge-ok', !isError);
     }
 
+    function syncHeaderProfile() {
+      const session = localStorage.getItem(STORAGE_KEYS.session);
+      if (!session) {
+        userNameLabel.textContent = '';
+        if (userAvatarBadge) {
+          userAvatarBadge.textContent = '🐼';
+          userAvatarBadge.removeAttribute('style');
+        }
+        return;
+      }
+      const bundle = getProfileBundle(session);
+      if (!bundle) {
+        userNameLabel.textContent = session;
+        if (userAvatarBadge) {
+          const frame = PROFILE_FRAMES[0];
+          userAvatarBadge.textContent = PROFILE_AVATARS[0];
+          userAvatarBadge.style.background = frame.badge;
+          userAvatarBadge.style.boxShadow = `0 0 0 2px ${frame.ring}`;
+          userAvatarBadge.style.color = frame.text;
+        }
+        return;
+      }
+      const { record } = bundle;
+      const displayName = record.displayName || session;
+      userNameLabel.textContent = displayName;
+      if (userAvatarBadge) {
+        const frame = PROFILE_FRAMES.find(f => f.id === record.frame) || PROFILE_FRAMES[0];
+        userAvatarBadge.textContent = record.avatar || PROFILE_AVATARS[0];
+        userAvatarBadge.style.background = frame.badge;
+        userAvatarBadge.style.boxShadow = `0 0 0 2px ${frame.ring}`;
+        userAvatarBadge.style.color = frame.text;
+      }
+    }
+
     function updateAuthUI() {
       closeNav();
       const session = localStorage.getItem(STORAGE_KEYS.session);
       if (session) {
-        userNameLabel.textContent = session;
+        syncHeaderProfile();
         userBadge.classList.remove('hidden');
         logoutBtn.classList.remove('hidden');
         loginBtn.classList.add('hidden');
@@ -1900,6 +2316,11 @@
         logoutBtn.classList.add('hidden');
         loginBtn.classList.remove('hidden');
         signupBtn.classList.remove('hidden');
+        userNameLabel.textContent = '';
+        if (userAvatarBadge) {
+          userAvatarBadge.textContent = '🐼';
+          userAvatarBadge.removeAttribute('style');
+        }
       }
       syncHeaderOffset();
     }
@@ -1963,18 +2384,24 @@
     const sections = {
       home: document.getElementById('home'),
       faq: document.getElementById('faq'),
-      app: document.getElementById('app')
+      app: document.getElementById('app'),
+      account: document.getElementById('account')
     };
 
     function goRoute(route) {
       closeNav();
-      if (route === 'app' && !localStorage.getItem(STORAGE_KEYS.session)) {
+      const requiresAuth = route === 'app' || route === 'account';
+      const session = localStorage.getItem(STORAGE_KEYS.session);
+      if (requiresAuth && !session) {
         openAuth('login');
         return;
       }
       Object.entries(sections).forEach(([key, section]) => {
-        section.classList.toggle('active', key === route);
+        if (section) section.classList.toggle('active', key === route);
       });
+      if (route === 'account') {
+        populateAccount(true);
+      }
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -2019,10 +2446,30 @@
     const flashFlip = document.getElementById('flashFlip');
     const flashNext = document.getElementById('flashNext');
     const flashModeBtn = document.getElementById('flashMode');
+    const flashStudyLink = document.getElementById('flashStudyLink');
+    const accountNameInput = document.getElementById('accountNameInput');
+    const accountDisplayName = document.getElementById('accountDisplayName');
+    const accountSince = document.getElementById('accountSince');
+    const accountAvatarFrame = document.getElementById('accountAvatarFrame');
+    const accountAvatar = document.getElementById('accountAvatar');
+    const accountProfileFeedback = document.getElementById('accountProfileFeedback');
+    const accountPassFeedback = document.getElementById('accountPassFeedback');
+    const accountPassNew = document.getElementById('accountPassNew');
+    const accountPassConfirm = document.getElementById('accountPassConfirm');
+    const accountSaveProfile = document.getElementById('accountSaveProfile');
+    const accountSavePassword = document.getElementById('accountSavePassword');
+    const avatarOptions = document.getElementById('avatarOptions');
+    const frameOptions = document.getElementById('frameOptions');
+    const leaderboardList = document.getElementById('leaderboardList');
 
     const flashState = {
       current: null,
       front: 'han'
+    };
+
+    const accountState = {
+      avatar: PROFILE_AVATARS[0],
+      frame: PROFILE_FRAMES[0].id
     };
 
     function renderFlashcard() {
@@ -2154,6 +2601,23 @@
       });
     }
 
+    function activateAppPanel(panelName) {
+      document.querySelectorAll('.app-tab').forEach(tab => {
+        tab.classList.toggle('active', tab.dataset.panel === panelName);
+      });
+      document.querySelectorAll('#app .panel').forEach(panel => {
+        panel.classList.toggle('active', panel.id === `panel-${panelName}`);
+      });
+    }
+
+    if (flashStudyLink) {
+      flashStudyLink.addEventListener('click', () => {
+        activateAppPanel('study');
+        const targetTab = document.querySelector('.app-tab[data-panel="study"]');
+        if (targetTab) targetTab.focus();
+      });
+    }
+
     const studyAnswer = document.getElementById('studyAnswer');
     const checkStudy = document.getElementById('checkStudy');
     const studyFeedback = document.getElementById('studyFeedback');
@@ -2177,6 +2641,254 @@
         checkStudy.click();
       }
     });
+
+    // ACCOUNT
+    function updateAccountPreview() {
+      if (!accountAvatarFrame || !accountAvatar) return;
+      const frame = PROFILE_FRAMES.find(f => f.id === accountState.frame) || PROFILE_FRAMES[0];
+      accountAvatarFrame.style.background = frame.gradient;
+      accountAvatarFrame.style.boxShadow = frame.shadow;
+      accountAvatarFrame.style.borderColor = frame.ring;
+      accountAvatar.textContent = accountState.avatar;
+    }
+
+    function renderAvatarOptions() {
+      if (!avatarOptions) return;
+      avatarOptions.innerHTML = '';
+      PROFILE_AVATARS.forEach(emoji => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = `avatar-choice${accountState.avatar === emoji ? ' active' : ''}`;
+        btn.setAttribute('role', 'radio');
+        btn.setAttribute('aria-checked', String(accountState.avatar === emoji));
+        btn.setAttribute('aria-label', `Chọn avatar ${emoji}`);
+        btn.title = `Avatar ${emoji}`;
+        btn.textContent = emoji;
+        btn.addEventListener('click', () => {
+          accountState.avatar = emoji;
+          renderAvatarOptions();
+          updateAccountPreview();
+        });
+        avatarOptions.appendChild(btn);
+      });
+    }
+
+    function renderFrameOptions() {
+      if (!frameOptions) return;
+      frameOptions.innerHTML = '';
+      PROFILE_FRAMES.forEach(frame => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = `frame-choice${accountState.frame === frame.id ? ' active' : ''}`;
+        btn.style.background = frame.gradient;
+        btn.style.color = frame.text;
+        btn.setAttribute('role', 'radio');
+        btn.setAttribute('aria-checked', String(accountState.frame === frame.id));
+        btn.setAttribute('aria-label', `Chọn khung ${frame.label}`);
+        btn.title = `Khung ${frame.label}`;
+        btn.textContent = frame.label;
+        btn.addEventListener('click', () => {
+          accountState.frame = frame.id;
+          renderFrameOptions();
+          updateAccountPreview();
+        });
+        frameOptions.appendChild(btn);
+      });
+    }
+
+    function setAccountFeedback(el, message, isError) {
+      if (!el) return;
+      el.textContent = message;
+      el.className = `chip ${isError ? 'badge-bad' : 'badge-ok'}`;
+    }
+
+    function clearAccountFeedback() {
+      if (accountProfileFeedback) {
+        accountProfileFeedback.textContent = '';
+        accountProfileFeedback.className = 'chip';
+      }
+      if (accountPassFeedback) {
+        accountPassFeedback.textContent = '';
+        accountPassFeedback.className = 'chip';
+      }
+    }
+
+    function populateAccount(resetFeedback = false) {
+      const session = localStorage.getItem(STORAGE_KEYS.session);
+      if (!session || !accountNameInput || !accountDisplayName) return;
+      const bundle = getProfileBundle(session);
+      if (!bundle) return;
+      const { record } = bundle;
+      accountDisplayName.textContent = record.displayName || session;
+      accountNameInput.value = record.displayName || session;
+      const joined = record.created ? new Date(record.created) : new Date();
+      if (accountSince) {
+        accountSince.textContent = `Tham gia từ ${JOINED_FORMATTER.format(joined)}`;
+      }
+      accountState.avatar = record.avatar && PROFILE_AVATARS.includes(record.avatar) ? record.avatar : PROFILE_AVATARS[0];
+      accountState.frame = record.frame && PROFILE_FRAMES.some(f => f.id === record.frame) ? record.frame : PROFILE_FRAMES[0].id;
+      updateAccountPreview();
+      renderAvatarOptions();
+      renderFrameOptions();
+      if (resetFeedback) {
+        clearAccountFeedback();
+      }
+      renderLeaderboard();
+    }
+
+    function getLeaderboard() {
+      return JSON.parse(localStorage.getItem(STORAGE_KEYS.leaderboard) || '[]');
+    }
+
+    function setLeaderboard(data) {
+      localStorage.setItem(STORAGE_KEYS.leaderboard, JSON.stringify(data));
+    }
+
+    function renderLeaderboard() {
+      if (!leaderboardList) return;
+      const entries = getLeaderboard();
+      leaderboardList.innerHTML = '';
+      if (!entries.length) {
+        const li = document.createElement('li');
+        li.className = 'empty';
+        li.textContent = 'Chưa có dữ liệu. Luyện tập để xuất hiện trên bảng xếp hạng!';
+        leaderboardList.appendChild(li);
+        return;
+      }
+      entries.slice(0, 5).forEach((entry, index) => {
+        const li = document.createElement('li');
+        const rank = document.createElement('span');
+        rank.className = 'rank';
+        rank.textContent = `#${index + 1}`;
+        const meta = document.createElement('div');
+        meta.className = 'meta';
+        const name = document.createElement('strong');
+        name.textContent = entry.displayName || entry.user || 'Người học';
+        const score = document.createElement('span');
+        score.className = 'score';
+        const correct = typeof entry.correct === 'number' ? entry.correct : 0;
+        const accuracy = typeof entry.accuracy === 'number' ? entry.accuracy : 0;
+        const streak = typeof entry.streak === 'number' ? entry.streak : 0;
+        score.textContent = `${correct} câu · ${accuracy}% chính xác · 🔥 ${streak}`;
+        meta.appendChild(name);
+        meta.appendChild(score);
+        const avatar = document.createElement('span');
+        avatar.className = 'avatar-circle';
+        const frame = PROFILE_FRAMES.find(f => f.id === entry.frame) || PROFILE_FRAMES[0];
+        avatar.style.background = frame.badge;
+        avatar.style.boxShadow = `0 0 0 2px ${frame.ring}`;
+        avatar.style.color = frame.text;
+        const avatarEmoji = entry.avatar && PROFILE_AVATARS.includes(entry.avatar) ? entry.avatar : PROFILE_AVATARS[0];
+        avatar.textContent = avatarEmoji;
+        li.appendChild(rank);
+        li.appendChild(meta);
+        li.appendChild(avatar);
+        leaderboardList.appendChild(li);
+      });
+    }
+
+    function updateLeaderboard() {
+      const session = localStorage.getItem(STORAGE_KEYS.session);
+      if (!session) return;
+      const bundle = getProfileBundle(session);
+      if (!bundle) return;
+      const { record } = bundle;
+      const total = practiceState.stats.correct + practiceState.stats.wrong;
+      const accuracy = total ? Math.round((practiceState.stats.correct / total) * 100) : 0;
+      const entry = {
+        user: session,
+        displayName: record.displayName || session,
+        avatar: record.avatar || PROFILE_AVATARS[0],
+        frame: record.frame || PROFILE_FRAMES[0].id,
+        correct: practiceState.stats.correct,
+        accuracy,
+        streak: practiceState.stats.streak,
+        updated: Date.now()
+      };
+      const entries = getLeaderboard();
+      const existingIndex = entries.findIndex(item => item.user === session);
+      if (existingIndex !== -1) {
+        entries[existingIndex] = entry;
+      } else {
+        entries.push(entry);
+      }
+      entries.sort((a, b) => {
+        if (b.correct !== a.correct) return b.correct - a.correct;
+        if (b.accuracy !== a.accuracy) return b.accuracy - a.accuracy;
+        if (b.streak !== a.streak) return b.streak - a.streak;
+        return a.updated - b.updated;
+      });
+      if (entries.length > 10) {
+        entries.splice(10);
+      }
+      setLeaderboard(entries);
+      renderLeaderboard();
+    }
+
+    if (accountSaveProfile) {
+      accountSaveProfile.addEventListener('click', () => {
+        const session = localStorage.getItem(STORAGE_KEYS.session);
+        if (!session) {
+          openAuth('login');
+          return;
+        }
+        const bundle = getProfileBundle(session);
+        if (!bundle) return;
+        const { users, record } = bundle;
+        const name = accountNameInput.value.trim();
+        if (!name) {
+          setAccountFeedback(accountProfileFeedback, 'Tên hiển thị không được để trống.', true);
+          return;
+        }
+        record.displayName = name;
+        record.avatar = accountState.avatar;
+        record.frame = accountState.frame;
+        users[session] = record;
+        setUsers(users);
+        setAccountFeedback(accountProfileFeedback, 'Đã lưu hồ sơ cá nhân!', false);
+        accountDisplayName.textContent = record.displayName;
+        syncHeaderProfile();
+        updateAccountPreview();
+        const entries = getLeaderboard();
+        const idx = entries.findIndex(item => item.user === session);
+        if (idx !== -1) {
+          entries[idx].displayName = record.displayName;
+          entries[idx].avatar = record.avatar;
+          entries[idx].frame = record.frame;
+          setLeaderboard(entries);
+        }
+        renderLeaderboard();
+      });
+    }
+
+    if (accountSavePassword) {
+      accountSavePassword.addEventListener('click', async () => {
+        const session = localStorage.getItem(STORAGE_KEYS.session);
+        if (!session) {
+          openAuth('login');
+          return;
+        }
+        const bundle = getProfileBundle(session);
+        if (!bundle) return;
+        const { users, record } = bundle;
+        const newPass = accountPassNew.value.trim();
+        const confirmPass = accountPassConfirm.value.trim();
+        if (newPass.length < 6) {
+          setAccountFeedback(accountPassFeedback, 'Mật khẩu cần ít nhất 6 ký tự.', true);
+          return;
+        }
+        if (newPass !== confirmPass) {
+          setAccountFeedback(accountPassFeedback, 'Mật khẩu nhập lại chưa khớp.', true);
+          return;
+        }
+        record.pass = await hashPass(newPass);
+        users[session] = record;
+        setUsers(users);
+        accountPassNew.value = '';
+        accountPassConfirm.value = '';
+        setAccountFeedback(accountPassFeedback, 'Đã cập nhật mật khẩu!', false);
+      });
+    }
 
     // PRACTICE
     const practiceState = {
@@ -2209,6 +2921,7 @@
       document.getElementById('statAccuracy').textContent = `${accuracy}%`;
       document.getElementById('statStreak').textContent = practiceState.stats.streak;
       localStorage.setItem(STORAGE_KEYS.practiceStats, JSON.stringify(practiceState.stats));
+      updateLeaderboard();
     }
 
     function setMode(mode) {
@@ -2570,12 +3283,10 @@
       updateStatsUI();
       setWrongPool(getWrongPool());
       restoreBankSettings();
+      renderLeaderboard();
       document.querySelectorAll('.app-tab').forEach(btn => {
         btn.addEventListener('click', () => {
-          document.querySelectorAll('.app-tab').forEach(tab => tab.classList.remove('active'));
-          btn.classList.add('active');
-          document.querySelectorAll('.panel').forEach(panel => panel.classList.remove('active'));
-          document.getElementById(`panel-${btn.dataset.panel}`).classList.add('active');
+          activateAppPanel(btn.dataset.panel);
         });
       });
       document.addEventListener('keydown', (e) => {
