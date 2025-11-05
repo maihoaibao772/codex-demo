@@ -555,6 +555,62 @@
       gap: 8px;
       flex-wrap: wrap;
     }
+    .flashcard-stack {
+      display: grid;
+      gap: 12px;
+    }
+    .flashcard-stack h3 {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+    .flashcard {
+      position: relative;
+      perspective: 1200px;
+      height: 180px;
+    }
+    .flash-face {
+      position: absolute;
+      inset: 0;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      text-align: center;
+      backface-visibility: hidden;
+      transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+      box-shadow: var(--shadow);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .flash-face {
+        transition: none;
+      }
+    }
+    .flash-face strong {
+      font-size: clamp(1.6rem, 6vw, 2.4rem);
+      display: block;
+      margin-bottom: 4px;
+    }
+    .flash-face span {
+      display: block;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+    .flash-face.back {
+      transform: rotateY(180deg);
+    }
+    .flashcard.flipped .flash-face.front {
+      transform: rotateY(180deg);
+    }
+    .flashcard.flipped .flash-face.back {
+      transform: rotateY(360deg);
+    }
+    .flashcard-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
     .list-scroll {
       max-height: 240px;
       overflow-y: auto;
@@ -587,9 +643,56 @@
       gap: 8px;
       align-items: center;
     }
+    .practice-settings {
+      display: grid;
+      gap: 12px;
+    }
+    @media (min-width: 768px) {
+      .practice-settings {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+    .practice-group {
+      display: grid;
+      gap: 6px;
+    }
+    .group-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .segmented {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 8px;
+      border-radius: 16px;
+      border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+      background: color-mix(in srgb, var(--chip) 80%, transparent);
+    }
+    .segmented button {
+      flex: 1 1 120px;
+      justify-content: center;
+    }
     .practice-card {
       display: grid;
-      gap: 16px;
+      gap: 20px;
+    }
+    .practice-hint {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--chip) 90%, transparent);
+      color: color-mix(in srgb, var(--ink) 65%, var(--muted) 35%);
+      font-size: 0.9rem;
+      margin: 6px 0 4px;
+    }
+    .practice-hint::before {
+      content: '💡';
     }
     .practice-pinyin {
       font-size: 1.05rem;
@@ -1160,6 +1263,22 @@
                 <span id="studyFeedback" class="chip"></span>
               </div>
             </div>
+            <div class="flashcard-stack">
+              <h3>Flash card luyện phản xạ</h3>
+              <div class="flashcard" id="flashcard" aria-live="polite">
+                <div class="flash-face front">
+                  <div id="flashFront">Chạm “Lật thẻ” để bắt đầu</div>
+                </div>
+                <div class="flash-face back">
+                  <div id="flashBack">Đáp án sẽ hiển thị tại đây</div>
+                </div>
+              </div>
+              <div class="flashcard-controls">
+                <button id="flashFlip">Lật thẻ</button>
+                <button id="flashNext">Thẻ tiếp</button>
+                <button id="flashMode">Hiện mặt Việt trước</button>
+              </div>
+            </div>
           </div>
           <div class="card">
             <h3>Bộ câu đang học</h3>
@@ -1169,18 +1288,24 @@
       </div>
       <div class="panel practice" id="panel-practice">
         <div class="practice-card card">
-          <div class="practice-controls">
-            <label for="modeSelect">Chế độ</label>
-            <button data-mode="shuffle" class="practice-mode active">Xáo trộn câu</button>
-            <button data-mode="han2vi" class="practice-mode">Hán → Việt</button>
-            <button data-mode="vi2han" class="practice-mode">Việt → Hán</button>
-          </div>
-          <div class="practice-controls">
-            <label>Nhóm</label>
-            <button data-level="easy" class="practice-level active">Dễ</button>
-            <button data-level="hard" class="practice-level">Khó</button>
-            <button data-level="mix" class="practice-level">Tất cả</button>
-            <button data-level="wrong" class="practice-level">🛠 Ôn sai (<span id="wrongCount">0</span>)</button>
+          <div class="practice-settings">
+            <div class="practice-group">
+              <span class="group-label">Chế độ</span>
+              <div class="segmented">
+                <button data-mode="shuffle" class="practice-mode active">Xáo trộn câu</button>
+                <button data-mode="han2vi" class="practice-mode">Hán → Việt</button>
+                <button data-mode="vi2han" class="practice-mode">Việt → Hán</button>
+              </div>
+            </div>
+            <div class="practice-group">
+              <span class="group-label">Nhóm</span>
+              <div class="segmented">
+                <button data-level="easy" class="practice-level active">Dễ</button>
+                <button data-level="hard" class="practice-level">Khó</button>
+                <button data-level="mix" class="practice-level">Tất cả</button>
+                <button data-level="wrong" class="practice-level">🛠 Ôn sai (<span id="wrongCount">0</span>)</button>
+              </div>
+            </div>
           </div>
           <div class="practice-meta">
             <span class="chip">⏱ <span id="timer">60</span>s</span>
@@ -1192,7 +1317,7 @@
           </div>
           <div class="card" id="practicePrompt">
             <h3 id="promptText">Bắt đầu luyện tập nào!</h3>
-            <p id="promptHint" class="muted">Chọn chế độ và nhóm để luyện.</p>
+            <div id="promptHint" class="practice-hint" aria-live="polite">Chọn chế độ và nhóm để luyện.</div>
             <p id="promptPinyin" class="practice-pinyin" style="display:none"></p>
           </div>
           <div class="quick-check">
@@ -1200,7 +1325,7 @@
             <input id="practiceAnswer" type="text" placeholder="Nhập đáp án" autocomplete="off" />
             <div class="practice-controls">
               <button id="submitPractice">Kiểm tra</button>
-              <span id="practiceFeedback" class="chip"></span>
+              <span id="practiceFeedback" class="chip" aria-live="polite"></span>
             </div>
           </div>
           <div class="stat-badges">
@@ -1888,6 +2013,53 @@
     const toggleVi = document.getElementById('toggleVi');
     const togglePinyin = document.getElementById('togglePinyin');
     const speakBtn = document.getElementById('speakBtn');
+    const flashcardEl = document.getElementById('flashcard');
+    const flashFront = document.getElementById('flashFront');
+    const flashBack = document.getElementById('flashBack');
+    const flashFlip = document.getElementById('flashFlip');
+    const flashNext = document.getElementById('flashNext');
+    const flashModeBtn = document.getElementById('flashMode');
+
+    const flashState = {
+      current: null,
+      front: 'han'
+    };
+
+    function renderFlashcard() {
+      if (!flashcardEl || !flashFront || !flashBack) return;
+      const item = flashState.current;
+      if (!item) {
+        flashFront.textContent = 'Chạm “Thẻ tiếp” để lấy câu bất kỳ.';
+        flashBack.textContent = 'Đáp án sẽ hiển thị tại đây.';
+        flashcardEl.classList.remove('flipped');
+        return;
+      }
+      const tone = item.pinyinTone || item.pinyin;
+      if (flashState.front === 'han') {
+        flashFront.innerHTML = `<strong>${item.han}</strong><span>${tone}</span>`;
+        flashBack.innerHTML = `<strong>${item.vi}</strong><span>${tone}</span>`;
+        if (flashModeBtn) flashModeBtn.textContent = 'Hiện mặt Việt trước';
+      } else {
+        flashFront.innerHTML = `<strong>${item.vi}</strong><span>${tone}</span>`;
+        flashBack.innerHTML = `<strong>${item.han}</strong><span>${tone}</span>`;
+        if (flashModeBtn) flashModeBtn.textContent = 'Hiện mặt Hán trước';
+      }
+      flashcardEl.classList.remove('flipped');
+    }
+
+    function pickFlashRandom() {
+      if (!studyState.list.length) return null;
+      if (studyState.list.length === 1) {
+        flashState.current = studyState.list[0];
+        return flashState.current;
+      }
+      let candidate = null;
+      do {
+        candidate = studyState.list[Math.floor(Math.random() * studyState.list.length)];
+      } while (candidate === flashState.current);
+      flashState.current = candidate;
+      return candidate;
+    }
 
     function renderStudyList() {
       studyList.innerHTML = '';
@@ -1913,6 +2085,8 @@
       toggleVi.textContent = studyState.showVi ? 'Ẩn nghĩa' : 'Hiện nghĩa';
       togglePinyin.textContent = studyState.showPinyin ? 'Ẩn pinyin' : 'Hiện pinyin';
       highlightStudyList();
+      flashState.current = item;
+      renderFlashcard();
     }
 
     function highlightStudyList() {
@@ -1957,6 +2131,28 @@
       speechSynthesis.cancel();
       speechSynthesis.speak(utter);
     });
+
+    if (flashFlip && flashcardEl) {
+      flashFlip.addEventListener('click', () => {
+        if (!flashState.current) {
+          pickFlashRandom();
+          renderFlashcard();
+        }
+        flashcardEl.classList.toggle('flipped');
+      });
+    }
+    if (flashNext) {
+      flashNext.addEventListener('click', () => {
+        pickFlashRandom();
+        renderFlashcard();
+      });
+    }
+    if (flashModeBtn) {
+      flashModeBtn.addEventListener('click', () => {
+        flashState.front = flashState.front === 'han' ? 'vi' : 'han';
+        renderFlashcard();
+      });
+    }
 
     const studyAnswer = document.getElementById('studyAnswer');
     const checkStudy = document.getElementById('checkStudy');
@@ -2049,7 +2245,9 @@
         if (!wrongPool.length) {
           promptText.textContent = 'Ôn sai trống';
           promptHint.textContent = 'Tuyệt vời! Bạn đã chinh phục hết câu sai.';
+          promptHint.style.display = 'inline-flex';
           practiceFeedback.textContent = '';
+          practiceFeedback.className = 'chip';
           practiceState.current = null;
           return null;
         }
@@ -2067,12 +2265,14 @@
       const q = pickQuestion();
       practiceState.current = q;
       practiceFeedback.textContent = '';
+      practiceFeedback.className = 'chip';
       practiceAnswer.value = '';
       if (!q) {
         practiceState.autoResume = false;
         updateTimerButton();
         promptPinyin.style.display = 'none';
         promptPinyin.textContent = '';
+        promptHint.style.display = 'inline-flex';
         return;
       }
       practiceAnswer.focus();
@@ -2092,6 +2292,7 @@
       const isHanPrompt = prompt === q.han;
       promptText.textContent = prompt;
       promptHint.textContent = hint;
+      promptHint.style.display = hint ? 'inline-flex' : 'none';
       if (isHanPrompt) {
         promptPinyin.textContent = q.pinyinTone || q.pinyin;
         promptPinyin.style.display = 'block';
@@ -2201,10 +2402,15 @@
         }
       }
       updateStatsUI();
-      if (fromUser || timeUp) {
+      const shouldAdvance = timeUp || isCorrect;
+      if (shouldAdvance) {
+        const delay = timeUp ? 1600 : 1200;
         setTimeout(() => {
           nextQuestion();
-        }, 1000);
+        }, delay);
+      } else {
+        practiceState.autoResume = false;
+        updateTimerButton();
       }
     }
 
