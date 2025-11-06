@@ -6,6 +6,9 @@
   <title>Học Trung ⇄ Việt • Hoài Bảo</title>
   <meta name="description" content="Ôn từ vựng, luyện dịch Hán⇄Việt, pinyin dấu, kiểm tra, shop khung, VIP. Build bởi Hoài Bảo." />
   <meta name="theme-color" content="#0b1220"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Noto+Sans+SC:wght@400;600&display=swap" rel="stylesheet">
   <link rel="manifest" href="/manifest.webmanifest" />
   <link rel="stylesheet" href="/css/style.css" />
   <link rel="stylesheet" href="/css/animations.css" />
@@ -17,6 +20,7 @@
         <span class="brand"><i class="logo"></i> Học Trung ⇄ Việt</span>
         <span class="badge" id="userBadge" hidden>👤</span>
         <span class="badge coin" id="coinBadge" hidden>🟡 0</span>
+        <button class="iconbtn" id="accountBtn" title="Tài khoản">👤</button>
         <button class="auth-btn" id="btnOpenLogin">Đăng nhập</button>
         <button class="logout" id="btnLogout" hidden>Đăng xuất</button>
       </div>
@@ -27,7 +31,7 @@
         <button class="tablink" data-route="app">Vào học</button>
       </nav>
       <div class="row gap">
-        <button class="auth-btn" id="btnOpenTranslate" title="Dịch nhanh">🌐</button>
+        <button class="iconbtn" id="btnOpenTranslate" title="Dịch nhanh">🌐</button>
         <button class="theme-toggle" id="themeToggle">☀️ / 🌙</button>
       </div>
     </div>
@@ -236,6 +240,21 @@
 
       <section class="section" id="account" hidden>
         <div class="badge">Tài khoản</div>
+        <div class="card account-quick">
+          <div class="muted">Đăng nhập: <b id="accName">(chưa)</b></div>
+          <div class="row" style="margin-top:8px; gap:10px; flex-wrap:wrap">
+            <label class="badge"><input type="checkbox" id="prefHidePinyin" style="accent-color:var(--accent)"> Mặc định ẩn pinyin (Ôn bài)</label>
+            <label class="badge">Màu chủ đạo:
+              <select id="accentSelect">
+                <option value="green">Xanh lá</option>
+                <option value="blue">Xanh dương</option>
+                <option value="violet">Tím</option>
+              </select>
+            </label>
+            <button class="btn accent" id="saveAcc">Lưu cài đặt</button>
+          </div>
+          <div class="muted small" id="accMsg"></div>
+        </div>
         <div class="row wrap gap">
           <div class="card">
             <div class="muted">Thông tin</div>

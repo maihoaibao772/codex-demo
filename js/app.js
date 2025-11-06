@@ -17,12 +17,33 @@ const tabs={
 const userBadge=$('#userBadge'); const coinBadge=$('#coinBadge');
 const themeBtn=$('#themeToggle'); const body=document.body;
 
+const accentPalettes={
+  green:{accent:'#22c55e',brand:'#16a34a'},
+  blue:{accent:'#3b82f6',brand:'#2563eb'},
+  violet:{accent:'#8b5cf6',brand:'#7c3aed'}
+};
+function applyAccentByName(name='green'){
+  const tone=accentPalettes[name]||accentPalettes.green;
+  document.documentElement.style.setProperty('--accent', tone.accent);
+  document.documentElement.style.setProperty('--brand', tone.brand);
+  body.style.setProperty('--accent', tone.accent);
+  body.style.setProperty('--brand', tone.brand);
+}
+const savedAccent=localStorage.getItem('accentColor')||'green';
+applyAccentByName(savedAccent);
+
 const state={
   user:null, prefs:{pinyinTone:false, anim:true, toast:true},
   vocab:[], easy:[], hard:[], frames:[],
   sentences:[], studyIdx:0, wrongPool:new Set(), wrongArr:[], stats:{correct:0,wrong:0,total:0,streak:0},
   practice:{mode:'random',level:'easy',pool:[],cur:null, timeLeft:60, timerId:null, useWrong:false}
 };
+
+let syncAccountPanel=()=>{};
+
+function currentUser(){
+  return state.user?.username || '';
+}
 
 function norm(s){return (s||'').toLowerCase().replace(/[\s\u00A0]+/g,' ').replace(/[。．\.!！!？?]+$/g,'').replace(/\bcậu\b/g,'bạn').replace(/(\s)không$/g,' phải không').trim()}
 
@@ -62,6 +83,7 @@ function setAuthedUI(){
   }else{
     $('.tab.admin').hidden = true;
   }
+  syncAccountPanel();
 }
 function getCoins(user){ return Number(localStorage.getItem(`hb:coins:${user}`) ?? uCoinsSeed(user)); }
 function setCoins(user,val){ localStorage.setItem(`hb:coins:${user}`, String(Math.max(0,Math.floor(val||0)))); if(state.user?.username===user) coinBadge.textContent='🟡 '+getCoins(user); }
@@ -75,6 +97,23 @@ function closeAuth(){ $('#authModal').hidden=true; }
 $('#btnOpenLogin').onclick=openAuth; $('#authClose').onclick=closeAuth;
 
 $('#btnLogout').onclick=()=>{ localStorage.removeItem('hb:session'); state.user=null; setAuthedUI(); routeTo('home'); toast('Đã đăng xuất'); };
+
+const accountBtn=document.getElementById('accountBtn');
+if(accountBtn){
+  accountBtn.onclick=()=>{
+    if(currentUser()){
+      routeTo('app');
+      const tabBtn=document.querySelector('.tab[data-tab="account"]');
+      if(tabBtn){
+        tabBtn.click();
+      }else{
+        switchAppTab('account');
+      }
+    }else{
+      openAuth();
+    }
+  };
+}
 
 $('#btnLogin').onclick=async()=>{
   const u=$('#loginUser').value.trim(); const p=$('#loginPass').value;
@@ -198,12 +237,65 @@ init();
 
 $('#btnOpenTranslate')?.addEventListener('click',()=> window.openTranslate && window.openTranslate());
 
+(function initAccountPanel(){
+  const nameEl=document.getElementById('accName');
+  const hideCb=document.getElementById('prefHidePinyin');
+  const accentSel=document.getElementById('accentSelect');
+  const saveBtn=document.getElementById('saveAcc');
+  const msg=document.getElementById('accMsg');
+
+  if(hideCb){
+    const stored=localStorage.getItem('hb:studyShowPinyin');
+    const legacy=localStorage.getItem('studyShowPinyin');
+    const flag=(stored??legacy??'1');
+    hideCb.checked = flag!=='1';
+  }
+  if(accentSel){
+    const storedAccent=localStorage.getItem('accentColor')||savedAccent||'green';
+    accentSel.value = accentPalettes[storedAccent]? storedAccent : 'green';
+  }
+
+  syncAccountPanel=()=>{
+    if(nameEl){
+      const name=currentUser();
+      nameEl.textContent = name || '(chưa)';
+    }
+  };
+  syncAccountPanel();
+
+  if(saveBtn){
+    saveBtn.onclick=()=>{
+      if(hideCb){
+        const showValue=hideCb.checked?'0':'1';
+        localStorage.setItem('hb:studyShowPinyin', showValue);
+        localStorage.setItem('studyShowPinyin', showValue);
+        const py=document.getElementById('pinyinText');
+        if(py) py.hidden=hideCb.checked;
+      }
+      if(accentSel){
+        const val=accentSel.value;
+        localStorage.setItem('accentColor', val);
+        applyAccentByName(val);
+      }
+      if(msg){
+        msg.textContent='Đã lưu cài đặt.';
+        msg.style.color='var(--ok)';
+      }
+    };
+  }
+})();
+
 window.addEventListener('keydown',e=>{
   if(e.ctrlKey && (e.key==='k' || e.key==='K')){ e.preventDefault(); window.openTranslate && window.openTranslate(); }
   const inInput=['INPUT','TEXTAREA'].includes(document.activeElement?.tagName);
   if(!inInput && !$('#study').hidden){
     if(e.key==='j' || e.key==='J') $('#prevStudy')?.click();
     if(e.key==='k' || e.key==='K') $('#nextStudy')?.click();
+  }
+  if(!e.ctrlKey && !e.metaKey && !inInput && (e.key==='g' || e.key==='G') && currentUser()){
+    routeTo('app');
+    const tabBtn=document.querySelector('.tab[data-tab="account"]');
+    if(tabBtn){ tabBtn.click(); } else { switchAppTab('account'); }
   }
 });
 
@@ -221,4 +313,8 @@ if('serviceWorker' in navigator){
   navigator.serviceWorker.register('/service-worker.js').catch(()=>{});
 }
 
-export { state, norm, setAuthedUI, switchAppTab };
+window.routeTo=routeTo;
+window.openAuth=openAuth;
+window.currentUser=currentUser;
+
+export { state, norm, setAuthedUI, switchAppTab, currentUser, applyAccentByName };
