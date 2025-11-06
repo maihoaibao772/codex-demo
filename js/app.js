@@ -115,6 +115,34 @@ if(accountBtn){
   };
 }
 
+(() => {
+  const tabsPreview=Array.from(document.querySelectorAll('.s-tab'));
+  if(!tabsPreview.length) return;
+  const demos={
+    study:document.querySelector('.demo-study'),
+    practice:document.querySelector('.demo-practice'),
+    bank:document.querySelector('.demo-bank')
+  };
+  const dots=Array.from(document.querySelectorAll('.screen-footer .dot'));
+  function activate(name, idx){
+    tabsPreview.forEach(btn=> btn.classList.toggle('is-active', btn.dataset.demo===name));
+    Object.values(demos).forEach(el=> el?.classList.remove('is-active'));
+    demos[name]?.classList.add('is-active');
+    dots.forEach((dot,i)=> dot.classList.toggle('is-active', i===idx));
+  }
+  tabsPreview.forEach((btn,i)=> btn.addEventListener('click',()=> activate(btn.dataset.demo, i)));
+  activate('study',0);
+})();
+
+document.getElementById('ctaAccount')?.addEventListener('click',()=>{
+  if(currentUser()){
+    routeTo('app');
+    document.querySelector('.tab[data-tab="account"]')?.click();
+  }else{
+    openAuth();
+  }
+});
+
 $('#btnLogin').onclick=async()=>{
   const u=$('#loginUser').value.trim(); const p=$('#loginPass').value;
   const remember=$('#remember').checked; const msg=$('#authMsg'); msg.textContent='Đang kiểm tra...'; msg.style.color='';

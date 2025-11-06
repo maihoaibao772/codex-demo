@@ -57,30 +57,124 @@
   </div>
 
   <main class="wrap">
-    <section class="section" id="home">
-      <div class="hero">
-        <div>
-          <h1>Trang học Trung-Việt <span class="hl">nhanh, gọn, mượt</span></h1>
-          <p class="muted">Ôn từ vựng • Luyện dịch • Pinyin bật/tắt (có dấu) • Kiểm tra • Shop khung • VIP animation • Dark/Light • Offline (PWA).</p>
-          <div class="row gap">
+    <section class="landing" id="home">
+      <div class="landing-bg">
+        <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+        <div class="noise"></div>
+      </div>
+
+      <div class="wrap landing-grid">
+        <div class="l-col">
+          <h1 class="hero-title">
+            Học Trung–Việt <span class="brand-grad">nhanh, gọn, mượt</span>
+          </h1>
+          <p class="hero-sub">
+            Ôn từ vựng • Luyện dịch Hán⇄Việt • Pinyin có dấu • Kiểm tra chuẩn “phải không?” • Dark/Light • Offline (PWA).
+          </p>
+          <div class="cta-row">
             <button class="btn accent" data-route="app" id="ctaStart">Bắt đầu học</button>
-            <button class="btn" data-route="faq">Xem FAQ</button>
-            <a class="btn" href="/cheatsheet.html" target="_blank" rel="noopener">Cheat-sheet (In)</a>
+            <button class="btn ghost" data-route="faq">FAQ</button>
+            <button class="btn ghost" id="ctaAccount">👤 Tài khoản</button>
+            <a class="btn ghost" href="/cheatsheet.html" target="_blank" rel="noopener">Cheat-sheet</a>
           </div>
-          <div class="kpis">
-            <div class="kpi"><b>60</b><div class="muted">Câu luyện</div></div>
-            <div class="kpi"><b>40+</b><div class="muted">Từ vựng</div></div>
-            <div class="kpi"><b>100%</b><div class="muted">Tối ưu mobile</div></div>
+          <div class="trust-row">
+            <span class="trust-badge">⚡ Nhanh & mượt</span>
+            <span class="trust-badge">📱 Tối ưu mobile</span>
+            <span class="trust-badge">🔒 Local-first</span>
+          </div>
+          <div class="metric-row">
+            <div class="metric"><b>60</b><span>Câu luyện</span></div>
+            <div class="metric"><b>40+</b><span>Từ vựng</span></div>
+            <div class="metric"><b>100%</b><span>Không ảnh/binary</span></div>
           </div>
         </div>
-        <div class="card">
-          <div class="muted">Điểm nổi bật</div>
-          <ul class="muted lh">
-            <li>Ôn bài: Ẩn/hiện nghĩa & pinyin, kiểm tra nhanh, vuốt trái/phải</li>
-            <li>Bài tập: Hán→Việt / Việt→Hán, Timer 60s, Ôn sai, biểu đồ</li>
-            <li>Shop: 24+ khung CSS, VIP frame + hạt bay (text canvas)</li>
-          </ul>
-          <button class="btn" data-route="app">Vào học</button>
+
+        <div class="r-col">
+          <div class="phone">
+            <div class="phone-notch"></div>
+            <div class="screen">
+              <div class="screen-tabs">
+                <button class="s-tab is-active" data-demo="study">Ôn bài</button>
+                <button class="s-tab" data-demo="practice">Bài tập</button>
+                <button class="s-tab" data-demo="bank">Ngân hàng</button>
+              </div>
+              <div class="screen-body">
+                <div class="demo demo-study is-active">
+                  <div class="demo-card">
+                    <div class="muted">Tiếng Hán</div>
+                    <div class="big demo-hz">你好吗？</div>
+                    <div class="muted">Pinyin</div>
+                    <div class="py">nǐ hǎo ma?</div>
+                    <div class="muted">Nghĩa</div>
+                    <div class="big">bạn khoẻ phải không?</div>
+                    <div class="btn-row">
+                      <div class="mini-btn">Ẩn/hiện nghĩa</div>
+                      <div class="mini-btn">Ẩn/hiện pinyin</div>
+                      <div class="mini-btn">🔊</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="demo demo-practice">
+                  <div class="demo-card">
+                    <div class="muted">Chế độ: <b>Hán → Việt</b> • Cấp: <b>Dễ</b></div>
+                    <div class="big">他很忙。</div>
+                    <div class="muted">Gợi ý: pinyin</div>
+                    <div class="py">tā hěn máng.</div>
+                    <div class="mini-input">Nhập đáp án…</div>
+                    <div class="btn-row">
+                      <div class="mini-btn">Kiểm tra</div>
+                      <div class="mini-btn">Hiện đáp án</div>
+                      <div class="mini-btn">▶</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="demo demo-bank">
+                  <div class="demo-list">
+                    <div class="demo-item"><b>你</b> <span class="muted">(nǐ)</span> <span class="muted">bạn</span></div>
+                    <div class="demo-item"><b>好</b> <span class="muted">(hǎo)</span> <span class="muted">tốt</span></div>
+                    <div class="demo-item"><b>忙</b> <span class="muted">(máng)</span> <span class="muted">bận</span></div>
+                    <div class="demo-item"><b>汉语</b> <span class="muted">(Hànyǔ)</span> <span class="muted">tiếng Hán</span></div>
+                  </div>
+                </div>
+              </div>
+              <div class="screen-footer">
+                <span class="dot is-active"></span><span class="dot"></span><span class="dot"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="wrap features">
+        <div class="f-card">
+          <div class="f-ico">🎯</div>
+          <div class="f-title">Ôn bài mạch lạc</div>
+          <div class="f-txt">Ẩn/hiện nghĩa &amp; pinyin, phát âm, phím tắt J/K.</div>
+        </div>
+        <div class="f-card">
+          <div class="f-ico">🧠</div>
+          <div class="f-title">Bài tập chuẩn</div>
+          <div class="f-txt">Hán→Việt / Việt→Hán, timer 60s, ôn sai.</div>
+        </div>
+        <div class="f-card">
+          <div class="f-ico">📚</div>
+          <div class="f-title">Ngân hàng gọn</div>
+          <div class="f-txt">Accordion + pinyin tuỳ chọn, không rối.</div>
+        </div>
+        <div class="f-card">
+          <div class="f-ico">💎</div>
+          <div class="f-title">Khung VIP</div>
+          <div class="f-txt">Animation CSS text-only, đổi accent 1 chạm.</div>
+        </div>
+        <div class="f-card">
+          <div class="f-ico">☁️</div>
+          <div class="f-title">PWA Offline</div>
+          <div class="f-txt">Cache text assets, offline.html dự phòng.</div>
+        </div>
+        <div class="f-card">
+          <div class="f-ico">🔐</div>
+          <div class="f-title">Local-first</div>
+          <div class="f-txt">Lưu localStorage, Export/Import JSON.</div>
         </div>
       </div>
     </section>
