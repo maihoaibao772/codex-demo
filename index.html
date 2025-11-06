@@ -34,12 +34,24 @@
     body{-webkit-text-size-adjust:100%;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
     *{-webkit-tap-highlight-color:transparent}
     button,a,input,select,textarea{touch-action:manipulation}
-    input,select,textarea{font-size:16px}
+    input,textarea,select{font-size:16px}
     header{padding-top:calc(env(safe-area-inset-top,0))}
     .footer,.hb-footer{padding-bottom:calc(env(safe-area-inset-bottom,0))}
     #authModal[hidden],#gtModal[hidden]{display:none!important}
     .theme-toggle{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:40px;padding:10px 14px;border-radius:12px;cursor:pointer;-webkit-tap-highlight-color:transparent}
     .theme-toggle *{pointer-events:none}
+    /* Modal an toàn cuộn & iOS */
+    #authModal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:80;background:rgba(4,8,18,.78);backdrop-filter:blur(10px)}
+    #authModal[hidden]{display:none!important}
+    #authCard{max-width:420px;width:calc(100% - 24px);border-radius:18px;overflow:hidden}
+    @media (max-width:640px){
+      #authModal{align-items:flex-end}
+      #authCard{width:100%;max-width:100%;border-radius:16px 16px 0 0;animation:sheetIn .24s ease-out both}
+      .sheet-handle{width:40px;height:4px;border-radius:999px;opacity:.3;margin:6px auto}
+    }
+    @keyframes sheetIn{from{transform:translateY(20px)}to{transform:translateY(0)}}
+    /* Không để overlay ẩn mà vẫn bắt click */
+    .modal[hidden],#authModal[aria-hidden="true"]{display:none!important;visibility:hidden;pointer-events:none}
   </style>
 </head>
 <body>
@@ -308,7 +320,7 @@
 
   <!-- Modals -->
   <div class="hb-modal" data-modal="auth" id="authModal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
-    <div class="hb-modal__dialog modal-card">
+    <div class="hb-modal__dialog modal-card" id="authCard">
       <div class="sheet-handle" aria-hidden="true"></div>
       <header class="hb-modal__header">
         <h2 id="authTitle">Đăng nhập</h2>
@@ -408,51 +420,10 @@
     display: 'displayName',
   };
 
-  function isLoggedIn() {
-    try {
-      const raw = localStorage.getItem(storage.session);
-      if (!raw) return false;
-      const data = JSON.parse(raw);
-      return Boolean(data && data.username);
-    } catch (error) {
-      return false;
-    }
-  }
-
-  function requireActivation() {
-    if (!isLoggedIn()) {
-      alert('Hãy đăng nhập trước khi vào học.');
-      return false;
-    }
-    if (localStorage.getItem(storage.activated) === '1') {
-      return true;
-    }
-    const code = prompt('Nhập MÃ KÍCH HOẠT để vào học:');
-    if (code && code.trim() === ACT_CODE) {
-      localStorage.setItem(storage.activated, '1');
-      return true;
-    }
-    alert('Sai mã kích hoạt. Liên hệ admin để được cấp mã.');
-    return false;
-  }
-
   if (window.HB) {
     window.HB.getAllowlist = () => [];
     window.HB.setAllowlist = () => {};
     window.HB.isUserAllowed = () => true;
-  }
-
-  const originalRoute = window.routeTo;
-  window.routeTo = function patchedRoute(name) {
-    if (name === 'app' && !requireActivation()) {
-      name = 'home';
-    }
-    if (typeof originalRoute === 'function') {
-      originalRoute(name);
-    }
-  };
-  if (window.HB) {
-    window.HB.routeTo = window.routeTo;
   }
 
   document.addEventListener('click', (event) => {
@@ -706,6 +677,176 @@
   if (window.HB) {
     window.HB.openTranslateModal = openTranslateModal;
   }
+})();
+  </script>
+  <script defer id="fix_allowlist_off">
+(() => {
+  const pass = (fn) => {
+    if (typeof fn !== 'function') return undefined;
+    return async (...args) => fn(...args);
+  };
+  if (window.register) window.register = pass(window.register);
+  if (window.login) window.login = pass(window.login);
+  if (window.HB) {
+    window.HB.isUserAllowed = () => true;
+    window.HB.setAllowlist = () => {};
+    window.HB.getAllowlist = () => [];
+  }
+})();
+  </script>
+  <script defer id="fix_activation_gate">
+(() => {
+  const ACT_CODE = 'HOCMETVCL_CODE123';
+  const SESSION_KEY = 'hb:session';
+  const originalRouteFn = typeof window.routeTo === 'function' ? window.routeTo : window.HB?.routeTo;
+  const baseRoute = typeof originalRouteFn === 'function' ? originalRouteFn.bind(window) : () => {};
+  window.routeTo = function patchedRoute(name) {
+    if (name !== 'app') {
+      return baseRoute(name);
+    }
+    const rawSession = localStorage.getItem(SESSION_KEY);
+    if (!rawSession) {
+      window.HB?.openAuthModal?.('login');
+      return baseRoute('home');
+    }
+    if (localStorage.getItem('hb:activated') === '1') {
+      return baseRoute('app');
+    }
+    const inp = prompt('Nhập MÃ TRUY CẬP để vào học:');
+    if (inp && inp.trim() === ACT_CODE) {
+      localStorage.setItem('hb:activated', '1');
+      return baseRoute('app');
+    }
+    alert('Sai mã truy cập. Liên hệ admin.');
+    return baseRoute('home');
+  };
+  if (window.HB) {
+    window.HB.routeTo = window.routeTo;
+  }
+})();
+  </script>
+  <script defer id="fix_auth_modal_behavior">
+(() => {
+  const modal = document.getElementById('authModal');
+  const card = document.getElementById('authCard') || modal?.firstElementChild;
+  if (!modal || !card) return;
+
+  const originalOpen = typeof window.HB?.openAuthModal === 'function' ? window.HB.openAuthModal : null;
+  const originalClose = typeof window.HB?.closeAuthModal === 'function' ? window.HB.closeAuthModal : null;
+
+  const close = () => {
+    if (typeof originalClose === 'function') {
+      try {
+        originalClose();
+      } catch (error) {
+        console.warn('Auth close error', error);
+      }
+    }
+    modal.style.display = 'none';
+    modal.setAttribute('aria-hidden', 'true');
+    modal.classList.remove('is-open');
+    card.style.transform = '';
+    card.style.transition = '';
+  };
+
+  const open = (mode = 'login') => {
+    if (typeof originalOpen === 'function') {
+      try {
+        originalOpen(mode);
+      } catch (error) {
+        console.warn('Auth open error', error);
+      }
+    }
+    modal.style.display = 'flex';
+    modal.removeAttribute('aria-hidden');
+    modal.classList.add('is-open');
+    card.style.transform = '';
+    card.style.transition = '';
+  };
+
+  modal.addEventListener('click', (event) => {
+    if (event.target === modal) {
+      close();
+    }
+  });
+
+  let startY = 0;
+  let deltaY = 0;
+  let dragging = false;
+  card.addEventListener('touchstart', (event) => {
+    if (event.touches.length !== 1) return;
+    startY = event.touches[0].clientY;
+    deltaY = 0;
+    dragging = true;
+    card.style.transition = 'none';
+  }, { passive: true });
+  card.addEventListener('touchmove', (event) => {
+    if (!dragging) return;
+    deltaY = event.touches[0].clientY - startY;
+    if (deltaY > 0) {
+      card.style.transform = `translateY(${deltaY}px)`;
+    }
+  }, { passive: true });
+  card.addEventListener('touchend', () => {
+    if (!dragging) return;
+    dragging = false;
+    if (deltaY > 90) {
+      close();
+    } else {
+      card.style.transition = 'transform .2s';
+      card.style.transform = 'translateY(0)';
+    }
+    deltaY = 0;
+    startY = 0;
+  }, { passive: true });
+
+  let lastScroll = window.scrollY;
+  window.addEventListener('scroll', () => {
+    if (modal.style.display === 'flex') {
+      if (Math.abs(window.scrollY - lastScroll) > 6) {
+        close();
+      }
+    }
+    lastScroll = window.scrollY;
+  }, { passive: true });
+
+  document.querySelectorAll('#authModal input, #authModal textarea').forEach((input) => {
+    input.addEventListener('focus', () => {
+      setTimeout(() => {
+        try {
+          input.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        } catch (error) {
+          /* noop */
+        }
+      }, 350);
+    }, { passive: true });
+  });
+
+  window.__openAuthModal = open;
+  window.__closeAuthModal = close;
+  if (window.HB) {
+    window.HB.openAuthModal = open;
+    window.HB.closeAuthModal = close;
+  }
+})();
+  </script>
+  <script defer id="fix_theme_click">
+(() => {
+  const btn = document.getElementById('themeToggle');
+  if (!btn) return;
+  btn.addEventListener('click', (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const root = document.documentElement;
+    const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    root.dataset.theme = next;
+    localStorage.setItem('hb:theme', next);
+    btn.setAttribute('aria-pressed', next === 'light' ? 'true' : 'false');
+    const sr = btn.querySelector('.sr-only');
+    if (sr) {
+      sr.textContent = next === 'light' ? 'Chuyển sang chế độ tối' : 'Chuyển sang chế độ sáng';
+    }
+  }, true);
 })();
   </script>
 </body>
