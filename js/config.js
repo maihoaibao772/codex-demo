@@ -1,9 +1,8 @@
 /*
-  config.js - deployment-time configuration for allowlist and optional access code.
-  Owners can edit HB_ALLOW or HB_ACCESS_CODE before deploying without touching
-  application logic. The runtime also respects any allowlist CSV stored in
-  localStorage (hb:allow) which overrides this static list.
+  config.js - deployment-time knobs. Allowlist is deprecated in V13.3 hotfix,
+  so we expose empty arrays and rely solely on activation codes handled in the
+  inline patch. HB_ACCESS_CODE is still available if future builds need it.
 */
 
-window.HB_ALLOW = ['hoai-bao', 'vip-acc'];
+window.HB_ALLOW = [];
 window.HB_ACCESS_CODE = '';
