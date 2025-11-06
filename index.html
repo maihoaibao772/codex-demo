@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Học Trung ⇄ Việt • Hoài Bảo</title>
   <meta name="description" content="Ôn từ vựng, luyện dịch Hán⇄Việt, pinyin dấu, kiểm tra, shop khung, VIP. Build bởi Hoài Bảo." />
-  <meta name="theme-color" content="#0b1220"/>
+  <meta name="theme-color" content="#0b1220" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Noto+Sans+SC:wght@400;600&display=swap" rel="stylesheet">
@@ -16,10 +16,13 @@
     :root{
       --space-1:6px; --space-2:10px; --space-3:14px; --space-4:18px; --space-5:24px; --space-6:32px;
       --shadow-1:0 6px 20px rgba(0,0,0,.18); --shadow-2:0 20px 60px rgba(0,0,0,.35);
+      --accent:#22c55e;
+      --brand:#16a34a;
     }
+    body.light{--accent:#16a34a; --brand:#16a34a;}
     .wrap{max-width:1200px;}
     .card{border-radius:16px;}
-    .btn{border-radius:999px; padding:12px 16px; font-weight:600; transition:transform .12s ease, box-shadow .2s ease;}
+    .btn{border-radius:999px; padding:12px 16px; font-weight:600; transition:transform .12s ease, box-shadow .2s;}
     .btn:hover{transform:translateY(-1px);}
     .btn.accent{background:linear-gradient(180deg, color-mix(in srgb, var(--accent) 85%, transparent), var(--accent)); color:#fff; border-color:transparent; box-shadow:var(--shadow-1);}
     .btn.ghost{background:transparent; border:1px solid #2a3555;}
@@ -67,9 +70,9 @@
       .features{grid-template-columns:repeat(2,minmax(140px,1fr));}
     }
     html,body{line-height:1.6;}
-    .row{display:flex; align-items:center; flex-wrap:wrap; gap:10px;}
-    .big{margin:6px 0;}
-    .muted{margin:4px 0; color:var(--muted);}
+    .row{display:flex; align-items:center; flex-wrap:wrap; gap:var(--space-2);}
+    .big{margin-block:var(--space-2);}
+    .muted{margin-block:var(--space-2); color:var(--muted);}
     .header .avatar{
       width:32px; height:32px; border-radius:999px; display:grid; place-items:center;
       background:linear-gradient(180deg,#1a2442,#111a34); border:1px solid #2a3555; color:#fff; font-weight:700; cursor:pointer;
@@ -166,7 +169,7 @@
                   <div class="demo-card">
                     <div class="muted">Tiếng Hán</div>
                     <div class="big demo-hz">你好吗？</div>
-                    <div class="muted">Pinyin</div><div class="py">ni hao ma?</div>
+                    <div class="muted">Pinyin</div><div class="py">nǐ hǎo ma?</div>
                     <div class="muted">Nghĩa</div><div class="big">bạn khoẻ phải không?</div>
                     <div class="btn-row"><div class="mini-btn">Ẩn/hiện nghĩa</div><div class="mini-btn">Ẩn/hiện pinyin</div><div class="mini-btn">🔊</div></div>
                   </div>
@@ -174,17 +177,17 @@
                 <div class="demo demo-practice">
                   <div class="demo-card">
                     <div class="muted">Chế độ: <b>Hán → Việt</b> • Cấp: <b>Dễ</b></div>
-                    <div class="big">他很忙。</div><div class="muted">Gợi ý: pinyin</div><div class="py">ta hen mang.</div>
+                    <div class="big">他很忙。</div><div class="muted">Gợi ý: pinyin</div><div class="py">tā hěn máng.</div>
                     <div class="mini-input">Nhập đáp án…</div>
                     <div class="btn-row"><div class="mini-btn">Kiểm tra</div><div class="mini-btn">Hiện đáp án</div><div class="mini-btn">▶</div></div>
                   </div>
                 </div>
                 <div class="demo demo-bank">
                   <div class="demo-list">
-                    <div class="demo-item"><b>你</b> <span class="muted">(ni)</span> <span class="muted">bạn</span></div>
-                    <div class="demo-item"><b>好</b> <span class="muted">(hao)</span> <span class="muted">tốt</span></div>
-                    <div class="demo-item"><b>忙</b> <span class="muted">(mang)</span> <span class="muted">bận</span></div>
-                    <div class="demo-item"><b>汉语</b> <span class="muted">(han yu)</span> <span class="muted">tiếng Hán</span></div>
+                    <div class="demo-item"><b>你</b> <span class="muted">(nǐ)</span> <span class="muted">bạn</span></div>
+                    <div class="demo-item"><b>好</b> <span class="muted">(hǎo)</span> <span class="muted">tốt</span></div>
+                    <div class="demo-item"><b>忙</b> <span class="muted">(máng)</span> <span class="muted">bận</span></div>
+                    <div class="demo-item"><b>汉语</b> <span class="muted">(Hànyǔ)</span> <span class="muted">tiếng Hán</span></div>
                   </div>
                 </div>
               </div>
@@ -453,7 +456,7 @@
       </section>
     </section>
 
-    <div class="footer">© Build & Thiết kế bởi <b>Hoài Bảo</b> • Netlify static • Dark/Light • Mobile 📱 • v2</div>
+    <div class="footer">© Build & Thiết kế bởi <b>Hoài Bảo</b> • Netlify static • Dark/Light • Mobile 📱 • UI v3</div>
   </main>
 
   <div id="gtModal" class="modal" hidden>
@@ -575,6 +578,13 @@
         }
 
         window.openTranslate = openTranslate;
+        document.getElementById('btnOpenTranslate')?.addEventListener('click', () => openTranslate());
+        document.addEventListener('keydown', e => {
+          if(e.ctrlKey && e.key.toLowerCase() === 'k'){
+            e.preventDefault();
+            openTranslate();
+          }
+        });
       })();
 
       document.getElementById('ctaAccount')?.addEventListener('click', () => {
@@ -611,12 +621,19 @@
 
         function resolveEmoji(user){
           if(!user) return '🙂';
-          const stored = localStorage.getItem(`hb:av:${user}`);
-          return stored || initials(user);
+          const specific = localStorage.getItem(`hb:av:${user}`);
+          if(specific) return specific;
+          const globalEmoji = localStorage.getItem('avatarEmoji');
+          if(globalEmoji) return globalEmoji;
+          return initials(user);
         }
 
         function hasVipFrame(user, session){
           if(!user) return false;
+          try{
+            const prefs = JSON.parse(localStorage.getItem('hb:prefs')||'null');
+            if(prefs?.vipFrame) return true;
+          }catch(e){}
           if(session?.vip) return true;
           return localStorage.getItem(`hb:eq:${user}`) === 'vip_angel_gold';
         }
@@ -647,7 +664,14 @@
           const observer = new MutationObserver(() => refresh());
           observer.observe(userBadge, {attributes:true, attributeFilter:['hidden'], childList:true, characterData:true, subtree:true});
         }
-        document.getElementById('saveAvatar')?.addEventListener('click', () => setTimeout(refresh, 0));
+        document.getElementById('saveAvatar')?.addEventListener('click', () => {
+          const picker = document.getElementById('avatarPicker');
+          if(picker){
+            const emoji = (picker.value || '🙂').slice(0,2);
+            localStorage.setItem('avatarEmoji', emoji);
+          }
+          setTimeout(refresh, 0);
+        });
         window.addEventListener('storage', () => refresh());
         refresh();
       })();
