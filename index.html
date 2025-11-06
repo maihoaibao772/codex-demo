@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Học Trung ⇄ Việt • Hoài Bảo</title>
+  <meta name="description" content="Ôn từ vựng, luyện dịch Hán⇄Việt, pinyin dấu, kiểm tra, shop khung, VIP. Build bởi Hoài Bảo." />
+  <meta name="theme-color" content="#0b1220"/>
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/animations.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="wrap nav">
+      <div class="nav-left">
+        <span class="brand"><i class="logo"></i> Học Trung ⇄ Việt</span>
+        <span class="badge" id="userBadge" hidden>👤</span>
+        <span class="badge coin" id="coinBadge" hidden>🟡 0</span>
+        <button class="auth-btn" id="btnOpenLogin">Đăng nhập</button>
+        <button class="logout" id="btnLogout" hidden>Đăng xuất</button>
+      </div>
+      <div class="spacer"></div>
+      <nav class="nav-links">
+        <button class="tablink" data-route="home" aria-current="page">Trang chủ</button>
+        <button class="tablink" data-route="faq">FAQ</button>
+        <button class="tablink" data-route="app">Vào học</button>
+      </nav>
+      <div class="row gap">
+        <button class="auth-btn" id="btnOpenTranslate" title="Dịch nhanh">🌐</button>
+        <button class="theme-toggle" id="themeToggle">☀️ / 🌙</button>
+      </div>
+    </div>
+  </header>
+
+  <div id="authModal" class="modal" hidden>
+    <div class="modal-card">
+      <div class="auth-head">
+        <div class="t">Đăng nhập</div>
+        <button class="btn close" id="authClose">✕</button>
+      </div>
+      <div class="muted small">Tài khoản do Admin cấp (không mở đăng ký công khai)</div>
+      <div class="form">
+        <label>Tên đăng nhập</label>
+        <input type="text" id="loginUser" placeholder="vd: admin"/>
+        <label>Mật khẩu</label>
+        <input type="password" id="loginPass" placeholder="••••••••"/>
+        <label class="badge"><input type="checkbox" id="remember" style="accent-color:var(--accent)"> Nhớ tôi</label>
+        <button class="btn accent full" id="btnLogin">Vào học</button>
+        <div id="authMsg" class="result"></div>
+      </div>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <section class="section" id="home">
+      <div class="hero">
+        <div>
+          <h1>Trang học Trung-Việt <span class="hl">nhanh, gọn, mượt</span></h1>
+          <p class="muted">Ôn từ vựng • Luyện dịch • Pinyin bật/tắt (có dấu) • Kiểm tra • Shop khung • VIP animation • Dark/Light • Offline (PWA).</p>
+          <div class="row gap">
+            <button class="btn accent" data-route="app" id="ctaStart">Bắt đầu học</button>
+            <button class="btn" data-route="faq">Xem FAQ</button>
+            <a class="btn" href="/cheatsheet.html" target="_blank" rel="noopener">Cheat-sheet (In)</a>
+          </div>
+          <div class="kpis">
+            <div class="kpi"><b>60</b><div class="muted">Câu luyện</div></div>
+            <div class="kpi"><b>40+</b><div class="muted">Từ vựng</div></div>
+            <div class="kpi"><b>100%</b><div class="muted">Tối ưu mobile</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="muted">Điểm nổi bật</div>
+          <ul class="muted lh">
+            <li>Ôn bài: Ẩn/hiện nghĩa & pinyin, kiểm tra nhanh, vuốt trái/phải</li>
+            <li>Bài tập: Hán→Việt / Việt→Hán, Timer 60s, Ôn sai, biểu đồ</li>
+            <li>Shop: 24+ khung CSS, VIP frame + hạt bay (text canvas)</li>
+          </ul>
+          <button class="btn" data-route="app">Vào học</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="faq" hidden>
+      <h2>FAQ</h2>
+      <details open><summary>1) Có cần đăng nhập?</summary><div class="muted">Vào học đầy đủ cần <b>Đăng nhập</b> bằng tài khoản Admin cấp.</div></details>
+      <details><summary>2) Dữ liệu lưu ở đâu?</summary><div class="muted">Trong <b>LocalStorage</b>. Có <b>Xuất/Nhập</b> JSON để sao lưu.</div></details>
+      <details><summary>3) Pinyin có dấu?</summary><div class="muted">Có. Bật tại <b>Tài khoản → Cài đặt → Pinyin có dấu</b>.</div></details>
+      <details><summary>4) Coin có tự kiếm?</summary><div class="muted"><b>Không</b>. Chỉ Admin <b>add/set</b>.</div></details>
+      <details><summary>5) Offline?</summary><div class="muted">Có. App cài như PWA, có trang <b>offline.html</b> dự phòng.</div></details>
+    </section>
+
+    <section class="section" id="appSection" hidden>
+      <div class="tabs" role="tablist">
+        <button class="tab" aria-selected="true" data-tab="study">Ôn bài</button>
+        <button class="tab" aria-selected="false" data-tab="practice">Bài tập</button>
+        <button class="tab" aria-selected="false" data-tab="bank">Ngân hàng</button>
+        <button class="tab" aria-selected="false" data-tab="shop">Shop</button>
+        <button class="tab" aria-selected="false" data-tab="account">Tài khoản</button>
+        <button class="tab admin" aria-selected="false" data-tab="admin" hidden>Admin</button>
+      </div>
+
+      <section class="section" id="study">
+        <div class="badge">Mục: Ôn bài <span id="studyCount" class="muted"></span></div>
+        <div class="row cols">
+          <div class="col">
+            <div class="card">
+              <div class="muted">Tiếng Hán</div>
+              <div id="hanText" class="big"></div>
+              <div class="muted">Pinyin</div>
+              <div id="pinyinText" class="py big2"></div>
+              <div class="muted">Nghĩa (Việt)</div>
+              <div id="vietText" class="big"></div>
+              <div class="row wrap gap">
+                <button class="btn" id="toggleViet">Ẩn/hiện nghĩa</button>
+                <button class="btn" id="togglePinyinStudy">Ẩn/hiện pinyin</button>
+                <button class="btn" id="prevStudy">◀ Trước</button>
+                <button class="btn accent" id="nextStudy">Tiếp ▶</button>
+                <button class="btn" id="shuffleStudy">Xáo trộn</button>
+              </div>
+            </div>
+            <div class="card">
+              <div class="muted">Kiểm tra nhanh (Ôn bài)</div>
+              <div class="row gap">
+                <input id="selfAnswer" type="text" placeholder="Nhập phần dịch…" />
+                <button class="btn ok" id="checkSelf">Kiểm tra</button>
+              </div>
+              <div class="result" id="selfResult"></div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card">
+              <div class="muted">Mẹo</div>
+              <ul class="muted lh">
+                <li>Enter để kiểm tra nhanh</li>
+                <li>Chuẩn hoá “cậu” → “bạn”; câu hỏi dùng “phải không?”</li>
+              </ul>
+            </div>
+            <div class="card">
+              <div class="muted">Bộ câu đang học</div>
+              <div class="list" id="studyList"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="practice" hidden>
+        <div class="badge">Mục: Bài tập</div>
+        <div class="row wrap gap">
+          <button class="btn accent" data-mode="random">Chế độ: Xáo trộn câu</button>
+          <button class="btn" data-mode="han2vi">Hán → Việt</button>
+          <button class="btn" data-mode="vi2han">Việt → Hán</button>
+        </div>
+        <div class="row wrap gap">
+          <button class="btn" data-level="easy">🟢 Dễ (30)</button>
+          <button class="btn" data-level="hard">🔵 Khó (30)</button>
+          <button class="btn" id="mixAll">🔁 Xáo trộn tất cả (60)</button>
+        </div>
+        <div class="card">
+          <div class="muted">Chế độ: <b id="modeName">Xáo trộn câu</b> • Cấp độ: <b id="levelName">Dễ</b></div>
+          <div id="prompt" class="big" style="margin:8px 0"></div>
+          <div class="muted" id="hint"></div>
+          <div class="row wrap gap">
+            <span class="badge">⏱️ <b id="timer">60</b>s</span>
+            <button class="btn" id="startTimer">Bắt đầu 60s</button>
+            <button class="btn" id="stopTimer">Dừng</button>
+            <button class="btn" id="toggleWrongPool">🛠 Ôn sai (<span id="wrongCount">0</span>)</button>
+          </div>
+          <div class="row wrap gap">
+            <input id="answer" type="text" placeholder="Nhập đáp án…" />
+            <button class="btn ok" id="check">Kiểm tra</button>
+            <button class="btn" id="show">Hiện đáp án</button>
+            <button class="btn" id="next">Câu khác ▶</button>
+            <button class="btn" id="resetStats">Reset điểm</button>
+          </div>
+          <div class="result" id="result"></div>
+          <div class="muted" id="stats">Đúng: 0 • Sai: 0 • Độ chính xác: 0% • Chuỗi đúng: 0</div>
+          <canvas id="statsChart" width="640" height="160" class="chart"></canvas>
+        </div>
+      </section>
+
+      <section class="section" id="bank" hidden>
+        <div class="badge">Ngân hàng</div>
+        <div class="row wrap gap">
+          <label class="badge" style="cursor:pointer"><input type="checkbox" id="togglePinyin" checked style="accent-color:var(--accent)"> Hiện pinyin</label>
+          <button class="btn" id="toggleAll">Thu gọn / Mở rộng</button>
+        </div>
+        <details id="bankWords">
+          <summary>📚 Ngân hàng từ vựng <span class="muted" id="wordsCount"></span></summary>
+          <div class="grid" id="bankGridWords"></div>
+        </details>
+        <details id="bankSents">
+          <summary>🧩 Ngân hàng câu <span class="muted" id="sentsCount"></span></summary>
+          <div class="grid" id="bankGridSentences"></div>
+        </details>
+      </section>
+
+      <section class="section" id="shop" hidden>
+        <div class="badge">Shop khung (coin chỉ do Admin cấp)</div>
+        <div class="row wrap gap">
+          <select id="filterTheme" class="select">
+            <option value="">Tất cả chủ đề</option>
+          </select>
+          <select id="filterAnim" class="select">
+            <option value="">Tất cả</option>
+            <option value="animated">Animated</option>
+            <option value="static">Static</option>
+            <option value="owned">Đã sở hữu</option>
+          </select>
+          <select id="sortPrice" class="select">
+            <option value="asc">Giá ↑</option>
+            <option value="desc">Giá ↓</option>
+          </select>
+        </div>
+        <div class="card">
+          <div class="row wrap gap">
+            <div class="avatarPreview">
+              <div id="framePreview" class="frame ring"></div>
+              <div class="avatarEmoji" id="avatarEmoji">😀</div>
+            </div>
+            <div>
+              <div class="muted">Xem trước khung</div>
+              <div id="previewName" class="big2"></div>
+              <div id="previewMeta" class="muted"></div>
+              <div class="row wrap gap" style="margin-top:8px">
+                <button class="btn ok" id="btnBuy">Mua</button>
+                <button class="btn" id="btnEquip">Trang bị</button>
+                <button class="btn" id="btnUnequip">Tháo</button>
+              </div>
+              <div id="shopMsg" class="result"></div>
+            </div>
+          </div>
+        </div>
+        <div class="grid" id="shopGrid"></div>
+      </section>
+
+      <section class="section" id="account" hidden>
+        <div class="badge">Tài khoản</div>
+        <div class="row wrap gap">
+          <div class="card">
+            <div class="muted">Thông tin</div>
+            <div id="accUser" class="big2"></div>
+            <div class="muted">Quyền: <span id="accRole"></span> • VIP: <span id="accVip"></span></div>
+            <div class="muted">Coin: <span id="accCoin">0</span> 🟡</div>
+            <div class="row wrap gap" style="margin-top:6px">
+              <label class="badge">Avatar emoji: <input id="avatarPicker" type="text" maxlength="2" placeholder="😀"/></label>
+              <button class="btn" id="saveAvatar">Lưu avatar</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="muted">Cài đặt</div>
+            <div class="row wrap gap">
+              <label class="badge"><input type="checkbox" id="setPinyinTone"/> Pinyin có dấu</label>
+              <label class="badge"><input type="checkbox" id="setAnim" checked/> Bật animation</label>
+              <label class="badge"><input type="checkbox" id="setToast" checked/> Thông báo</label>
+            </div>
+            <button class="btn" id="saveSettings">Lưu cài đặt</button>
+            <div id="settingsMsg" class="result"></div>
+          </div>
+          <div class="card">
+            <div class="muted">Sao lưu / Khôi phục</div>
+            <div class="row wrap gap">
+              <button class="btn" id="btnExport">Xuất dữ liệu (JSON)</button>
+              <label class="btn">
+                <input id="importFile" type="file" accept="application/json" style="display:none">Nhập dữ liệu…
+              </label>
+              <button class="btn" id="btnClear">Xoá sạch dữ liệu máy này</button>
+            </div>
+            <div class="muted small">Dữ liệu gồm: prefs, điểm, ôn sai, coin, avatar, khung đang dùng…</div>
+            <div id="backupMsg" class="result"></div>
+          </div>
+          <div class="card">
+            <div class="muted">Phím tắt</div>
+            <ul class="muted lh shortcuts">
+              <li><span class="kbd">Enter</span>: Kiểm tra đáp án</li>
+              <li><span class="kbd">Ctrl</span> + <span class="kbd">K</span>: Mở Dịch nhanh</li>
+              <li><span class="kbd">J</span>/<span class="kbd">K</span> (Ôn bài): Trước / Tiếp</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="admin" hidden>
+        <div class="badge">Admin panel</div>
+        <div class="row wrap gap">
+          <div class="card">
+            <div class="muted">Cấp/đặt coin</div>
+            <div class="row wrap gap">
+              <input type="text" id="admUser" placeholder="username"/>
+              <input type="number" id="admValue" placeholder="số coin"/>
+            </div>
+            <div class="row wrap gap">
+              <button class="btn ok" id="admAdd">Add coin (+)</button>
+              <button class="btn" id="admSet">Set coin (=)</button>
+            </div>
+            <div id="admMsg" class="result"></div>
+          </div>
+          <div class="card">
+            <div class="muted">Tạo user mới (overlay local)</div>
+            <div class="row wrap gap">
+              <input type="text" id="newUser" placeholder="username"/>
+              <input type="text" id="newPass" placeholder="password"/>
+              <label class="badge"><input type="checkbox" id="newVip"/> VIP</label>
+              <select id="newRole" class="select">
+                <option value="user">user</option>
+                <option value="admin">admin</option>
+              </select>
+            </div>
+            <button class="btn" id="admCreate">Tạo user</button>
+            <div id="admCreateMsg" class="result"></div>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <div class="footer">© Build & Thiết kế bởi <b>Hoài Bảo</b> • Netlify static • Dark/Light • Mobile 📱 • v2</div>
+  </main>
+
+  <div id="gtModal" class="modal" hidden>
+    <div class="modal-card large">
+      <div class="auth-head">
+        <div class="t">🌐 Dịch nhanh</div>
+        <button class="btn close" id="gtClose">✕</button>
+      </div>
+      <div class="row wrap gap">
+        <input id="gtInput" type="text" placeholder="Dán văn bản để dịch…"/>
+        <button class="btn" id="gtUseCurrent">Chèn câu đang xem</button>
+        <a class="btn" id="gtOpenNew" target="_blank" rel="noopener">Mở tab Google Dịch</a>
+      </div>
+      <div class="gtFrameWrap">
+        <iframe id="gtFrame" loading="lazy"></iframe>
+      </div>
+      <div class="muted small">Nếu iframe bị chặn, dùng “Mở tab Google Dịch”.</div>
+    </div>
+  </div>
+
+  <script type="module" src="/js/app.js"></script>
+</body>
+</html>

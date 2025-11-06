@@ -1,0 +1,10 @@
+{
+  "name": "Học Trung ⇄ Việt • Hoài Bảo",
+  "short_name": "TrungViệt",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b1220",
+  "theme_color": "#0b1220",
+  "description": "Ôn từ vựng, luyện dịch Hán⇄Việt, pinyin, kiểm tra, shop khung, VIP.",
+  "icons": []
+}

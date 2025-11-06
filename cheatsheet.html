@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="vi">
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Cheat-sheet Trung ⇄ Việt • In ấn</title>
+<link rel="stylesheet" href="/css/style.css"/>
+<style>
+  @media print{ .no-print{display:none} body{background:#fff;color:#000} .section{border:none} }
+  table{width:100%;border-collapse:collapse}
+  th,td{border:1px solid var(--line);padding:6px}
+  th{background:rgba(77,163,255,.08)}
+</style>
+<body>
+  <main class="wrap">
+    <section class="section">
+      <h1>Cheat-sheet từ vựng & câu</h1>
+      <button class="btn no-print" onclick="window.print()">In</button>
+      <h2>Từ vựng</h2>
+      <table id="tblV"></table>
+      <h2 style="margin-top:16px">Câu ví dụ</h2>
+      <table id="tblS"></table>
+    </section>
+  </main>
+<script type="module">
+import { toToneMarked } from '/js/utils/pinyinTone.js';
+async function load(url){ return fetch(url).then(r=>r.json()); }
+const [vocab,easy,hard]=await Promise.all([
+  load('/data/vocab.json'), load('/data/sentences_easy.json'), load('/data/sentences_hard.json')
+]);
+const showTone = (JSON.parse(localStorage.getItem('hb:prefs')||'{}').pinyinTone)===true;
+const V=document.getElementById('tblV'); V.innerHTML='<tr><th>Hán</th><th>Pinyin</th><th>Việt</th></tr>'+
+  vocab.map(v=>`<tr><td>${v.han}</td><td>${showTone? toToneMarked(v.pinyin_num||v.pinyin):v.pinyin}</td><td>${v.vi}</td></tr>`).join('');
+const all=[...easy,...hard];
+const S=document.getElementById('tblS'); S.innerHTML='<tr><th>Hán</th><th>Pinyin</th><th>Việt</th></tr>'+
+  all.map(s=>`<tr><td>${s.han}</td><td>${showTone? toToneMarked(s.pinyin_num||s.pinyin):s.pinyin}</td><td>${s.vi}</td></tr>`).join('');
+</script>
+</body>
+</html>

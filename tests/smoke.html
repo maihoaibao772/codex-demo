@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<meta charset="utf-8"/>
+<title>Smoke Test</title>
+<body>
+<pre id="out">Testing…</pre>
+<script type="module">
+async function ok(){
+  const must=['/data/vocab.json','/data/sentences_easy.json','/data/sentences_hard.json','/data/frames.json'];
+  const out=document.getElementById('out'); let log=[];
+  for(const u of must){
+    const j=await fetch(u).then(r=>r.json());
+    log.push(u+' -> '+(Array.isArray(j)? j.length+' items' : 'ok'));
+  }
+  out.textContent='OK\n'+log.join('\n');
+}
+ok().catch(e=>{ document.getElementById('out').textContent='FAIL: '+e; });
+</script>
+</body>

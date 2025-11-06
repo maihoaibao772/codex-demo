@@ -1,0 +1,5 @@
+[
+  {"username":"admin","password":"hoai123","role":"admin","vip":true,"coins":99999},
+  {"username":"hocvien1","password":"abc123","role":"user","vip":false,"coins":0},
+  {"username":"hocvien2","password":"xyz123","role":"user","vip":false,"coins":0}
+]
