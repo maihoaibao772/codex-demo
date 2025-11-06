@@ -40,15 +40,15 @@
       <span class="hb-logo-text">Hanzi Bridge</span>
     </div>
     <nav class="hb-header__nav" aria-label="Điều hướng chính">
-      <button class="hb-btn hb-btn--ghost" data-nav="start">Bắt đầu học</button>
-      <button class="hb-btn hb-btn--ghost" data-nav="faq">FAQ</button>
-      <button class="hb-btn hb-btn--ghost" data-nav="account">👤 Tài khoản</button>
-      <button class="hb-btn hb-btn--ghost" data-nav="translate">🌐 Dịch nhanh</button>
+      <button class="hb-btn hb-btn--ghost" data-route="home" aria-current="page">Trang chủ</button>
+      <button class="hb-btn hb-btn--ghost" data-route="faq">FAQ</button>
+      <button class="hb-btn hb-btn--ghost" data-route="app">Vào học</button>
+      <button class="hb-btn hb-btn--ghost" data-modal-target="translate">🌐 Dịch nhanh</button>
     </nav>
     <div class="hb-header__actions">
-      <button class="hb-btn hb-btn--pill" data-auth="signup">Đăng ký</button>
-      <button class="hb-btn hb-btn--pill" data-auth="login">Đăng nhập</button>
-      <button class="hb-theme-toggle" data-theme-toggle>
+      <button class="hb-btn hb-btn--pill" data-auth="signup" id="navRegister">Đăng ký</button>
+      <button class="hb-btn hb-btn--pill" data-auth="login" id="navLogin">Đăng nhập</button>
+      <button class="hb-theme-toggle" data-theme-toggle id="themeToggle">
         <span class="sr-only">Đổi chế độ sáng/tối</span>
         <span aria-hidden="true" class="hb-theme-toggle__icon hb-theme-toggle__icon--sun">☀️</span>
         <span aria-hidden="true" class="hb-theme-toggle__icon hb-theme-toggle__icon--moon">🌙</span>
@@ -75,10 +75,10 @@
             Được xây dựng như một bộ UI v10 tối ưu cho Netlify.
           </p>
           <div class="hb-hero__cta">
-            <button class="hb-btn hb-btn--primary" data-nav="start">Bắt đầu học</button>
-            <button class="hb-btn hb-btn--secondary" data-nav="faq">Xem FAQ</button>
-            <button class="hb-btn hb-btn--ghost" data-nav="account">👤 Vào tài khoản</button>
-            <button class="hb-btn hb-btn--ghost" data-nav="translate">🌐 Dịch nhanh</button>
+            <button class="hb-btn hb-btn--primary" data-route="app">Bắt đầu học</button>
+            <button class="hb-btn hb-btn--secondary" data-route="faq">Xem FAQ</button>
+            <button class="hb-btn hb-btn--ghost" data-route="account">👤 Vào tài khoản</button>
+            <button class="hb-btn hb-btn--ghost" data-modal-target="translate">🌐 Dịch nhanh</button>
           </div>
           <dl class="hb-hero__metrics" aria-label="Chỉ số nội dung">
             <div>
@@ -177,20 +177,20 @@
     <section class="hb-view hb-view--app" data-route="app" aria-label="Ứng dụng học">
       <div class="hb-app-shell">
         <aside class="hb-app-shell__sidebar" aria-label="Danh sách tab">
-          <button class="hb-tab-btn is-active" data-tab="learn">Ôn bài</button>
-          <button class="hb-tab-btn" data-tab="practice">Bài tập</button>
-          <button class="hb-tab-btn" data-tab="bank">Ngân hàng</button>
-          <button class="hb-tab-btn" data-tab="account">Tài khoản</button>
-          <button class="hb-tab-btn" data-tab="store">Cửa hàng</button>
+          <button class="hb-tab-btn tab is-active" data-tab="learn">Ôn bài</button>
+          <button class="hb-tab-btn tab" data-tab="practice">Bài tập</button>
+          <button class="hb-tab-btn tab" data-tab="bank">Ngân hàng</button>
+          <button class="hb-tab-btn tab" data-tab="account">Tài khoản</button>
+          <button class="hb-tab-btn tab" data-tab="store">Cửa hàng</button>
         </aside>
         <section class="hb-app-shell__content">
           <div class="hb-tab" id="tab-learn" data-tab-content="learn">
             <header class="hb-tab__header">
               <h2>Ôn bài</h2>
               <div class="hb-tab__actions">
-                <button class="hb-btn hb-btn--pill" data-learn="prev">◀ Trước</button>
-                <button class="hb-btn hb-btn--pill" data-learn="next">Tiếp ▶</button>
-                <button class="hb-btn hb-btn--pill" data-learn="shuffle">Xáo trộn</button>
+                <button class="hb-btn hb-btn--pill" data-learn="prev" id="prevStudy">◀ Trước</button>
+                <button class="hb-btn hb-btn--pill" data-learn="next" id="nextStudy">Tiếp ▶</button>
+                <button class="hb-btn hb-btn--pill" data-learn="shuffle" id="shuffleStudy">Xáo trộn</button>
               </div>
             </header>
             <article class="hb-card hb-card--learn">
@@ -200,17 +200,17 @@
               </header>
               <p id="meaningText">Xin chào</p>
               <div class="hb-card__controls">
-                <button class="hb-btn hb-btn--primary" data-learn="toggleMeaning">Ẩn/hiện nghĩa</button>
-                <button class="hb-btn hb-btn--primary" data-learn="togglePinyin">Ẩn/hiện pinyin</button>
-                <button class="hb-btn hb-btn--ghost" data-audio="speak">🔊 Phát âm</button>
-                <button class="hb-btn hb-btn--ghost" data-audio="record">🎙️ Ghi</button>
-                <button class="hb-btn hb-btn--ghost" data-audio="playback">▶️ Nghe lại</button>
+                <button class="hb-btn hb-btn--primary" data-learn="toggleMeaning" id="toggleViet">Ẩn/hiện nghĩa</button>
+                <button class="hb-btn hb-btn--primary" data-learn="togglePinyin" id="togglePinyinStudy">Ẩn/hiện pinyin</button>
+                <button class="hb-btn hb-btn--ghost" data-audio="speak" id="speak">🔊 Phát âm</button>
+                <button class="hb-btn hb-btn--ghost" data-audio="record" id="recordStudy">🎙️ Ghi</button>
+                <button class="hb-btn hb-btn--ghost" data-audio="playback" id="playbackStudy">▶️ Nghe lại</button>
               </div>
               <label class="hb-form-control">
                 <span>Kiểm tra nhanh (gõ nghĩa Việt hoặc pinyin)</span>
                 <input type="text" data-learn="quizInput" placeholder="Nhập câu trả lời">
               </label>
-              <button class="hb-btn hb-btn--secondary" data-learn="check">Kiểm tra</button>
+              <button class="hb-btn hb-btn--secondary" data-learn="check" id="checkSelf">Kiểm tra</button>
               <p class="hb-feedback" data-learn="feedback"></p>
             </article>
           </div>
@@ -219,26 +219,17 @@
             <header class="hb-tab__header">
               <h2>Bài tập</h2>
               <div class="hb-tab__actions">
-                <label class="hb-form-control hb-form-control--inline">
-                  <span>Chế độ</span>
-                  <select data-practice="mode">
-                    <option value="shuffle">Xáo trộn</option>
-                    <option value="han">Hán → Việt</option>
-                    <option value="viet">Việt → Hán</option>
-                  </select>
-                </label>
-                <label class="hb-form-control hb-form-control--inline">
-                  <span>Cấp độ</span>
-                  <select data-practice="difficulty">
-                    <option value="mixed">Xáo trộn tất cả</option>
-                    <option value="easy">Dễ</option>
-                    <option value="hard">Khó</option>
-                  </select>
-                </label>
-                <label class="hb-form-control hb-form-control--inline">
-                  <span>Ôn sai</span>
-                  <input type="checkbox" data-practice="reviewWrong">
-                </label>
+                <div class="hb-pill-group" role="group" aria-label="Chọn chế độ">
+                  <button class="hb-btn hb-btn--pill" data-mode="shuffle" aria-pressed="true">Xáo trộn</button>
+                  <button class="hb-btn hb-btn--pill" data-mode="han" aria-pressed="false">Hán → Việt</button>
+                  <button class="hb-btn hb-btn--pill" data-mode="viet" aria-pressed="false">Việt → Hán</button>
+                </div>
+                <div class="hb-pill-group" role="group" aria-label="Chọn cấp độ">
+                  <button class="hb-btn hb-btn--pill" data-level="mixed" id="mixAll" aria-pressed="true">Xáo tất cả</button>
+                  <button class="hb-btn hb-btn--pill" data-level="easy" aria-pressed="false">Dễ</button>
+                  <button class="hb-btn hb-btn--pill" data-level="hard" aria-pressed="false">Khó</button>
+                </div>
+                <button class="hb-btn hb-btn--ghost" id="toggleWrongPool" data-review="toggle" aria-pressed="false">Ôn sai</button>
               </div>
             </header>
             <div class="hb-practice">
@@ -246,13 +237,14 @@
               <div class="hb-practice__body">
                 <h3 data-practice="prompt">你好</h3>
                 <p class="hb-practice__hint" data-practice="hint">Gõ nghĩa Việt hoặc pinyin</p>
-                <input type="text" data-practice="answer" placeholder="Trả lời ở đây">
+                <input type="text" data-practice="answer" placeholder="Trả lời ở đây" id="answer">
                 <div class="hb-practice__actions">
-                  <button class="hb-btn hb-btn--secondary" data-practice="check">Kiểm tra</button>
-                  <button class="hb-btn hb-btn--ghost" data-practice="reveal">Hiện đáp án</button>
-                  <button class="hb-btn hb-btn--ghost" data-practice="skip">Câu khác</button>
-                  <button class="hb-btn hb-btn--ghost" data-practice="reset">Reset điểm</button>
-                  <button class="hb-btn hb-btn--ghost" data-practice="timerToggle">Bắt đầu/Dừng timer</button>
+                  <button class="hb-btn hb-btn--secondary" data-practice="check" id="check">Kiểm tra</button>
+                  <button class="hb-btn hb-btn--ghost" data-practice="reveal" id="show">Hiện đáp án</button>
+                  <button class="hb-btn hb-btn--ghost" data-practice="skip" id="next">Câu khác</button>
+                  <button class="hb-btn hb-btn--ghost" data-practice="reset" id="resetStats">Reset điểm</button>
+                  <button class="hb-btn hb-btn--ghost" data-practice="start" id="startTimer">Bắt đầu 60s</button>
+                  <button class="hb-btn hb-btn--ghost" data-practice="stop" id="stopTimer">Dừng timer</button>
                 </div>
                 <p class="hb-feedback" data-practice="feedback"></p>
                 <p class="hb-feedback" data-practice="answerReveal"></p>
@@ -269,10 +261,10 @@
           <div class="hb-tab is-hidden" id="tab-bank" data-tab-content="bank">
             <header class="hb-tab__header">
               <h2>Ngân hàng</h2>
-              <label class="hb-form-control hb-form-control--inline">
-                <span>Hiện pinyin</span>
-                <input type="checkbox" checked data-bank="togglePinyin">
-              </label>
+              <div class="hb-tab__actions">
+                <button class="hb-btn hb-btn--pill" id="togglePinyin" data-bank-toggle="pinyin" aria-pressed="true">Hiện pinyin</button>
+                <button class="hb-btn hb-btn--ghost" id="toggleAll" data-bank-toggle="all">Thu gọn tất cả</button>
+              </div>
             </header>
             <div class="hb-bank" data-bank="list"></div>
           </div>
@@ -300,8 +292,8 @@
   </main>
 
   <!-- Modals -->
-  <div class="hb-modal" data-modal="auth" role="dialog" aria-modal="true" aria-labelledby="authTitle">
-    <div class="hb-modal__dialog">
+  <div class="hb-modal" data-modal="auth" id="authModal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+    <div class="hb-modal__dialog modal-card">
       <div class="sheet-handle" aria-hidden="true"></div>
       <header class="hb-modal__header">
         <h2 id="authTitle">Đăng nhập</h2>
@@ -322,15 +314,15 @@
         </label>
         <div class="hb-form__actions">
           <button type="submit" class="hb-btn hb-btn--primary">Xác nhận</button>
-          <button type="button" class="hb-btn hb-btn--ghost" data-auth-toggle>Chuyển sang đăng ký</button>
+          <button type="button" class="hb-btn hb-btn--ghost" data-auth-toggle id="authToggle">Chuyển sang đăng ký</button>
         </div>
         <p class="hb-feedback" data-auth-feedback></p>
       </form>
     </div>
   </div>
 
-  <div class="hb-modal" data-modal="translate" role="dialog" aria-modal="true" aria-labelledby="translateTitle">
-    <div class="hb-modal__dialog hb-modal__dialog--wide">
+  <div class="hb-modal" data-modal="translate" id="gtModal" role="dialog" aria-modal="true" aria-labelledby="translateTitle">
+    <div class="hb-modal__dialog hb-modal__dialog--wide modal-card">
       <div class="sheet-handle" aria-hidden="true"></div>
       <header class="hb-modal__header">
         <h2 id="translateTitle">Dịch nhanh</h2>
@@ -389,7 +381,7 @@
   <!-- Healthcheck -->
   <script defer>
     window.addEventListener('DOMContentLoaded', () => {
-      console.log('HB_OK: scripts loaded');
+      console.log('HB_FIX_V11_READY');
     });
   </script>
 </body>

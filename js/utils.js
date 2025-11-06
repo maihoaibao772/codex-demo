@@ -20,6 +20,7 @@ const storageKeys = {
   coins: 'hb:coins',
   allow: 'hb:allow',
   frames: 'hb:frames',
+  lastTab: 'hb:lastTab',
 };
 
 /**

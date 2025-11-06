@@ -25,8 +25,6 @@
   const authFeedback = authModal.querySelector('[data-auth-feedback]');
   const authToggleBtn = authModal.querySelector('[data-auth-toggle]');
   const authTitle = authModal.querySelector('#authTitle');
-  const loginBtn = document.querySelector('[data-auth="login"]');
-  const signupBtn = document.querySelector('[data-auth="signup"]');
 
   let authMode = 'login';
   let startY = 0;
@@ -145,6 +143,9 @@
         authFeedback.textContent = 'Đăng ký thành công!';
       }
       handleRemember(remember, username);
+      HB.routeTo?.('app');
+      HB.activateTab?.('learn');
+      HB.renderAccount?.();
       setTimeout(() => {
         closeModal();
       }, 600);
@@ -163,9 +164,6 @@
       closeModal();
     }
   });
-
-  loginBtn?.addEventListener('click', () => openModal('login'));
-  signupBtn?.addEventListener('click', () => openModal('signup'));
 
   document.querySelectorAll('[data-modal-close]').forEach((btn) => {
     btn.addEventListener('click', () => {

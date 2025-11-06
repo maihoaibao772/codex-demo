@@ -150,6 +150,12 @@ select {
   text-transform: none;
 }
 
+.hb-btn.is-active,
+.hb-btn[aria-pressed='true'] {
+  box-shadow: 0 0 0 2px rgba(108, 77, 255, 0.25);
+  border-color: rgba(108, 77, 255, 0.4);
+}
+
 .hb-btn:focus-visible,
 .hb-theme-toggle:focus-visible,
 .hb-avatar:focus-visible,
@@ -353,6 +359,23 @@ main {
 
 .hb-tab.is-hidden {
   display: none;
+}
+
+.hb-tab__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.hb-pill-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.hb-pill-group .hb-btn {
+  border-radius: 999px;
 }
 
 .hb-card {

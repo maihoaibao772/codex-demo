@@ -38,8 +38,7 @@ function renderLoggedOut() {
     </section>
   `;
   container.querySelector('[data-account-action="login"]').addEventListener('click', () => {
-    window.location.hash = '#/account';
-    document.querySelector('[data-auth="login"]').click();
+    HB.openAuthModal?.('login');
   });
 }
 
@@ -76,7 +75,7 @@ function renderLoggedIn(username) {
       </div>
       <div class="hb-account__grid">
         <button class="hb-btn hb-btn--secondary" data-account-action="save">Lưu thay đổi</button>
-        <button class="hb-btn hb-btn--ghost" data-account-action="logout">Đăng xuất</button>
+        <button class="hb-btn hb-btn--ghost" data-account-action="logout" id="logoutBtn">Đăng xuất</button>
       </div>
     </section>
 
@@ -132,11 +131,6 @@ function renderLoggedIn(username) {
     headerAvatar.textContent = emoji;
     headerAvatar.parentElement.dataset.vip = vip ? 'true' : 'false';
     showToast('Đã lưu avatar và VIP.');
-  });
-
-  container.querySelector('[data-account-action="logout"]').addEventListener('click', () => {
-    logout();
-    renderLoggedOut();
   });
 
   container.querySelector('[data-account-action="export"]').addEventListener('click', () => {

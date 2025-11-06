@@ -1,5 +1,6 @@
 /*
-  practice.js - interactive practice module with timer and stats.
+  practice.js - interactive practice module with timer, wrong-answer review,
+  and centralized handlers for event delegation.
 */
 
 (function (global) {
@@ -18,209 +19,314 @@
     emit,
   } = HB;
 
-const promptEl = document.querySelector('[data-practice="prompt"]');
-const answerInput = document.querySelector('[data-practice="answer"]');
-const feedbackEl = document.querySelector('[data-practice="feedback"]');
-const answerRevealEl = document.querySelector('[data-practice="answerReveal"]');
-const timerEl = document.querySelector('[data-practice="timer"]');
-const correctEl = document.querySelector('[data-practice="correct"]');
-const incorrectEl = document.querySelector('[data-practice="incorrect"]');
-const accuracyEl = document.querySelector('[data-practice="accuracy"]');
-const streakEl = document.querySelector('[data-practice="streak"]');
+  const els = {};
+  const state = {
+    mode: 'shuffle',
+    level: 'mixed',
+    reviewWrong: false,
+    dataset: [],
+    currentItem: null,
+    promptSide: 'han',
+    timerId: null,
+    timeLeft: 60,
+    stats: { correct: 0, incorrect: 0, streak: 0, bestStreak: 0 },
+  };
 
-const modeSelect = document.querySelector('[data-practice="mode"]');
-const difficultySelect = document.querySelector('[data-practice="difficulty"]');
-const reviewWrongToggle = document.querySelector('[data-practice="reviewWrong"]');
+  function cacheElements() {
+    els.prompt = document.querySelector('[data-practice="prompt"]');
+    els.answerInput = document.querySelector('[data-practice="answer"]');
+    els.feedback = document.querySelector('[data-practice="feedback"]');
+    els.answerReveal = document.querySelector('[data-practice="answerReveal"]');
+    els.timer = document.querySelector('[data-practice="timer"]');
+    els.correct = document.querySelector('[data-practice="correct"]');
+    els.incorrect = document.querySelector('[data-practice="incorrect"]');
+    els.accuracy = document.querySelector('[data-practice="accuracy"]');
+    els.streak = document.querySelector('[data-practice="streak"]');
+    els.hint = document.querySelector('[data-practice="hint"]');
+    els.modeButtons = Array.from(document.querySelectorAll('[data-mode]'));
+    els.levelButtons = Array.from(document.querySelectorAll('[data-level]'));
+    els.reviewButton = document.getElementById('toggleWrongPool');
+  }
 
-const checkBtn = document.querySelector('[data-practice="check"]');
-const revealBtn = document.querySelector('[data-practice="reveal"]');
-const skipBtn = document.querySelector('[data-practice="skip"]');
-const resetBtn = document.querySelector('[data-practice="reset"]');
-const timerToggleBtn = document.querySelector('[data-practice="timerToggle"]');
+  function selectDataset() {
+    if (state.level === 'easy') state.dataset = [...easySentences];
+    else if (state.level === 'hard') state.dataset = [...hardSentences];
+    else state.dataset = [...allSentences];
+    state.dataset = shuffle(state.dataset);
+  }
 
-let dataset = [];
-let currentItem = null;
-let timer = null;
-let timeLeft = 60;
-let stats = { correct: 0, incorrect: 0, streak: 0, bestStreak: 0 };
-
-function selectDataset() {
-  const mode = difficultySelect.value;
-  if (mode === 'easy') dataset = [...easySentences];
-  else if (mode === 'hard') dataset = [...hardSentences];
-  else dataset = [...allSentences];
-  dataset = shuffle(dataset);
-}
-
-function pickItem() {
-  if (reviewWrongToggle.checked) {
+  function pickFromWrongPool() {
     const user = getCurrentUser();
-    if (user) {
-      const pool = JSON.parse(localStorage.getItem('hb:wrongPool') || '{}');
-      const items = pool[user] || [];
-      if (items.length) {
-        const hanzi = items[Math.floor(Math.random() * items.length)];
-        currentItem = allSentences.find((item) => item.hanzi === hanzi) || dataset[0];
+    if (!user) return null;
+    const pool = JSON.parse(localStorage.getItem('hb:wrongPool') || '{}');
+    const items = pool[user] || [];
+    if (!items.length) return null;
+    const hanzi = items[Math.floor(Math.random() * items.length)];
+    return allSentences.find((item) => item.hanzi === hanzi) || null;
+  }
+
+  function pickItem() {
+    if (!state.dataset.length) {
+      selectDataset();
+    }
+    if (state.reviewWrong) {
+      const wrong = pickFromWrongPool();
+      if (wrong) {
+        state.currentItem = wrong;
         return;
       }
     }
-  }
-  currentItem = dataset[Math.floor(Math.random() * dataset.length)];
-}
-
-function renderItem() {
-  if (!currentItem) pickItem();
-  promptEl.textContent = currentItem.hanzi;
-  feedbackEl.textContent = '';
-  answerRevealEl.textContent = '';
-  answerInput.value = '';
-  answerInput.focus();
-}
-
-function evaluate() {
-  const input = answerInput.value.trim();
-  if (!input) return;
-  const mode = modeSelect.value;
-  const normalizedInputVN = normalizeVN(input);
-  const normalizedMeaning = normalizeVN(currentItem.meaning);
-  const normalizedHanzi = normalizeCN(currentItem.hanzi);
-  const normalizedPinyin = normalizeCN(currentItem.pinyin);
-  let correct = false;
-
-  if (mode === 'han') {
-    correct = normalizedInputVN === normalizedMeaning;
-  } else if (mode === 'viet') {
-    correct = normalizeCN(input) === normalizedHanzi || normalizeCN(input) === normalizedPinyin;
-  } else {
-    correct =
-      normalizedInputVN === normalizedMeaning ||
-      normalizeCN(input) === normalizedHanzi ||
-      normalizeCN(input) === normalizedPinyin;
+    const index = Math.floor(Math.random() * state.dataset.length);
+    state.currentItem = state.dataset[index];
   }
 
-  if (correct) {
-    feedbackEl.dataset.state = 'success';
-    feedbackEl.textContent = 'Tuyệt vời!';
-    stats.correct += 1;
-    stats.streak += 1;
-    stats.bestStreak = Math.max(stats.bestStreak, stats.streak);
-  } else {
-    feedbackEl.dataset.state = 'error';
-    feedbackEl.textContent = 'Sai rồi, hãy xem đáp án.';
-    answerRevealEl.textContent = `${currentItem.meaning} (${currentItem.pinyin})`;
-    stats.incorrect += 1;
-    stats.streak = 0;
-    const user = getCurrentUser();
-    if (user) pushWrongItem(user, currentItem.hanzi);
-  }
-  updateStatsUI();
-  saveStats();
-  pickItem();
-  renderItem();
-}
-
-function revealAnswer() {
-  answerRevealEl.textContent = `${currentItem.meaning} (${currentItem.pinyin})`;
-}
-
-function skipQuestion() {
-  pickItem();
-  renderItem();
-}
-
-function resetStats() {
-  stats = { correct: 0, incorrect: 0, streak: 0, bestStreak: 0 };
-  updateStatsUI();
-  saveStats();
-}
-
-function updateStatsUI() {
-  correctEl.textContent = stats.correct;
-  incorrectEl.textContent = stats.incorrect;
-  accuracyEl.textContent = formatAccuracy(stats.correct, stats.incorrect);
-  streakEl.textContent = `${stats.streak} (best ${stats.bestStreak})`;
-}
-
-function saveStats() {
-  const user = getCurrentUser();
-  if (!user) return;
-  updateStats(user, () => ({ ...stats }));
-}
-
-function loadStats() {
-  const user = getCurrentUser();
-  if (!user) return;
-  const all = JSON.parse(localStorage.getItem('hb:stats') || '{}');
-  if (all[user]) {
-    stats = all[user];
-    updateStatsUI();
-  }
-}
-
-function startTimer() {
-  if (timer) clearInterval(timer);
-  timeLeft = 60;
-  timerEl.textContent = timeLeft;
-  timer = setInterval(() => {
-    timeLeft -= 1;
-    timerEl.textContent = timeLeft;
-    if (timeLeft <= 0) {
-      clearInterval(timer);
-      timer = null;
-      feedbackEl.dataset.state = 'error';
-      feedbackEl.textContent = 'Hết giờ!';
-      revealAnswer();
+  function updateHint() {
+    if (!els.hint) return;
+    const side = state.promptSide || 'han';
+    const isShuffle = state.mode === 'shuffle';
+    if (side === 'han') {
+      els.hint.textContent = isShuffle ? 'Xáo trộn: gõ nghĩa Việt' : 'Gõ nghĩa Việt';
+    } else {
+      els.hint.textContent = isShuffle ? 'Xáo trộn: gõ chữ Hán hoặc pinyin' : 'Gõ chữ Hán hoặc pinyin';
     }
-  }, 1000);
-}
-
-function toggleTimer() {
-  if (timer) {
-    clearInterval(timer);
-    timer = null;
-  } else {
-    startTimer();
   }
-}
 
-function initEvents() {
-  modeSelect.addEventListener('change', () => {
+  function choosePromptSide() {
+    if (state.mode === 'viet') return 'viet';
+    if (state.mode === 'han') return 'han';
+    return Math.random() > 0.5 ? 'han' : 'viet';
+  }
+
+  function renderItem() {
+    if (!els.answerInput || !els.prompt) return;
+    if (!state.currentItem) pickItem();
+    if (!state.currentItem) return;
+    state.promptSide = choosePromptSide();
+    const promptSide = state.promptSide;
+    if (promptSide === 'viet') {
+      els.prompt.textContent = state.currentItem.meaning;
+      els.prompt.lang = 'vi';
+    } else {
+      els.prompt.textContent = state.currentItem.hanzi;
+      els.prompt.lang = 'zh-Hans';
+    }
+    els.prompt.dataset.promptSide = promptSide;
+    if (els.feedback) {
+      els.feedback.textContent = '';
+      els.feedback.dataset.state = '';
+    }
+    if (els.answerReveal) {
+      els.answerReveal.textContent = '';
+    }
+    els.answerInput.value = '';
+    const practicePanel = document.querySelector('[data-tab-content="practice"]');
+    if (!practicePanel || !practicePanel.classList.contains('is-hidden')) {
+      els.answerInput.focus();
+    }
+    updateHint();
+  }
+
+  function updateModeButtons() {
+    if (!els.modeButtons) return;
+    els.modeButtons.forEach((btn) => {
+      const active = btn.dataset.mode === state.mode;
+      btn.classList.toggle('is-active', active);
+      btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+  }
+
+  function updateLevelButtons() {
+    if (!els.levelButtons) return;
+    els.levelButtons.forEach((btn) => {
+      const active = btn.dataset.level === state.level;
+      btn.classList.toggle('is-active', active);
+      btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+  }
+
+  function updateReviewButton() {
+    if (!els.reviewButton) return;
+    els.reviewButton.setAttribute('aria-pressed', state.reviewWrong ? 'true' : 'false');
+    els.reviewButton.textContent = state.reviewWrong ? 'Ôn sai (bật)' : 'Ôn sai';
+  }
+
+  function evaluate() {
+    if (!els.answerInput) return;
+    const input = els.answerInput.value.trim();
+    if (!input || !state.currentItem) return;
+    const { hanzi, pinyin, meaning } = state.currentItem;
+    const normalizedInputVN = normalizeVN(input);
+    const normalizedMeaning = normalizeVN(meaning);
+    const normalizedHanzi = normalizeCN(hanzi);
+    const normalizedPinyin = normalizeCN(pinyin);
+    const normalizedInputCN = normalizeCN(input);
+    let correct = false;
+
+    const side = state.promptSide || 'han';
+    if (side === 'han') {
+      correct = normalizedInputVN === normalizedMeaning;
+    } else {
+      correct = normalizedInputCN === normalizedHanzi || normalizedInputCN === normalizedPinyin;
+    }
+
+    if (correct) {
+      if (els.feedback) {
+        els.feedback.dataset.state = 'success';
+        els.feedback.textContent = 'Tuyệt vời!';
+      }
+      state.stats.correct += 1;
+      state.stats.streak += 1;
+      state.stats.bestStreak = Math.max(state.stats.bestStreak, state.stats.streak);
+    } else {
+      if (els.feedback) {
+        els.feedback.dataset.state = 'error';
+        els.feedback.textContent = 'Sai rồi, hãy xem đáp án.';
+      }
+      if (els.answerReveal) {
+        els.answerReveal.textContent = `${state.currentItem.hanzi} → ${state.currentItem.meaning} (${state.currentItem.pinyin})`;
+      }
+      state.stats.incorrect += 1;
+      state.stats.streak = 0;
+      const user = getCurrentUser();
+      if (user) pushWrongItem(user, state.currentItem.hanzi);
+    }
+
+    updateStatsUI();
+    saveStats();
+    pickItem();
+    renderItem();
+  }
+
+  function revealAnswer() {
+    if (!els.answerReveal) return;
+    if (!state.currentItem) return;
+    els.answerReveal.textContent = `${state.currentItem.hanzi} → ${state.currentItem.meaning} (${state.currentItem.pinyin})`;
+  }
+
+  function skipQuestion() {
+    if (!els.answerInput) return;
+    pickItem();
+    renderItem();
+  }
+
+  function resetStats() {
+    if (!els.correct) return;
+    state.stats = { correct: 0, incorrect: 0, streak: 0, bestStreak: 0 };
+    updateStatsUI();
+    saveStats();
+  }
+
+  function updateStatsUI() {
+    if (!els.correct) return;
+    els.correct.textContent = state.stats.correct;
+    els.incorrect.textContent = state.stats.incorrect;
+    els.accuracy.textContent = formatAccuracy(state.stats.correct, state.stats.incorrect);
+    els.streak.textContent = `${state.stats.streak} (best ${state.stats.bestStreak})`;
+  }
+
+  function saveStats() {
+    const user = getCurrentUser();
+    if (!user) return;
+    updateStats(user, () => ({ ...state.stats }));
+  }
+
+  function loadStats() {
+    const user = getCurrentUser();
+    if (!user) return;
+    const all = JSON.parse(localStorage.getItem('hb:stats') || '{}');
+    if (all[user]) {
+      state.stats = all[user];
+      updateStatsUI();
+    }
+  }
+
+  function startTimer() {
+    if (!els.timer) return;
+    stopTimer();
+    state.timeLeft = 60;
+    els.timer.textContent = state.timeLeft;
+    if (els.feedback) {
+      els.feedback.textContent = '';
+      els.feedback.dataset.state = '';
+    }
+    state.timerId = setInterval(() => {
+      state.timeLeft -= 1;
+      els.timer.textContent = state.timeLeft;
+      if (state.timeLeft <= 0) {
+        stopTimer();
+        els.feedback.dataset.state = 'error';
+        els.feedback.textContent = 'Hết giờ!';
+        revealAnswer();
+      }
+    }, 1000);
+  }
+
+  function stopTimer() {
+    if (!els.timer) return;
+    if (state.timerId) {
+      clearInterval(state.timerId);
+      state.timerId = null;
+    }
+  }
+
+  function setMode(mode) {
+    if (!mode || state.mode === mode) return;
+    state.mode = mode;
+    updateModeButtons();
+    renderItem();
+  }
+
+  function setLevel(level) {
+    if (!level || state.level === level) return;
+    state.level = level;
+    updateLevelButtons();
     selectDataset();
     pickItem();
     renderItem();
-  });
-  difficultySelect.addEventListener('change', () => {
-    selectDataset();
+  }
+
+  function toggleWrongReview() {
+    state.reviewWrong = !state.reviewWrong;
+    updateReviewButton();
     pickItem();
     renderItem();
-  });
-  reviewWrongToggle.addEventListener('change', () => {
-    pickItem();
-    renderItem();
-  });
-  checkBtn.addEventListener('click', evaluate);
-  revealBtn.addEventListener('click', revealAnswer);
-  skipBtn.addEventListener('click', skipQuestion);
-  resetBtn.addEventListener('click', resetStats);
-  timerToggleBtn.addEventListener('click', toggleTimer);
-  answerInput.addEventListener('keydown', (event) => {
+  }
+
+  function handleEnter(event) {
     if (event.key === 'Enter') {
       event.preventDefault();
       evaluate();
     }
-  });
-}
+  }
 
-function initPractice() {
-  selectDataset();
-  pickItem();
-  renderItem();
-  updateStatsUI();
-  loadStats();
-  initEvents();
-  emit('practice:ready');
-}
+  function init() {
+    cacheElements();
+    if (!els.prompt) return;
+    selectDataset();
+    pickItem();
+    renderItem();
+    updateModeButtons();
+    updateLevelButtons();
+    updateReviewButton();
+    updateStatsUI();
+    loadStats();
+    els.answerInput.addEventListener('keydown', handleEnter);
+    emit('practice:ready');
+  }
 
-document.addEventListener('DOMContentLoaded', initPractice);
-  HB.initPractice = initPractice;
+  const api = {
+    init,
+    setMode,
+    setLevel,
+    toggleWrongReview,
+    evaluate,
+    revealAnswer,
+    skipQuestion,
+    resetStats,
+    startTimer,
+    stopTimer,
+  };
+
+  HB.practice = api;
+  document.addEventListener('DOMContentLoaded', init);
 })(window);

@@ -1,5 +1,7 @@
 /*
-  learn.js - controls the "Ôn bài" tab.
+  learn.js - controls the "Ôn bài" tab with centralized handlers so that
+  global event delegation can call into this module regardless of when the
+  buttons are rendered.
 */
 
 (function (global) {
@@ -11,147 +13,211 @@
     normalizeVN,
     normalizeCN,
     pushWrongItem,
-    buildSpeakText,
     getCurrentUser,
     emit,
-    speakText,
+    speakHan,
     startRecording,
     stopRecording,
     playbackRecording,
-    isAudioSupported,
+    isRecorderSupported,
   } = HB;
 
-const hanText = document.getElementById('hanText');
-const pinyinText = document.getElementById('pinyinText');
-const meaningText = document.getElementById('meaningText');
-const quizInput = document.querySelector('[data-learn="quizInput"]');
-const feedback = document.querySelector('[data-learn="feedback"]');
+  const state = {
+    items: [],
+    index: 0,
+    showMeaning: true,
+    showPinyin: true,
+    recording: false,
+  };
 
-const items = shuffle([...vocabList, ...allSentences.map((s) => ({ hanzi: s.hanzi, pinyin: s.pinyin, meaning: s.meaning }))]);
-let currentIndex = 0;
-let showMeaning = true;
-let showPinyin = true;
+  const els = {};
 
-function renderCurrent() {
-  const item = items[currentIndex];
-  hanText.textContent = item.hanzi;
-  pinyinText.textContent = item.pinyin;
-  meaningText.textContent = item.meaning;
-  pinyinText.style.display = showPinyin ? '' : 'none';
-  meaningText.style.display = showMeaning ? '' : 'none';
-  feedback.textContent = '';
-  feedback.dataset.state = '';
-}
-
-function move(delta) {
-  currentIndex = (currentIndex + delta + items.length) % items.length;
-  renderCurrent();
-}
-
-function handleCheck() {
-  const input = quizInput.value.trim();
-  if (!input) return;
-  const item = items[currentIndex];
-  const normalizedInput = normalizeVN(input);
-  const normalizedMeaning = normalizeVN(item.meaning);
-  const normalizedHanzi = normalizeCN(item.hanzi);
-  const normalizedPinyin = normalizeCN(item.pinyin);
-  if (normalizedInput === normalizedMeaning || normalizeCN(input) === normalizedHanzi || normalizeCN(input) === normalizedPinyin) {
-    feedback.dataset.state = 'success';
-    feedback.textContent = 'Chính xác!';
-  } else {
-    feedback.dataset.state = 'error';
-    feedback.textContent = `Chưa đúng. Đáp án: ${item.meaning}`;
-    const user = getCurrentUser();
-    if (user) pushWrongItem(user, item.hanzi);
+  function cacheElements() {
+    els.han = document.getElementById('hanText');
+    els.pinyin = document.getElementById('pinyinText');
+    els.meaning = document.getElementById('meaningText');
+    els.quizInput = document.querySelector('[data-learn="quizInput"]');
+    els.feedback = document.querySelector('[data-learn="feedback"]');
+    els.recordBtn = document.getElementById('recordStudy');
+    els.playbackBtn = document.getElementById('playbackStudy');
+    els.speakBtn = document.getElementById('speak');
   }
-  quizInput.value = '';
-}
 
-function shuffleItems() {
-  for (let i = items.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [items[i], items[j]] = [items[j], items[i]];
+  function buildItems() {
+    const sentenceItems = allSentences.map((sentence) => ({
+      hanzi: sentence.hanzi,
+      pinyin: sentence.pinyin,
+      meaning: sentence.meaning,
+    }));
+    state.items = shuffle([...vocabList, ...sentenceItems]);
   }
-  currentIndex = 0;
-  renderCurrent();
-}
 
-function initControls() {
-  document.querySelector('[data-learn="prev"]').addEventListener('click', () => move(-1));
-  document.querySelector('[data-learn="next"]').addEventListener('click', () => move(1));
-  document.querySelector('[data-learn="shuffle"]').addEventListener('click', () => shuffleItems());
-  document.querySelector('[data-learn="toggleMeaning"]').addEventListener('click', () => {
-    showMeaning = !showMeaning;
-    meaningText.style.display = showMeaning ? '' : 'none';
-  });
-  document.querySelector('[data-learn="togglePinyin"]').addEventListener('click', () => {
-    showPinyin = !showPinyin;
-    pinyinText.style.display = showPinyin ? '' : 'none';
-  });
-  document.querySelector('[data-learn="check"]').addEventListener('click', handleCheck);
-  quizInput.addEventListener('keydown', (event) => {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      handleCheck();
+  function renderCurrent() {
+    if (!els.han) return;
+    if (!state.items.length) buildItems();
+    const item = state.items[state.index];
+    if (!item) return;
+    els.han.textContent = item.hanzi;
+    if (els.pinyin) {
+      els.pinyin.textContent = item.pinyin;
+      els.pinyin.style.display = state.showPinyin ? '' : 'none';
     }
-  });
-
-  window.addEventListener('keydown', (event) => {
-    if (document.body.contains(quizInput)) {
-      if (event.key.toLowerCase() === 'j') {
-        move(-1);
-      }
-      if (event.key.toLowerCase() === 'k') {
-        move(1);
-      }
+    if (els.meaning) {
+      els.meaning.textContent = item.meaning;
+      els.meaning.style.display = state.showMeaning ? '' : 'none';
     }
-  });
-}
-
-function initAudio() {
-  const speakBtn = document.querySelector('[data-audio="speak"]');
-  const recordBtn = document.querySelector('[data-audio="record"]');
-  const playbackBtn = document.querySelector('[data-audio="playback"]');
-
-  if (!isAudioSupported()) {
-    speakBtn.style.display = 'none';
-    recordBtn.style.display = 'none';
-    playbackBtn.style.display = 'none';
-    return;
+    if (els.feedback) {
+      els.feedback.textContent = '';
+      els.feedback.dataset.state = '';
+    }
+    if (els.quizInput) {
+      els.quizInput.value = '';
+    }
   }
 
-  speakBtn.addEventListener('click', () => {
-    const item = items[currentIndex];
-    speakText(buildSpeakText(item));
-  });
+  function move(delta) {
+    const total = state.items.length;
+    state.index = (state.index + delta + total) % total;
+    renderCurrent();
+  }
 
-  let recording = false;
+  function toggleMeaning() {
+    if (!els.meaning) return;
+    state.showMeaning = !state.showMeaning;
+    els.meaning.style.display = state.showMeaning ? '' : 'none';
+  }
 
-  recordBtn.addEventListener('click', async () => {
-    if (!recording) {
-      recording = true;
-      recordBtn.textContent = '⏹ Dừng';
-      await startRecording();
+  function togglePinyin() {
+    if (!els.pinyin) return;
+    state.showPinyin = !state.showPinyin;
+    els.pinyin.style.display = state.showPinyin ? '' : 'none';
+  }
+
+  function shuffleItems() {
+    state.items = shuffle(state.items);
+    state.index = 0;
+    renderCurrent();
+  }
+
+  function checkAnswer() {
+    if (!els.quizInput) return;
+    const input = els.quizInput.value.trim();
+    if (!input) return;
+    const item = state.items[state.index];
+    const normalizedInputVN = normalizeVN(input);
+    const normalizedMeaning = normalizeVN(item.meaning);
+    const normalizedHanzi = normalizeCN(item.hanzi);
+    const normalizedPinyin = normalizeCN(item.pinyin);
+    const normalizedInputCN = normalizeCN(input);
+
+    const correct =
+      normalizedInputVN === normalizedMeaning ||
+      normalizedInputCN === normalizedHanzi ||
+      normalizedInputCN === normalizedPinyin;
+
+    if (correct) {
+      if (els.feedback) {
+        els.feedback.dataset.state = 'success';
+        els.feedback.textContent = 'Chính xác!';
+      }
     } else {
-      recording = false;
-      recordBtn.textContent = '🎙️ Ghi';
+      if (els.feedback) {
+        els.feedback.dataset.state = 'error';
+        els.feedback.textContent = `Chưa đúng. Đáp án: ${item.meaning}`;
+      }
+      const user = getCurrentUser();
+      if (user) pushWrongItem(user, item.hanzi);
+    }
+    els.quizInput.value = '';
+  }
+
+  function speakCurrent() {
+    if (!els.han) return;
+    if (typeof speakHan === 'function') {
+      speakHan(els.han.textContent || '');
+    }
+  }
+
+  async function toggleRecording() {
+    if (!els.recordBtn) return;
+    if (!isRecorderSupported || !isRecorderSupported()) {
+      return;
+    }
+    if (!state.recording) {
+      state.recording = true;
+      els.recordBtn.textContent = '⏹ Dừng';
+      try {
+        await startRecording();
+      } catch (error) {
+        state.recording = false;
+        els.recordBtn.textContent = '🎙️ Ghi';
+      }
+    } else {
+      state.recording = false;
+      els.recordBtn.textContent = '🎙️ Ghi';
       await stopRecording();
     }
-  });
+  }
 
-  playbackBtn.addEventListener('click', () => {
-    playbackRecording();
-  });
-}
+  function playbackLatest() {
+    if (!els.playbackBtn) return;
+    playbackRecording?.();
+  }
 
-function initLearn() {
-  initControls();
-  initAudio();
-  renderCurrent();
-  emit('learn:ready');
-}
+  function handleKeydown(event) {
+    if (!els.quizInput) return;
+    const learnPanel = document.querySelector('[data-tab-content="learn"]');
+    if (learnPanel && learnPanel.classList.contains('is-hidden')) return;
+    if (event.key.toLowerCase() === 'j') {
+      move(-1);
+    } else if (event.key.toLowerCase() === 'k') {
+      move(1);
+    }
+  }
 
-document.addEventListener('DOMContentLoaded', initLearn);
-  HB.initLearn = initLearn;
+  function handleEnter(event) {
+    if (!els.quizInput) return;
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      checkAnswer();
+    }
+  }
+
+  function applyAudioVisibility() {
+    if (!els.recordBtn || !els.playbackBtn) return;
+    if (!isRecorderSupported || !isRecorderSupported()) {
+      els.recordBtn.style.display = 'none';
+      els.playbackBtn.style.display = 'none';
+    }
+    if (!('speechSynthesis' in window) && els.speakBtn) {
+      els.speakBtn.style.display = 'none';
+    }
+  }
+
+  function init() {
+    cacheElements();
+    if (!els.han) return;
+    buildItems();
+    renderCurrent();
+    els.quizInput?.addEventListener('keydown', handleEnter);
+    window.addEventListener('keydown', handleKeydown, { passive: true });
+    applyAudioVisibility();
+    emit('learn:ready');
+  }
+
+  const api = {
+    init,
+    prev: () => move(-1),
+    next: () => move(1),
+    shuffle: shuffleItems,
+    toggleMeaning,
+    togglePinyin,
+    check: checkAnswer,
+    speak: speakCurrent,
+    record: toggleRecording,
+    playback: playbackLatest,
+  };
+
+  HB.learn = api;
+  document.addEventListener('DOMContentLoaded', init);
 })(window);
