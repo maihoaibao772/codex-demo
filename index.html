@@ -13,7 +13,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta
     name="viewport"
-    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
+    content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"
   >
   <meta name="format-detection" content="telephone=no">
   <title>Hanzi Bridge [UI v12]</title>
@@ -29,6 +29,16 @@
   <link rel="stylesheet" href="css/landing.css">
   <link rel="stylesheet" href="css/app.css">
   <link rel="stylesheet" href="css/store.css">
+  <style>
+    html,body{height:100%}
+    body{-webkit-text-size-adjust:100%;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+    *{-webkit-tap-highlight-color:transparent}
+    button,a,input,select,textarea{touch-action:manipulation}
+    input,select,textarea{font-size:16px}
+    header{padding-top:calc(env(safe-area-inset-top,0))}
+    .footer,.hb-footer{padding-bottom:calc(env(safe-area-inset-bottom,0))}
+    #authModal[hidden],#gtModal[hidden]{display:none!important}
+  </style>
 </head>
 <body>
   <!--
@@ -47,7 +57,8 @@
       <button class="hb-btn hb-btn--ghost" data-route="home" aria-current="page">Trang chủ</button>
       <button class="hb-btn hb-btn--ghost" data-route="faq">FAQ</button>
       <button class="hb-btn hb-btn--ghost" data-route="app">Vào học</button>
-      <button class="hb-btn hb-btn--ghost" data-modal-target="translate">🌐 Dịch nhanh</button>
+      <button class="hb-btn hb-btn--ghost" data-gt="zh2vi">🌐 ZH→VI</button>
+      <button class="hb-btn hb-btn--ghost" data-gt="vi2zh">🌐 VI→ZH</button>
     </nav>
     <div class="hb-header__actions">
       <button class="hb-btn hb-btn--pill" data-auth="signup" id="navRegister">Đăng ký</button>
@@ -79,10 +90,11 @@
             Được xây dựng như một bộ UI v12 tối ưu cho Netlify và iOS Safari.
           </p>
           <div class="hb-hero__cta">
-            <button class="hb-btn hb-btn--primary" data-route="app">Bắt đầu học</button>
+            <button class="hb-btn hb-btn--primary" data-route="app" id="ctaStart">Bắt đầu học</button>
             <button class="hb-btn hb-btn--secondary" data-route="faq">Xem FAQ</button>
             <button class="hb-btn hb-btn--ghost" data-route="account">👤 Vào tài khoản</button>
-            <button class="hb-btn hb-btn--ghost" data-modal-target="translate">🌐 Dịch nhanh</button>
+            <button class="hb-btn hb-btn--ghost" data-gt="zh2vi">Dịch ZH→VI</button>
+            <button class="hb-btn hb-btn--ghost" data-gt="vi2zh">Dịch VI→ZH</button>
           </div>
           <dl class="hb-hero__metrics" aria-label="Chỉ số nội dung">
             <div>
@@ -181,14 +193,14 @@
     <section class="hb-view hb-view--app" data-route="app" aria-label="Ứng dụng học">
       <div class="hb-app-shell">
         <aside class="hb-app-shell__sidebar" aria-label="Danh sách tab">
-          <button class="hb-tab-btn tab is-active" data-tab="learn">Ôn bài</button>
+          <button class="hb-tab-btn tab is-active" data-tab="study" aria-selected="true">Ôn bài</button>
           <button class="hb-tab-btn tab" data-tab="practice">Bài tập</button>
           <button class="hb-tab-btn tab" data-tab="bank">Ngân hàng</button>
           <button class="hb-tab-btn tab" data-tab="account">Tài khoản</button>
           <button class="hb-tab-btn tab" data-tab="store">Cửa hàng</button>
         </aside>
         <section class="hb-app-shell__content">
-          <div class="hb-tab" id="tab-learn" data-tab-content="learn">
+          <div class="hb-tab" id="study" data-tab-content="learn">
             <header class="hb-tab__header">
               <h2>Ôn bài</h2>
               <div class="hb-tab__actions">
@@ -219,7 +231,7 @@
             </article>
           </div>
 
-          <div class="hb-tab is-hidden" id="tab-practice" data-tab-content="practice">
+          <div class="hb-tab is-hidden" id="practice" data-tab-content="practice" hidden>
             <header class="hb-tab__header">
               <h2>Bài tập</h2>
               <div class="hb-tab__actions">
@@ -262,7 +274,7 @@
             </div>
           </div>
 
-          <div class="hb-tab is-hidden" id="tab-bank" data-tab-content="bank">
+          <div class="hb-tab is-hidden" id="bank" data-tab-content="bank" hidden>
             <header class="hb-tab__header">
               <h2>Ngân hàng</h2>
               <div class="hb-tab__actions">
@@ -273,7 +285,7 @@
             <div class="hb-bank" data-bank="list"></div>
           </div>
 
-          <div class="hb-tab is-hidden" id="tab-account" data-tab-content="account">
+          <div class="hb-tab is-hidden" id="account" data-tab-content="account" hidden>
             <header class="hb-tab__header">
               <h2>Tài khoản</h2>
             </header>
@@ -282,7 +294,7 @@
             </div>
           </div>
 
-          <div class="hb-tab is-hidden" id="tab-store" data-tab-content="store">
+          <div class="hb-tab is-hidden" id="store" data-tab-content="store" hidden>
             <header class="hb-tab__header">
               <h2>Cửa hàng khung</h2>
             </header>
@@ -329,7 +341,7 @@
     </div>
   </div>
 
-  <div class="hb-modal" data-modal="translate" id="gtModal" role="dialog" aria-modal="true" aria-labelledby="translateTitle">
+  <div class="hb-modal" data-modal="translate-legacy" id="legacyTranslateModal" role="dialog" aria-modal="true" aria-labelledby="translateTitle" hidden>
     <div class="hb-modal__dialog hb-modal__dialog--wide modal-card">
       <div class="sheet-handle" aria-hidden="true"></div>
       <header class="hb-modal__header">
@@ -379,6 +391,128 @@
   <script src="js/store.js" defer></script>
   <script defer>
     window.addEventListener('DOMContentLoaded', () => console.log('HB_V12_READY'));
+  </script>
+  <script defer id="v13_hotfix">
+(() => {
+  /* ===== CONFIG (sửa chuỗi mã nếu cần) ===== */
+  const ACT_CODE = 'BAO-888';              // mã kích hoạt do chủ cấp
+  const ALLOW = (localStorage.getItem('hb:allow')||'hoai-bao').split(',').map(s=>s.trim()).filter(Boolean);
+  const isAuthed = () => !!localStorage.getItem('sessionUser');
+  const isActivated = () => localStorage.getItem('hb:activated')==='1';
+  const gate = () => {
+    if (!isAuthed()) { alert('Hãy đăng nhập trước đã.'); return false; }
+    if (!isActivated()) {
+      const inp = prompt('Nhập MÃ KÍCH HOẠT để vào học:');
+      if (inp && inp.trim()===ACT_CODE) { localStorage.setItem('hb:activated','1'); return true; }
+      alert('Sai mã hoặc chưa có mã kích hoạt. Liên hệ admin.');
+      return false;
+    }
+    return true;
+  };
+
+  /* ===== Router hook: chặn vào app nếu chưa kích hoạt ===== */
+  const _routeTo = window.routeTo || function(){};
+  window.routeTo = function(name){
+    if (name==='app' && !gate()) { name = 'home'; }
+    _routeTo(name);
+  };
+
+  /* ===== Event delegation: 1 listener cho toàn bộ nút/route/tab ===== */
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest('[data-route]');
+    if (a) { e.preventDefault(); routeTo(a.getAttribute('data-route')); return; }
+
+    const t = e.target.closest('.tab[data-tab]');
+    if (t) {
+      document.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-selected','false'));
+      t.setAttribute('aria-selected','true');
+      const tab = t.dataset.tab;
+      ['study','practice','bank','account','store','social'].forEach(id=>{
+        const el = document.getElementById(id); if (el) el.hidden = (id!==tab);
+      });
+      return;
+    }
+
+    // Nút “Vào học” ngoài landing
+    const goApp = e.target.closest('#ctaStart');
+    if (goApp) { e.preventDefault(); routeTo('app'); return; }
+
+    // Google Dịch toggle
+    const zh2vi = e.target.closest('[data-gt="zh2vi"]');
+    const vi2zh = e.target.closest('[data-gt="vi2zh"]');
+    if (zh2vi || vi2zh) {
+      openGT(zh2vi ? 'zh2vi' : 'vi2zh'); return;
+    }
+  }, true);
+
+  /* ===== Google Dịch: chỉ 2 chế độ ZH↔VI, có fallback mở tab ===== */
+  function openGT(mode){
+    const sl = mode==='zh2vi' ? 'zh-CN' : 'vi';
+    const tl = mode==='zh2vi' ? 'vi'     : 'zh-CN';
+    const text = (document.getElementById('hanText')?.textContent||'').trim();
+    const url = `https://translate.google.com/?sl=${sl}&tl=${tl}&op=translate&text=${encodeURIComponent(text)}`;
+
+    let modal = document.getElementById('gtModal');
+    if (!modal) {
+      modal = document.createElement('div');
+      modal.id='gtModal';
+      modal.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:90';
+      modal.innerHTML = '<div class="modal-card" style="max-width:900px;width:96%;height:80%;background:var(--card);border:1px solid #213055;border-radius:16px;overflow:hidden;display:flex;flex-direction:column">'
+        + '<div style="display:flex;gap:8px;padding:8px;background:var(--bg);border-bottom:1px solid #213055">'
+        + '  <button class="btn" data-gt="zh2vi">ZH→VI</button>'
+        + '  <button class="btn" data-gt="vi2zh">VI→ZH</button>'
+        + '  <button class="btn" id="gtOpenTab">Mở tab</button>'
+        + '  <div class="spacer"></div><button class="btn" id="gtClose">✕</button>'
+        + '</div>'
+        + '<iframe id="gtFrame" style="flex:1;border:0"></iframe></div>';
+      document.body.appendChild(modal);
+      modal.addEventListener('click', (ev)=>{ if(ev.target===modal) modal.remove(); });
+      modal.querySelector('#gtClose').onclick = ()=> modal.remove();
+      modal.querySelector('#gtOpenTab').onclick = ()=> window.open(document.getElementById('gtFrame').src,'_blank');
+    }
+    const frame = document.getElementById('gtFrame');
+    if (frame) {
+      frame.src = url;
+      frame.removeAttribute('hidden');
+    }
+  }
+
+  /* ===== Auth tighten: chỉ cho user trong ALLOW đăng ký/đăng nhập ===== */
+  const _register = window.register;
+  if (_register) {
+    window.register = async (u,p)=> {
+      if (!ALLOW.includes(u)) throw 'Tài khoản chưa được cấp quyền (allowlist).';
+      return _register(u,p);
+    };
+  }
+  const _login = window.login;
+  if (_login) {
+    window.login = async (u,p,remember)=> {
+      if (!ALLOW.includes(u)) throw 'Tài khoản chưa được cấp quyền (allowlist).';
+      return _login(u,p,remember);
+    };
+  }
+
+  /* ===== TTS: chỉ đọc CHỮ HÁN ===== */
+  (function(){
+    let zhVoice=null;
+    function pick(){ const vs=speechSynthesis.getVoices()||[];
+      zhVoice = vs.find(v=>/^(zh|cmn)/i.test(v.lang)) || vs.find(v=>/chinese/i.test(v.name+v.lang)) || null; }
+    if (speechSynthesis.onvoiceschanged!==undefined) speechSynthesis.onvoiceschanged = pick;
+    pick();
+    function onlyHan(s){ const m=(s||'').match(/[\u3400-\u9FFF\uF900-\uFAFF]+/g); return m?m.join(''):''; }
+    window.speakHan = function(raw){
+      try{ const text=onlyHan(raw); if(!text) return;
+        const u=new SpeechSynthesisUtterance(text); u.lang='zh-CN'; if(zhVoice) u.voice=zhVoice;
+        speechSynthesis.cancel(); speechSynthesis.speak(u);
+      }catch(e){ console.warn('TTS error',e); }
+    };
+    const btn=document.getElementById('speak');
+    if(btn){ btn.addEventListener('click', ()=>{ const el=document.getElementById('hanText'); if(el) speakHan(el.textContent||''); }); }
+  })();
+
+  console.log('HB_V13_HOTFIX_READY');
+})();
   </script>
 </body>
 </html>
