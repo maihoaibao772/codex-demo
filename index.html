@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+  <!--
+    UI v10 Hanzi Builder
+    File: index.html
+    Description: Landing page + shell for SPA style app with sections Home, FAQ, App.
+    The document is designed to be verbose with explanatory comments so other
+    contributors can easily understand every block. The HTML structure is intentionally
+    layered with semantic regions and accessibility helpers.
+  -->
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hanzii Builder [UI v10]</title>
+  <!-- Google Fonts: Inter for Latin text, Noto Sans SC for Chinese characters -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap"
+    rel="stylesheet">
+  <!-- Reset + Theme + Landing + App styles -->
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/landing.css">
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/store.css">
+</head>
+<body>
+  <!--
+    The body of this document hosts a simple router-driven single page experience.
+    The router is implemented in /js/router.js and responds to hash changes. Each
+    view is wrapped in a <section> with data-route attribute. The router toggles the
+    "is-active" class accordingly. The landing view is the home route (#/ or empty hash).
+  -->
+  <header class="hb-header" data-component="app-header">
+    <div class="hb-header__logo" aria-label="Hanzi Bridge Logo">
+      <!-- Decorative inline SVG for the gradient conic logo -->
+      <span class="hb-logo-icon" aria-hidden="true"></span>
+      <span class="hb-logo-text">Hanzi Bridge</span>
+    </div>
+    <nav class="hb-header__nav" aria-label="Điều hướng chính">
+      <button class="hb-btn hb-btn--ghost" data-nav="start">Bắt đầu học</button>
+      <button class="hb-btn hb-btn--ghost" data-nav="faq">FAQ</button>
+      <button class="hb-btn hb-btn--ghost" data-nav="account">👤 Tài khoản</button>
+      <button class="hb-btn hb-btn--ghost" data-nav="translate">🌐 Dịch nhanh</button>
+    </nav>
+    <div class="hb-header__actions">
+      <button class="hb-btn hb-btn--pill" data-auth="signup">Đăng ký</button>
+      <button class="hb-btn hb-btn--pill" data-auth="login">Đăng nhập</button>
+      <button class="hb-theme-toggle" data-theme-toggle>
+        <span class="sr-only">Đổi chế độ sáng/tối</span>
+        <span aria-hidden="true" class="hb-theme-toggle__icon hb-theme-toggle__icon--sun">☀️</span>
+        <span aria-hidden="true" class="hb-theme-toggle__icon hb-theme-toggle__icon--moon">🌙</span>
+      </button>
+      <button class="hb-avatar" data-avatar-trigger>
+        <span class="hb-avatar__emoji" data-avatar-emoji>🙂</span>
+        <span class="hb-avatar__vip" data-avatar-vip></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Floating badge for UI build version -->
+  <div class="hb-badge hb-badge--floating" id="uiVersionBadge" role="status">UI v10 LIVE</div>
+
+  <main id="app" tabindex="-1">
+    <!-- Landing/Home view -->
+    <section class="hb-view hb-view--landing is-active" data-route="home" aria-label="Trang chủ">
+      <div class="hb-hero">
+        <div class="hb-hero__content">
+          <h1>Học tiếng Trung ⇄ Việt theo vibe Hanzii &amp; Duolingo</h1>
+          <p class="hb-hero__subtitle">
+            Bộ công cụ học Hanzi thân thiện mobile, chạy hoàn toàn offline với localStorage.
+            Giao diện gradient mượt mà, tab học/ôn/bài tập rõ ràng, kèm ngân hàng câu linh hoạt.
+            Được xây dựng như một bộ UI v10 tối ưu cho Netlify.
+          </p>
+          <div class="hb-hero__cta">
+            <button class="hb-btn hb-btn--primary" data-nav="start">Bắt đầu học</button>
+            <button class="hb-btn hb-btn--secondary" data-nav="faq">Xem FAQ</button>
+            <button class="hb-btn hb-btn--ghost" data-nav="account">👤 Vào tài khoản</button>
+            <button class="hb-btn hb-btn--ghost" data-nav="translate">🌐 Dịch nhanh</button>
+          </div>
+          <dl class="hb-hero__metrics" aria-label="Chỉ số nội dung">
+            <div>
+              <dt>Tổng câu luyện</dt>
+              <dd data-metric="sentences">0</dd>
+            </div>
+            <div>
+              <dt>Tổng từ vựng</dt>
+              <dd data-metric="vocab">0</dd>
+            </div>
+          </dl>
+        </div>
+        <div class="hb-hero__visual">
+          <div class="hb-phone">
+            <div class="hb-phone__screen">
+              <div class="hb-phone__tablist" role="tablist" aria-label="Demo tabs">
+                <button role="tab" aria-selected="true">Ôn bài</button>
+                <button role="tab" aria-selected="false">Bài tập</button>
+                <button role="tab" aria-selected="false">Ngân hàng</button>
+              </div>
+              <div class="hb-phone__content">
+                <article>
+                  <h2>你好 → Xin chào</h2>
+                  <p>Học Hanzi với pinyin rõ ràng, giải nghĩa sát nghĩa Việt.</p>
+                </article>
+                <article>
+                  <h2>Mini quiz</h2>
+                  <p>Chọn chế độ Hán → Việt hoặc Việt → Hán, luyện phản xạ 60s.</p>
+                </article>
+                <article>
+                  <h2>Ngân hàng câu</h2>
+                  <p>Accordion gọn gàng, mỗi câu có mini-quiz kiểm tra nhanh.</p>
+                </article>
+              </div>
+              <div class="hb-phone__dots" aria-hidden="true">
+                <span></span><span></span><span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <section class="hb-feature-grid" aria-label="Tính năng nổi bật">
+        <article class="hb-feature-card">
+          <h3>Ôn bài</h3>
+          <p>Trình duyệt Hanzi, pinyin và nghĩa Việt. Tích hợp phát âm, ghi âm và ghi nhớ trả lời sai.</p>
+        </article>
+        <article class="hb-feature-card">
+          <h3>Bài tập</h3>
+          <p>Ba chế độ luyện phản xạ với timer 60 giây, thống kê chính xác và ôn sai.</p>
+        </article>
+        <article class="hb-feature-card">
+          <h3>Ngân hàng</h3>
+          <p>Accordion rõ ràng, mini quiz từng mục, bật tắt pinyin và chế độ luyện nhanh.</p>
+        </article>
+        <article class="hb-feature-card">
+          <h3>Khung VIP</h3>
+          <p>Cửa hàng khung CSS-only với conic-gradient và glow, không dùng ảnh, tối ưu mobile.</p>
+        </article>
+        <article class="hb-feature-card">
+          <h3>Offline friendly</h3>
+          <p>Không cần backend, toàn bộ dữ liệu lưu localStorage, xuất nhập JSON tùy ý.</p>
+        </article>
+        <article class="hb-feature-card">
+          <h3>Local first</h3>
+          <p>Router hash đơn giản, data seed ngay trong trình duyệt, theme dark/light lưu bền vững.</p>
+        </article>
+      </section>
+
+      <section class="hb-faq" data-route="faq" aria-label="Câu hỏi thường gặp">
+        <h2>FAQ</h2>
+        <article>
+          <h3>App này chạy offline được không?</h3>
+          <p>Có. Mọi dữ liệu và trạng thái được lưu vào localStorage. Bạn có thể deploy trên Netlify và chạy hoàn toàn tĩnh.</p>
+        </article>
+        <article>
+          <h3>Khung avatar VIP có mất phí không?</h3>
+          <p>Khung VIP mặc định miễn phí cho người bật cờ VIP trong tài khoản. Các khung khác sử dụng coin mua trong cửa hàng.</p>
+        </article>
+        <article>
+          <h3>Làm sao đổi theme?</h3>
+          <p>Sử dụng nút ở góc phải header. Theme được lưu và tự động áp dụng cho lần mở sau.</p>
+        </article>
+        <article>
+          <h3>Xuất dữ liệu như thế nào?</h3>
+          <p>Vào tab Tài khoản → Xuất dữ liệu để tải file JSON chứa người dùng, thống kê, allowlist và khung đã mua.</p>
+        </article>
+        <article>
+          <h3>App có hỗ trợ phát âm và ghi âm?</h3>
+          <p>Có, nếu trình duyệt hỗ trợ speechSynthesis và MediaRecorder. Nếu không, các nút này sẽ ẩn.</p>
+        </article>
+      </section>
+    </section>
+
+    <!-- Application view: hosts tabs for learning modules -->
+    <section class="hb-view hb-view--app" data-route="app" aria-label="Ứng dụng học">
+      <div class="hb-app-shell">
+        <aside class="hb-app-shell__sidebar" aria-label="Danh sách tab">
+          <button class="hb-tab-btn is-active" data-tab="learn">Ôn bài</button>
+          <button class="hb-tab-btn" data-tab="practice">Bài tập</button>
+          <button class="hb-tab-btn" data-tab="bank">Ngân hàng</button>
+          <button class="hb-tab-btn" data-tab="account">Tài khoản</button>
+          <button class="hb-tab-btn" data-tab="store">Cửa hàng</button>
+        </aside>
+        <section class="hb-app-shell__content">
+          <div class="hb-tab" id="tab-learn" data-tab-content="learn">
+            <header class="hb-tab__header">
+              <h2>Ôn bài</h2>
+              <div class="hb-tab__actions">
+                <button class="hb-btn hb-btn--pill" data-learn="prev">◀ Trước</button>
+                <button class="hb-btn hb-btn--pill" data-learn="next">Tiếp ▶</button>
+                <button class="hb-btn hb-btn--pill" data-learn="shuffle">Xáo trộn</button>
+              </div>
+            </header>
+            <article class="hb-card hb-card--learn">
+              <header>
+                <h3 id="hanText">你好</h3>
+                <p id="pinyinText">ni hao</p>
+              </header>
+              <p id="meaningText">Xin chào</p>
+              <div class="hb-card__controls">
+                <button class="hb-btn hb-btn--primary" data-learn="toggleMeaning">Ẩn/hiện nghĩa</button>
+                <button class="hb-btn hb-btn--primary" data-learn="togglePinyin">Ẩn/hiện pinyin</button>
+                <button class="hb-btn hb-btn--ghost" data-audio="speak">🔊 Phát âm</button>
+                <button class="hb-btn hb-btn--ghost" data-audio="record">🎙️ Ghi</button>
+                <button class="hb-btn hb-btn--ghost" data-audio="playback">▶️ Nghe lại</button>
+              </div>
+              <label class="hb-form-control">
+                <span>Kiểm tra nhanh (gõ nghĩa Việt hoặc pinyin)</span>
+                <input type="text" data-learn="quizInput" placeholder="Nhập câu trả lời">
+              </label>
+              <button class="hb-btn hb-btn--secondary" data-learn="check">Kiểm tra</button>
+              <p class="hb-feedback" data-learn="feedback"></p>
+            </article>
+          </div>
+
+          <div class="hb-tab is-hidden" id="tab-practice" data-tab-content="practice">
+            <header class="hb-tab__header">
+              <h2>Bài tập</h2>
+              <div class="hb-tab__actions">
+                <label class="hb-form-control hb-form-control--inline">
+                  <span>Chế độ</span>
+                  <select data-practice="mode">
+                    <option value="shuffle">Xáo trộn</option>
+                    <option value="han">Hán → Việt</option>
+                    <option value="viet">Việt → Hán</option>
+                  </select>
+                </label>
+                <label class="hb-form-control hb-form-control--inline">
+                  <span>Cấp độ</span>
+                  <select data-practice="difficulty">
+                    <option value="mixed">Xáo trộn tất cả</option>
+                    <option value="easy">Dễ</option>
+                    <option value="hard">Khó</option>
+                  </select>
+                </label>
+                <label class="hb-form-control hb-form-control--inline">
+                  <span>Ôn sai</span>
+                  <input type="checkbox" data-practice="reviewWrong">
+                </label>
+              </div>
+            </header>
+            <div class="hb-practice">
+              <div class="hb-practice__timer" data-practice="timer">60</div>
+              <div class="hb-practice__body">
+                <h3 data-practice="prompt">你好</h3>
+                <p class="hb-practice__hint" data-practice="hint">Gõ nghĩa Việt hoặc pinyin</p>
+                <input type="text" data-practice="answer" placeholder="Trả lời ở đây">
+                <div class="hb-practice__actions">
+                  <button class="hb-btn hb-btn--secondary" data-practice="check">Kiểm tra</button>
+                  <button class="hb-btn hb-btn--ghost" data-practice="reveal">Hiện đáp án</button>
+                  <button class="hb-btn hb-btn--ghost" data-practice="skip">Câu khác</button>
+                  <button class="hb-btn hb-btn--ghost" data-practice="reset">Reset điểm</button>
+                  <button class="hb-btn hb-btn--ghost" data-practice="timerToggle">Bắt đầu/Dừng timer</button>
+                </div>
+                <p class="hb-feedback" data-practice="feedback"></p>
+                <p class="hb-feedback" data-practice="answerReveal"></p>
+              </div>
+              <aside class="hb-practice__stats" aria-label="Thống kê">
+                <p>Đúng: <span data-practice="correct">0</span></p>
+                <p>Sai: <span data-practice="incorrect">0</span></p>
+                <p>Độ chính xác: <span data-practice="accuracy">0%</span></p>
+                <p>Chuỗi đúng: <span data-practice="streak">0</span></p>
+              </aside>
+            </div>
+          </div>
+
+          <div class="hb-tab is-hidden" id="tab-bank" data-tab-content="bank">
+            <header class="hb-tab__header">
+              <h2>Ngân hàng</h2>
+              <label class="hb-form-control hb-form-control--inline">
+                <span>Hiện pinyin</span>
+                <input type="checkbox" checked data-bank="togglePinyin">
+              </label>
+            </header>
+            <div class="hb-bank" data-bank="list"></div>
+          </div>
+
+          <div class="hb-tab is-hidden" id="tab-account" data-tab-content="account">
+            <header class="hb-tab__header">
+              <h2>Tài khoản</h2>
+            </header>
+            <div class="hb-account" data-account="container">
+              <!-- Nội dung sẽ được account.js render dựa trên trạng thái đăng nhập -->
+            </div>
+          </div>
+
+          <div class="hb-tab is-hidden" id="tab-store" data-tab-content="store">
+            <header class="hb-tab__header">
+              <h2>Cửa hàng khung</h2>
+            </header>
+            <div class="hb-store" data-store="container">
+              <!-- Render động trong store.js -->
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modals -->
+  <div class="hb-modal" data-modal="auth" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+    <div class="hb-modal__dialog">
+      <header class="hb-modal__header">
+        <h2 id="authTitle">Đăng nhập</h2>
+        <button class="hb-modal__close" data-modal-close>×</button>
+      </header>
+      <form class="hb-form" data-auth-form>
+        <label class="hb-form-control">
+          <span>Tên đăng nhập</span>
+          <input type="text" name="username" required autocomplete="username">
+        </label>
+        <label class="hb-form-control">
+          <span>Mật khẩu</span>
+          <input type="password" name="password" required autocomplete="current-password">
+        </label>
+        <label class="hb-form-control hb-form-control--inline">
+          <span>Nhớ tên đăng nhập</span>
+          <input type="checkbox" name="remember">
+        </label>
+        <div class="hb-form__actions">
+          <button type="submit" class="hb-btn hb-btn--primary">Xác nhận</button>
+          <button type="button" class="hb-btn hb-btn--ghost" data-auth-toggle>Chuyển sang đăng ký</button>
+        </div>
+        <p class="hb-feedback" data-auth-feedback></p>
+      </form>
+    </div>
+  </div>
+
+  <div class="hb-modal" data-modal="translate" role="dialog" aria-modal="true" aria-labelledby="translateTitle">
+    <div class="hb-modal__dialog hb-modal__dialog--wide">
+      <header class="hb-modal__header">
+        <h2 id="translateTitle">Dịch nhanh</h2>
+        <button class="hb-modal__close" data-modal-close>×</button>
+      </header>
+      <section class="hb-modal__body">
+        <div class="hb-translate-controls">
+          <label class="hb-form-control">
+            <span>Nhập nội dung cần dịch</span>
+            <textarea data-translate="input" rows="3"></textarea>
+          </label>
+          <div class="hb-translate-actions">
+            <button class="hb-btn hb-btn--secondary" data-translate="pasteCurrent">Chèn câu đang xem</button>
+            <button class="hb-btn hb-btn--ghost" data-translate="swap">Đổi ZH⇄VI</button>
+            <button class="hb-btn hb-btn--ghost" data-translate="openTab">Mở tab Google Dịch</button>
+          </div>
+        </div>
+        <div class="hb-translate-frame">
+          <iframe title="Google Dịch" data-translate="iframe" loading="lazy" referrerpolicy="no-referrer"></iframe>
+          <div class="hb-translate-fallback" data-translate="fallback">
+            <p>Không thể hiển thị Google Dịch trực tiếp. Bạn có thể mở tab mới.</p>
+            <button class="hb-btn hb-btn--secondary" data-translate="fallbackOpen">Mở Google Dịch</button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <footer class="hb-footer">
+    <p>© Build bởi Hoài Bảo • UI v10 • build:<span data-build-time></span></p>
+  </footer>
+
+  <!-- Application scripts -->
+  <script src="js/utils.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/router.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/translate.js"></script>
+  <script src="js/learn.js"></script>
+  <script src="js/practice.js"></script>
+  <script src="js/bank.js"></script>
+  <script src="js/account.js"></script>
+  <script src="js/store.js"></script>
+</body>
+</html>

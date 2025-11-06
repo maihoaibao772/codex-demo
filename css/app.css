@@ -1,0 +1,129 @@
+/*
+  app.css - layout for application tabs.
+*/
+
+.hb-tab__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.hb-tab__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.hb-practice__body h3 {
+  font-family: var(--hb-font-han);
+  font-size: clamp(2rem, 6vw, 3.2rem);
+}
+
+.hb-practice__hint {
+  color: var(--hb-color-muted);
+}
+
+.hb-practice__stats {
+  background: rgba(108, 77, 255, 0.08);
+  border-radius: var(--hb-radius-md);
+  padding: 24px;
+  display: grid;
+  gap: 12px;
+}
+
+html[data-theme='dark'] .hb-practice__stats {
+  background: rgba(140, 123, 255, 0.12);
+}
+
+.hb-bank__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hb-bank__group-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.hb-bank__pinyin {
+  color: var(--hb-color-muted);
+  font-family: var(--hb-font-han);
+}
+
+.hb-mini-quiz__input input {
+  flex: 1;
+}
+
+.hb-account__avatar-preview {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(108, 77, 255, 0.12);
+  font-size: 2.6rem;
+  position: relative;
+}
+
+.hb-account__frame-preview {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.hb-account__section code {
+  background: rgba(108, 77, 255, 0.1);
+  padding: 4px 6px;
+  border-radius: 6px;
+}
+
+.hb-store__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.hb-store__item {
+  background: var(--hb-glass-bg);
+  border-radius: var(--hb-radius-md);
+  padding: 20px;
+  display: grid;
+  gap: 12px;
+  position: relative;
+  box-shadow: var(--hb-shadow-sm);
+}
+
+.hb-store__item[data-owned='true'] {
+  border: 1px solid rgba(108, 77, 255, 0.3);
+}
+
+.hb-store__preview {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  font-size: 2.4rem;
+  position: relative;
+}
+
+.hb-store__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hb-account__admin {
+  border: 1px dashed rgba(255, 209, 102, 0.6);
+  background: rgba(255, 209, 102, 0.1);
+  border-radius: var(--hb-radius-sm);
+  padding: 16px;
+  display: grid;
+  gap: 12px;
+}

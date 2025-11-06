@@ -1,0 +1,5 @@
+[
+  { "id": "vip-galaxy", "name": "VIP Galaxy", "price": 500, "css": "frame-vip-galaxy" },
+  { "id": "neon-circuit", "name": "Neon Circuit", "price": 250, "css": "frame-neon-circuit" },
+  { "id": "jade-ring", "name": "Jade Ring", "price": 150, "css": "frame-jade-ring" }
+]
