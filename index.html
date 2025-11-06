@@ -1,0 +1,1586 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+  <meta name="format-detection" content="telephone=no">
+  <title>Hanzi Bridge</title>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --text: #e5edff;
+      --muted: #8ea2c6;
+      --card: rgba(24,34,56,0.95);
+      --accent: #5f8dff;
+      --accent-soft: rgba(95,141,255,0.12);
+      --shadow: 0 18px 45px rgba(5,10,25,0.35);
+      --border: rgba(116,140,190,0.4);
+      color-scheme: dark;
+    }
+    [data-theme="light"] {
+      --bg: #f2f5ff;
+      --text: #12203a;
+      --muted: #506083;
+      --card: rgba(255,255,255,0.9);
+      --accent: #3357ff;
+      --accent-soft: rgba(51,87,255,0.12);
+      --shadow: 0 16px 40px rgba(9,21,61,0.18);
+      --border: rgba(122,142,200,0.3);
+      color-scheme: light;
+    }
+    html,body{height:100%;overflow-x:hidden}
+    body{
+      margin:0;
+      font-family:"Inter",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      -webkit-text-size-adjust:100%;
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+      transition:background .4s ease,color .4s ease;
+    }
+    *{-webkit-tap-highlight-color:transparent;box-sizing:border-box}
+    input,textarea,select{font-size:16px}
+    button{
+      font:inherit;
+      border:none;
+      cursor:pointer;
+      background:var(--accent);
+      color:#fff;
+      border-radius:12px;
+      padding:10px 16px;
+      transition:transform .2s ease,background .2s ease,box-shadow .2s ease;
+      box-shadow:0 12px 24px rgba(51,87,255,0.24);
+    }
+    button:disabled{opacity:.6;cursor:not-allowed;box-shadow:none}
+    button:focus-visible{outline:3px solid rgba(255,255,255,0.4);outline-offset:3px}
+    body[data-theme="light"] button{color:#fff}
+    .ghost-btn{background:var(--accent-soft);color:var(--accent);box-shadow:none}
+    .ghost-btn:hover{background:rgba(95,141,255,0.2)}
+    .theme-toggle{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:40px;padding:10px 14px;border-radius:12px;cursor:pointer;background:var(--accent-soft);color:var(--accent);border:1px solid transparent;transition:background .3s ease,border .3s ease}
+    .theme-toggle:hover{background:rgba(95,141,255,0.24)}
+    .theme-toggle:focus-visible{outline:3px solid rgba(95,141,255,0.45)}
+    .theme-toggle *{pointer-events:none}
+    header{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);background:rgba(10,16,30,0.86);border-bottom:1px solid rgba(255,255,255,0.05);transition:background .3s ease}
+    body[data-theme="light"] header{background:rgba(242,245,255,0.85);border-bottom:1px solid rgba(20,30,70,0.08)}
+    .nav-wrap{max-width:1100px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:14px}
+    .logo{font-weight:700;font-size:1.1rem;letter-spacing:.04em}
+    .nav-buttons{display:flex;align-items:center;gap:10px;margin-left:20px;flex-wrap:wrap}
+    .nav-button{background:var(--accent-soft);color:var(--accent);padding:8px 14px;border-radius:10px;box-shadow:none;transition:background .2s ease,color .2s ease}
+    .nav-button.active{background:var(--accent);color:#fff}
+    .spacer{flex:1}
+    #accountBtn{width:40px;height:40px;border-radius:50%;overflow:hidden;padding:0;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;color:var(--accent);border:1px solid transparent;box-shadow:none}
+    #accountBtn img{width:100%;height:100%;object-fit:cover}
+    main{max-width:1100px;margin:0 auto;padding:24px 20px 80px;display:grid;gap:32px}
+    section{display:none;animation:fadeIn .4s ease forwards}
+    section.active{display:block}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+    @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+    .card{background:var(--card);border-radius:20px;padding:24px;box-shadow:var(--shadow);border:1px solid var(--border);position:relative;overflow:hidden}
+    .card h2{margin-top:0;margin-bottom:16px}
+    .grid{display:grid;gap:20px}
+    .grid.two{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+    .muted{color:var(--muted)}
+    .tab-bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
+    .tab-btn{background:var(--accent-soft);color:var(--accent);padding:8px 16px;border-radius:14px;box-shadow:none}
+    .tab-btn.active{background:var(--accent);color:#fff}
+    .review-display{display:flex;flex-direction:column;gap:18px}
+    .hanzi{font-size:3rem;font-weight:700}
+    .pinyin{font-size:1.2rem;color:var(--muted)}
+    .viet{font-size:1.1rem}
+    .review-actions{display:flex;flex-wrap:wrap;gap:10px}
+    .input-group{display:flex;gap:10px;flex-wrap:wrap}
+    input[type="text"],input[type="password"],input[type="email"],textarea,select{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--border);background:rgba(12,20,36,0.6);color:var(--text);transition:border .2s ease,background .2s ease}
+    body[data-theme="light"] input,body[data-theme="light"] textarea,body[data-theme="light"] select{background:rgba(255,255,255,0.9)}
+    input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid rgba(95,141,255,0.45);outline-offset:2px}
+    textarea{min-height:120px;resize:vertical}
+    .accordion{border-radius:16px;overflow:hidden;border:1px solid var(--border)}
+    .accordion-item{border-bottom:1px solid var(--border);background:rgba(255,255,255,0.03)}
+    .accordion-item:last-child{border-bottom:none}
+    .accordion-header{width:100%;text-align:left;background:transparent;padding:16px 20px;font-weight:600;display:flex;align-items:center;justify-content:space-between;color:inherit}
+    .accordion-content{padding:0 20px 20px;display:none}
+    .accordion-content.open{display:block}
+    .bank-list{display:grid;gap:12px;margin-top:12px}
+    .bank-card{padding:14px 16px;border-radius:14px;background:rgba(95,141,255,0.08);border:1px solid rgba(95,141,255,0.18)}
+    .bank-card .han{font-weight:700;font-size:1.1rem}
+    .status-line{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+    .stat-box{background:rgba(255,255,255,0.05);padding:10px 16px;border-radius:12px}
+    .list-clean{list-style:none;padding:0;margin:0;display:grid;gap:6px}
+    .store-grid{display:grid;gap:16px;margin-top:16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+    .frame-preview{width:120px;height:120px;border-radius:24px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.1rem}
+    .frame-basic{border:3px solid rgba(255,255,255,0.35);background:rgba(255,255,255,0.05)}
+    .frame-vip1{border:3px solid rgba(255,215,0,0.75);box-shadow:0 0 18px rgba(255,215,0,0.55);background:rgba(255,255,255,0.08)}
+    .frame-vip2{border:3px solid transparent;background:linear-gradient(135deg,rgba(255,255,255,0.1),rgba(0,0,0,0.35));box-shadow:0 0 24px rgba(95,141,255,0.45);position:relative}
+    .frame-vip2::before{content:"";position:absolute;inset:2px;border-radius:20px;background:linear-gradient(135deg,#f5f7ff,#6a83ff);opacity:0.6;z-index:-1}
+    .frame-vip3{position:relative;overflow:hidden;border-radius:24px}
+    .frame-vip3::before{content:"";position:absolute;inset:-8px;background:conic-gradient(from 0deg,rgba(255,0,122,0.7),rgba(255,180,0,0.7),rgba(51,87,255,0.8),rgba(255,0,122,0.7));animation:spin 6s linear infinite}
+    .frame-vip3::after{content:"";position:absolute;inset:6px;border-radius:18px;background:rgba(15,20,40,0.85)}
+    .frame-vip3 span{position:relative;z-index:1}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    #authModal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:90;background:rgba(0,0,0,.6);backdrop-filter:blur(8px)}
+    #authModal[hidden]{display:none!important}
+    #authCard{max-width:420px;width:calc(100% - 24px);background:var(--card);border:1px solid #213055;border-radius:16px;overflow:hidden}
+    @media(max-width:640px){#authModal{align-items:flex-end}#authCard{border-radius:16px 16px 0 0;animation:sheetIn .22s ease}}
+    @keyframes sheetIn{from{transform:translateY(16px)}to{transform:translateY(0)}}
+    .auth-header{display:flex}
+    .auth-tab{flex:1;padding:14px 0;text-align:center;background:rgba(255,255,255,0.06);cursor:pointer;color:var(--muted);font-weight:600;border:none}
+    .auth-tab.active{background:var(--accent);color:#fff}
+    .auth-body{padding:20px;display:grid;gap:12px}
+    .auth-body form{display:grid;gap:12px}
+    #settingsModal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:80;background:rgba(0,0,0,0.55);backdrop-filter:blur(8px)}
+    #settingsModal[hidden]{display:none!important}
+    #settingsCard{max-width:520px;width:calc(100% - 32px);background:var(--card);border-radius:20px;border:1px solid var(--border);padding:24px;max-height:90vh;overflow-y:auto}
+    .settings-section{margin-bottom:24px}
+    .settings-section:last-child{margin-bottom:0}
+    .avatar-preview{width:88px;height:88px;border-radius:50%;overflow:hidden;margin-bottom:12px;border:3px solid var(--accent);display:flex;align-items:center;justify-content:center;font-weight:600}
+    #translateModal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:70;background:rgba(0,0,0,0.55);backdrop-filter:blur(8px)}
+    #translateModal[hidden]{display:none!important}
+    #translateCard{max-width:520px;width:calc(100% - 32px);background:var(--card);border-radius:20px;border:1px solid var(--border);padding:24px}
+    #chatBox{background:rgba(255,255,255,0.05);border-radius:16px;padding:16px;height:240px;overflow-y:auto;display:flex;flex-direction:column;gap:10px}
+    .chat-bubble{padding:10px 14px;border-radius:12px;max-width:80%;background:rgba(95,141,255,0.18)}
+    .chat-bubble.self{margin-left:auto;background:var(--accent);color:#fff}
+    .faq-item{border-radius:18px;background:rgba(255,255,255,0.04);padding:20px;border:1px solid var(--border);box-shadow:var(--shadow)}
+    ul.checklist{list-style:none;padding:0;margin:0;display:grid;gap:10px}
+    ul.checklist li::before{content:"✔";margin-right:8px;color:var(--accent)}
+    .pill{display:inline-flex;padding:6px 12px;border-radius:999px;background:rgba(95,141,255,0.2);color:var(--accent);font-size:.85rem;margin-right:8px;margin-bottom:8px}
+    .pill.active{background:var(--accent);color:#fff}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav-wrap">
+      <div class="logo">Hanzi Bridge</div>
+      <div class="nav-buttons">
+        <button class="nav-button" data-route="#home">Trang chủ</button>
+        <button class="nav-button" data-route="#faq">FAQ</button>
+        <button class="nav-button" data-route="#app">Vào học</button>
+      </div>
+      <div class="spacer"></div>
+      <button id="themeToggle" class="theme-toggle" aria-label="Đổi giao diện"><span>🌓</span></button>
+      <button id="accountBtn" aria-label="Tài khoản">🙂</button>
+    </div>
+  </header>
+  <main>
+    <section id="homeSection" class="active">
+      <div class="card">
+        <h2>Chào mừng đến Hanzi Bridge</h2>
+        <p class="muted">Cầu nối giúp bạn luyện chữ Hán, mở rộng câu giao tiếp và duy trì động lực học mỗi ngày.</p>
+        <div class="grid two" style="margin-top:24px">
+          <div class="card" style="padding:20px">
+            <h3>Lộ trình gọn nhẹ</h3>
+            <ul class="checklist">
+              <li>Ôn tập từ vựng với phát âm tiếng Trung chuẩn.</li>
+              <li>Bài tập tốc độ 60 giây tăng phản xạ.</li>
+              <li>Ngân hàng câu và dịch nhanh ngay trong ứng dụng.</li>
+            </ul>
+          </div>
+          <div class="card" style="padding:20px">
+            <h3>Tiện ích đi kèm</h3>
+            <p class="muted">Quản lý tài khoản, theo dõi xu, khung VIP và bảng xếp hạng tại chỗ.</p>
+            <button data-route="#app">Bắt đầu ngay</button>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Cửa hàng khung avatar</h2>
+        <p class="muted">Tích xu thông qua bài tập và nâng cấp khung để nổi bật hơn.</p>
+        <div id="homeStorePreview" class="store-grid"></div>
+      </div>
+    </section>
+    <section id="faqSection">
+      <div class="card">
+        <h2>Câu hỏi thường gặp</h2>
+        <div class="grid">
+          <div class="faq-item">
+            <h3>Làm sao để đăng nhập?</h3>
+            <p>Dùng email bất kỳ, đặt mật khẩu rồi đăng nhập. Mật khẩu được mã hoá SHA-256 và lưu cục bộ.</p>
+          </div>
+          <div class="faq-item">
+            <h3>Tại sao cần mã truy cập?</h3>
+            <p>Đây là lớp bảo vệ giúp cộng đồng học tập an toàn. Nhập mã <strong>HOCMETVCL_CODE123</strong> để mở khoá nội dung học.</p>
+          </div>
+          <div class="faq-item">
+            <h3>Làm sao nhận xu và VIP?</h3>
+            <p>Hoàn thành bài tập để tích xu. Chủ sở hữu có thể tặng thêm xu hoặc VIP nhằm khích lệ thành viên.</p>
+          </div>
+          <div class="faq-item">
+            <h3>Dịch hoạt động thế nào?</h3>
+            <p>Hệ thống ưu tiên khớp câu có sẵn. Nếu không có, sẽ thử ghép từng từ theo vốn từ vựng đã học.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="appSection">
+      <div class="card">
+        <div class="tab-bar">
+          <button class="tab-btn active" data-tab="review">Ôn bài</button>
+          <button class="tab-btn" data-tab="practice">Bài tập</button>
+          <button class="tab-btn" data-tab="bank">Ngân hàng</button>
+          <button class="tab-btn" data-tab="chat" id="chatTab">Chat</button>
+        </div>
+        <div id="tabReview" class="tab-panel">
+          <div class="review-display">
+            <div class="hanzi" id="reviewHan">你好</div>
+            <div class="pinyin" id="reviewPin">ni hao</div>
+            <div class="viet" id="reviewVi">Xin chào</div>
+          </div>
+          <div class="review-actions" style="margin-top:18px">
+            <button data-action="toggleMeaning">Ẩn/hiện nghĩa</button>
+            <button data-action="togglePinyin">Ẩn/hiện pinyin</button>
+            <button data-action="prev">Prev</button>
+            <button data-action="next">Next</button>
+            <button data-action="shuffle">Shuffle</button>
+            <button data-action="speak">🔊 Phát âm</button>
+            <button data-action="openTranslate">🌐 Dịch ZH↔VI</button>
+          </div>
+          <div class="card" style="margin-top:20px">
+            <h3>Tự kiểm tra</h3>
+            <div class="input-group">
+              <input type="text" id="selfInput" placeholder="Nhập nghĩa tiếng Việt" autocomplete="off">
+              <button data-action="selfCheck">Kiểm tra</button>
+            </div>
+            <div class="muted" id="selfFeedback" style="margin-top:10px"></div>
+          </div>
+        </div>
+        <div id="tabPractice" class="tab-panel" hidden>
+          <div class="status-line">
+            <div class="stat-box">⏱️ <span id="practiceTimer">60</span>s</div>
+            <div class="stat-box">Đúng: <span id="practiceCorrect">0</span></div>
+            <div class="stat-box">Sai: <span id="practiceWrong">0</span></div>
+            <div class="stat-box">Chuỗi: <span id="practiceStreak">0</span></div>
+            <div class="stat-box">Độ chính xác: <span id="practiceAccuracy">0%</span></div>
+          </div>
+          <div style="margin-top:18px" class="pill-row">
+            <div class="pill" data-mode="random">Chế độ Random</div>
+            <div class="pill" data-mode="han2vi">Hán → Việt</div>
+            <div class="pill" data-mode="vi2han">Việt → Hán</div>
+            <div class="pill" data-level="easy">Dễ</div>
+            <div class="pill" data-level="hard">Khó</div>
+            <div class="pill" data-level="all">Tất cả</div>
+          </div>
+          <div class="card" style="margin-top:16px">
+            <div class="muted">Câu hỏi</div>
+            <div id="practiceQuestion" style="font-size:1.4rem;font-weight:600;margin:12px 0"></div>
+            <div class="input-group">
+              <input type="text" id="practiceAnswer" placeholder="Nhập đáp án" autocomplete="off">
+              <button data-action="submitAnswer">Trả lời</button>
+              <button class="ghost-btn" data-action="showAnswer">Xem đáp án</button>
+            </div>
+            <div class="review-actions" style="margin-top:12px">
+              <button class="ghost-btn" data-action="startPractice">Bắt đầu</button>
+              <button class="ghost-btn" data-action="resetPractice">Reset</button>
+            </div>
+            <div id="practiceFeedback" class="muted" style="margin-top:12px"></div>
+            <div id="wrongPoolList" class="muted" style="margin-top:12px"></div>
+          </div>
+        </div>
+        <div id="tabBank" class="tab-panel" hidden>
+          <div class="review-actions" style="margin-bottom:12px">
+            <button class="ghost-btn" data-action="toggleBankPinyin">Hiện pinyin</button>
+            <button class="ghost-btn" data-action="toggleAllBank">Thu gọn/Mở rộng tất cả</button>
+            <button class="ghost-btn" data-action="openStore">Mở cửa hàng</button>
+          </div>
+          <div class="accordion">
+            <div class="accordion-item" data-bank="vocab">
+              <button class="accordion-header" data-action="toggleAccordion">Ngân hàng từ vựng<span>＋</span></button>
+              <div class="accordion-content"></div>
+            </div>
+            <div class="accordion-item" data-bank="sentences">
+              <button class="accordion-header" data-action="toggleAccordion">Ngân hàng câu<span>＋</span></button>
+              <div class="accordion-content"></div>
+            </div>
+          </div>
+          <div id="storePanel" class="card" style="margin-top:24px">
+            <h3>Cửa hàng khung</h3>
+            <p class="muted">Xu hiện tại: <span id="storeCoins">0</span></p>
+            <div class="store-grid" id="storeGrid"></div>
+          </div>
+          <div class="card" style="margin-top:24px">
+            <h3>Bảng xếp hạng tại chỗ</h3>
+            <ul class="list-clean" id="leaderboardList"></ul>
+          </div>
+        </div>
+        <div id="tabChat" class="tab-panel" hidden>
+          <div id="chatUnavailable" class="muted">Bật khi cấu hình Firebase.</div>
+          <div id="chatOnline" hidden>
+            <div class="input-group">
+              <input type="email" id="chatFriend" placeholder="Email bạn bè">
+              <button data-action="chatConnect">Kết nối</button>
+            </div>
+            <div id="chatBox" style="margin-top:16px"></div>
+            <div class="input-group" style="margin-top:16px">
+              <input type="text" id="chatInput" placeholder="Nhập tin nhắn">
+              <button data-action="chatSend">Gửi</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="authModal" hidden>
+    <div id="authCard">
+      <div class="auth-header">
+        <button class="auth-tab active" data-auth="login">Đăng nhập</button>
+        <button class="auth-tab" data-auth="signup">Đăng ký</button>
+      </div>
+      <div class="auth-body">
+        <form id="loginForm">
+          <input type="email" id="loginEmail" placeholder="Email" required autocomplete="email">
+          <input type="password" id="loginPassword" placeholder="Mật khẩu" required autocomplete="current-password">
+          <button type="submit">Đăng nhập</button>
+        </form>
+        <form id="signupForm" hidden>
+          <input type="text" id="signupName" placeholder="Tên hiển thị" required>
+          <input type="email" id="signupEmail" placeholder="Email" required autocomplete="email">
+          <input type="password" id="signupPassword" placeholder="Mật khẩu" required autocomplete="new-password">
+          <button type="submit">Tạo tài khoản</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="settingsModal" hidden>
+    <div id="settingsCard">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <h2>Cài đặt tài khoản</h2>
+        <button class="ghost-btn" data-action="closeSettings">Đóng</button>
+      </div>
+      <div class="settings-section">
+        <div class="avatar-preview" id="settingsAvatarPreview">🙂</div>
+        <div class="muted">Khung hiện tại: <span id="settingsFrame">basic</span> · VIP: <span id="settingsVip">0</span> · Xu: <span id="settingsCoins">0</span></div>
+      </div>
+      <div class="settings-section">
+        <h3>Thông tin cá nhân</h3>
+        <form id="profileForm" class="grid">
+          <input type="text" id="profileName" placeholder="Tên hiển thị">
+          <div class="grid two">
+            <div><input type="password" id="oldPassword" placeholder="Mật khẩu hiện tại"></div>
+            <div><input type="password" id="newPassword" placeholder="Mật khẩu mới"></div>
+          </div>
+          <div>
+            <label class="muted" style="display:block;margin-bottom:8px">Ảnh đại diện</label>
+            <input type="file" id="avatarUpload" accept="image/*">
+          </div>
+          <button type="submit">Lưu thay đổi</button>
+        </form>
+      </div>
+      <div class="settings-section" id="adminControls" hidden>
+        <h3>Điều khiển quản trị</h3>
+        <div class="grid two">
+          <div>
+            <input type="number" id="adminCoins" placeholder="Thêm xu">
+            <button class="ghost-btn" data-action="grantCoins" style="margin-top:8px">Cộng xu</button>
+          </div>
+          <div>
+            <select id="adminVip">
+              <option value="0">VIP 0</option>
+              <option value="1">VIP 1</option>
+              <option value="2">VIP 2</option>
+              <option value="3">VIP 3</option>
+            </select>
+            <button class="ghost-btn" data-action="setVip" style="margin-top:8px">Cập nhật VIP</button>
+          </div>
+        </div>
+      </div>
+      <div class="settings-section">
+        <button class="ghost-btn" data-action="logout">Đăng xuất</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="translateModal" hidden>
+    <div id="translateCard">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <h3>Dịch nhanh</h3>
+        <button class="ghost-btn" data-action="closeTranslate">Đóng</button>
+      </div>
+      <div style="display:flex;gap:12px;margin-top:12px">
+        <label><input type="radio" name="translateMode" value="zh2vi" checked> ZH → VI</label>
+        <label><input type="radio" name="translateMode" value="vi2zh"> VI → ZH</label>
+      </div>
+      <textarea id="translateInput" placeholder="Nhập câu muốn dịch"></textarea>
+      <div class="review-actions" style="margin-top:12px">
+        <button data-action="translateNow">Dịch</button>
+        <button class="ghost-btn" data-action="useCurrentHan">Lấy câu Hán đang xem</button>
+      </div>
+      <div id="translateResult" class="muted" style="margin-top:12px;white-space:pre-wrap"></div>
+    </div>
+  </div>
+
+  <script>
+    const FB = {
+      apiKey: "PASTE_API_KEY",
+      authDomain: "PASTE_AUTH_DOMAIN",
+      databaseURL: "PASTE_DB_URL",
+      projectId: "PASTE_PROJECT_ID",
+      appId: "PASTE_APP_ID",
+    };
+    const OWNER_EMAIL = "owner@hanzi.bridge";
+    const ACT_CODE = 'HOCMETVCL_CODE123';
+
+    const navButtons = document.querySelectorAll('.nav-button');
+    const sections = {
+      '#home': document.getElementById('homeSection'),
+      '#faq': document.getElementById('faqSection'),
+      '#app': document.getElementById('appSection')
+    };
+
+    function setTheme(theme){
+      document.body.dataset.theme = theme;
+      localStorage.setItem('hb:theme', theme);
+    }
+    document.getElementById('themeToggle').addEventListener('click',()=>{
+      const next = document.body.dataset.theme === 'light' ? 'dark' : 'light';
+      setTheme(next);
+    });
+    setTheme(localStorage.getItem('hb:theme')||'dark');
+
+    function applyNavActive(hash){
+      navButtons.forEach(btn=>{
+        btn.classList.toggle('active', btn.dataset.route===hash);
+      });
+    }
+
+    function showSection(hash){
+      Object.values(sections).forEach(sec=>sec.classList.remove('active'));
+      const target = sections[hash] || sections['#home'];
+      target.classList.add('active');
+      if(hash==='#app'){
+        guardAppAccess();
+      }
+      applyNavActive(hash);
+    }
+
+    navButtons.forEach(btn=>btn.addEventListener('click',()=>{
+      window.location.hash = btn.dataset.route;
+    }));
+
+    window.addEventListener('hashchange',()=>{
+      const hash = window.location.hash || '#home';
+      showSection(hash);
+    });
+
+    if(!window.location.hash){
+      window.location.hash = '#home';
+    } else {
+      showSection(window.location.hash);
+    }
+
+    const authModal = document.getElementById('authModal');
+    const authCard = document.getElementById('authCard');
+    let authSwipeStart = null;
+    let lastScrollY = window.scrollY;
+
+    function openAuth(){
+      authModal.hidden = false;
+      authModal.style.display='flex';
+    }
+    function closeAuth(){
+      authModal.hidden = true;
+      authModal.style.display='none';
+    }
+
+    authModal.addEventListener('click',e=>{
+      if(e.target===authModal){closeAuth();}
+    });
+    authModal.addEventListener('touchstart',e=>{
+      if(e.target.closest('#authCard')){
+        authSwipeStart = e.touches[0].clientY;
+      }
+    });
+    authModal.addEventListener('touchmove',e=>{
+      if(authSwipeStart!==null){
+        const delta = e.touches[0].clientY - authSwipeStart;
+        if(delta>90){closeAuth();authSwipeStart=null;}
+      }
+    });
+    authModal.addEventListener('touchend',()=>{authSwipeStart=null;});
+    window.addEventListener('scroll',()=>{
+      const delta = Math.abs(window.scrollY - lastScrollY);
+      if(delta>8 && authModal.style.display==='flex'){closeAuth();}
+      lastScrollY = window.scrollY;
+    },{passive:true});
+
+    document.querySelectorAll('.auth-tab').forEach(tab=>{
+      tab.addEventListener('click',()=>{
+        document.querySelectorAll('.auth-tab').forEach(t=>t.classList.remove('active'));
+        tab.classList.add('active');
+        const mode = tab.dataset.auth;
+        document.getElementById('loginForm').hidden = mode!=='login';
+        document.getElementById('signupForm').hidden = mode!=='signup';
+      });
+    });
+
+    async function sha256(str){
+      const enc = new TextEncoder();
+      const data = enc.encode(str);
+      const hash = await crypto.subtle.digest('SHA-256', data);
+      return Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(2,'0')).join('');
+    }
+
+    function getUsersDB(){
+      return JSON.parse(localStorage.getItem('usersDB')||'{}');
+    }
+    function saveUsersDB(db){
+      localStorage.setItem('usersDB', JSON.stringify(db));
+    }
+    function getSession(){
+      return localStorage.getItem('sessionUser');
+    }
+
+    function updateAccountBtn(){
+      const email = getSession();
+      const btn = document.getElementById('accountBtn');
+      if(email){
+        const avatar = localStorage.getItem(`hb:avatar:${email}`);
+        if(avatar){
+          btn.innerHTML = `<img src="${avatar}" alt="avatar">`;
+        } else {
+          btn.textContent = email.charAt(0).toUpperCase();
+        }
+      } else {
+        btn.textContent = '🙂';
+      }
+    }
+
+    document.getElementById('accountBtn').addEventListener('click',()=>{
+      const email = getSession();
+      if(email){
+        openSettings();
+      } else {
+        openAuth();
+      }
+    });
+
+    document.getElementById('loginForm').addEventListener('submit',async e=>{
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+      const pwd = document.getElementById('loginPassword').value;
+      const db = getUsersDB();
+      if(!db[email]){alert('Email chưa đăng ký');return;}
+      const hash = await sha256(pwd);
+      if(hash!==db[email].passHash){alert('Sai mật khẩu');return;}
+      localStorage.setItem('sessionUser', email);
+      closeAuth();
+      loadSessionData();
+      updateAccountBtn();
+      guardAppAccess();
+    });
+
+    document.getElementById('signupForm').addEventListener('submit',async e=>{
+      e.preventDefault();
+      const name = document.getElementById('signupName').value.trim();
+      const email = document.getElementById('signupEmail').value.trim().toLowerCase();
+      const pwd = document.getElementById('signupPassword').value;
+      if(!name){alert('Nhập tên hiển thị');return;}
+      const db = getUsersDB();
+      if(db[email]){alert('Email đã tồn tại');return;}
+      db[email] = {
+        passHash: await sha256(pwd),
+        displayName: name,
+        createdAt: Date.now(),
+        coins: 0,
+        vip: 0,
+        frameId: 'basic'
+      };
+      saveUsersDB(db);
+      alert('Đăng ký thành công, mời đăng nhập.');
+      document.querySelector('[data-auth="login"]').click();
+    });
+
+    function openSettings(){
+      const email = getSession();
+      if(!email){return;}
+      const db = getUsersDB();
+      const user = db[email];
+      if(!user){return;}
+      const modal = document.getElementById('settingsModal');
+      modal.hidden=false;
+      modal.style.display='flex';
+      document.getElementById('profileName').value = user.displayName;
+      document.getElementById('settingsFrame').textContent = user.frameId;
+      document.getElementById('settingsVip').textContent = user.vip;
+      document.getElementById('settingsCoins').textContent = user.coins;
+      const avatarPreview = document.getElementById('settingsAvatarPreview');
+      const avatar = localStorage.getItem(`hb:avatar:${email}`);
+      avatarPreview.innerHTML = avatar ? `<img src="${avatar}" alt="avatar" style="width:100%;height:100%;object-fit:cover">` : email.charAt(0).toUpperCase();
+      avatarPreview.className = `avatar-preview frame-${user.frameId}`;
+      document.getElementById('adminControls').hidden = email!==OWNER_EMAIL;
+    }
+    function closeSettings(){
+      const modal = document.getElementById('settingsModal');
+      modal.hidden=true;
+      modal.style.display='none';
+    }
+    document.querySelector('[data-action="closeSettings"]').addEventListener('click',closeSettings);
+    document.getElementById('settingsModal').addEventListener('click',e=>{
+      if(e.target.id==='settingsModal'){closeSettings();}
+    });
+
+    document.getElementById('profileForm').addEventListener('submit',async e=>{
+      e.preventDefault();
+      const email = getSession();
+      if(!email){return;}
+      const db = getUsersDB();
+      const user = db[email];
+      if(!user){return;}
+      const newName = document.getElementById('profileName').value.trim();
+      if(newName){user.displayName = newName;}
+      const oldPwd = document.getElementById('oldPassword').value;
+      const newPwd = document.getElementById('newPassword').value;
+      if(newPwd){
+        if(!oldPwd){alert('Nhập mật khẩu hiện tại');return;}
+        const hashOld = await sha256(oldPwd);
+        if(hashOld!==user.passHash){alert('Mật khẩu hiện tại sai');return;}
+        user.passHash = await sha256(newPwd);
+      }
+      saveUsersDB(db);
+      loadSessionData();
+      alert('Đã lưu thông tin.');
+      document.getElementById('oldPassword').value='';
+      document.getElementById('newPassword').value='';
+    });
+
+    document.getElementById('avatarUpload').addEventListener('change',e=>{
+      const file = e.target.files[0];
+      if(!file){return;}
+      const reader = new FileReader();
+      reader.onload = ev => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          canvas.width = 256;canvas.height = 256;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img,0,0,256,256);
+          const dataUrl = canvas.toDataURL('image/png');
+          const email = getSession();
+          if(email){
+            localStorage.setItem(`hb:avatar:${email}`, dataUrl);
+            updateAccountBtn();
+            openSettings();
+          }
+        };
+        img.src = ev.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    document.querySelector('[data-action="logout"]').addEventListener('click',()=>{
+      localStorage.removeItem('sessionUser');
+      updateAccountBtn();
+      closeSettings();
+    });
+
+    document.querySelector('[data-action="grantCoins"]').addEventListener('click',()=>{
+      const amount = parseInt(document.getElementById('adminCoins').value,10)||0;
+      if(!amount){return;}
+      const email = getSession();
+      if(!email){return;}
+      const db = getUsersDB();
+      db[email].coins = (db[email].coins||0)+amount;
+      saveUsersDB(db);
+      loadSessionData();
+      openSettings();
+    });
+    document.querySelector('[data-action="setVip"]').addEventListener('click',()=>{
+      const level = Number(document.getElementById('adminVip').value);
+      const email = getSession();
+      if(!email){return;}
+      const db = getUsersDB();
+      db[email].vip = level;
+      saveUsersDB(db);
+      loadSessionData();
+      openSettings();
+    });
+
+    function guardAppAccess(){
+      const hash = window.location.hash;
+      if(hash!=='#app'){return;}
+      const email = getSession();
+      if(!email){
+        if(authModal.hidden){openAuth();}
+        window.location.hash = '#home';
+        return;
+      }
+      if(localStorage.getItem('hb:activated')!=='1'){
+        const code = prompt('Nhập mã truy cập Hanzi Bridge');
+        if(code===ACT_CODE){
+          localStorage.setItem('hb:activated','1');
+          window.location.hash = '#app';
+        } else {
+          alert('Sai mã truy cập');
+          window.location.hash = '#home';
+        }
+      }
+    }
+
+    function normalizeHan(str){
+      return str.replace(/[\s\u3000]/g,'').replace(/[。！？!?，,.]/g,'');
+    }
+    function normalizeVi(str){
+      return str.toLowerCase().trim().replace(/\s+/g,' ');
+    }
+    function capitalizeSentence(str){
+      if(!str) return str;
+      return str.charAt(0).toUpperCase()+str.slice(1);
+    }
+
+    const vocab = [
+      {han:'你',pinyin:'ni',vi:'bạn'},
+      {han:'好',pinyin:'hao',vi:'tốt'},
+      {han:'我',pinyin:'wo',vi:'tôi'},
+      {han:'不',pinyin:'bu',vi:'không'},
+      {han:'五',pinyin:'wu',vi:'năm'},
+      {han:'他',pinyin:'ta',vi:'anh ấy'},
+      {han:'她',pinyin:'ta',vi:'cô ấy'},
+      {han:'大',pinyin:'da',vi:'lớn'},
+      {han:'口',pinyin:'kou',vi:'miệng'},
+      {han:'白',pinyin:'bai',vi:'trắng'},
+      {han:'吗',pinyin:'ma',vi:'phải không'},
+      {han:'马',pinyin:'ma',vi:'ngựa'},
+      {han:'妈',pinyin:'ma',vi:'mẹ'},
+      {han:'八',pinyin:'ba',vi:'tám'},
+      {han:'很',pinyin:'hen',vi:'rất'},
+      {han:'忙',pinyin:'mang',vi:'bận'},
+      {han:'难',pinyin:'nan',vi:'khó'},
+      {han:'语',pinyin:'yu',vi:'ngữ'},
+      {han:'汉',pinyin:'han',vi:'Hán'},
+      {han:'人',pinyin:'ren',vi:'người'},
+      {han:'爸',pinyin:'ba',vi:'ba'},
+      {han:'太',pinyin:'tai',vi:'quá'},
+      {han:'弟',pinyin:'di',vi:'em trai'},
+      {han:'男',pinyin:'nan',vi:'nam'},
+      {han:'哥',pinyin:'ge',vi:'anh trai'},
+      {han:'妹',pinyin:'mei',vi:'em gái'},
+      {han:'学',pinyin:'xue',vi:'học'},
+      {han:'英',pinyin:'ying',vi:'Anh'},
+      {han:'得',pinyin:'dei',vi:'phải'},
+      {han:'饿',pinyin:'e',vi:'đói'},
+      {han:'去',pinyin:'qu',vi:'đi'},
+      {han:'法',pinyin:'fa',vi:'Pháp'},
+      {han:'韩',pinyin:'han',vi:'Hàn'},
+      {han:'国',pinyin:'guo',vi:'quốc'},
+      {han:'日',pinyin:'ri',vi:'Nhật'},
+      {han:'对',pinyin:'dui',vi:'đúng'},
+      {han:'也',pinyin:'ye',vi:'cũng'},
+      {han:'天',pinyin:'tian',vi:'trời'},
+      {han:'明',pinyin:'ming',vi:'sáng'},
+      {han:'见',pinyin:'jian',vi:'gặp'},
+      {han:'邮局',pinyin:'you ju',vi:'bưu điện'},
+      {han:'寄',pinyin:'ji',vi:'gửi'},
+      {han:'信',pinyin:'xin',vi:'thư'}
+    ];
+
+    const sentences = [];
+    const sentenceMapZh = {};
+    const sentenceMapVi = {};
+
+    function addSentence(han,pinyin,vi,level='easy'){
+      const entry = {han,pinyin,vi,level};
+      sentences.push(entry);
+      sentenceMapZh[normalizeHan(han)] = entry;
+      sentenceMapVi[normalizeVi(vi)] = entry;
+    }
+
+    const subjects = [
+      {han:'我',pin:'wo',vi:'Tôi'},
+      {han:'你',pin:'ni',vi:'Bạn'},
+      {han:'他',pin:'ta',vi:'Anh ấy'},
+      {han:'她',pin:'ta',vi:'Cô ấy'},
+      {han:'爸',pin:'ba',vi:'Ba'},
+      {han:'妈',pin:'ma',vi:'Mẹ'},
+      {han:'哥哥',pin:'ge ge',vi:'Anh trai'},
+      {han:'弟弟',pin:'di di',vi:'Em trai'},
+      {han:'妹妹',pin:'mei mei',vi:'Em gái'}
+    ];
+
+    const statusTemplates = [
+      {han:'很好。',pin:'hen hao.',vi:'rất tốt.',level:'easy'},
+      {han:'很忙。',pin:'hen mang.',vi:'rất bận.',level:'easy'},
+      {han:'不忙。',pin:'bu mang.',vi:'không bận.',level:'easy'},
+      {han:'很饿。',pin:'hen e.',vi:'rất đói.',level:'easy'},
+      {han:'不饿。',pin:'bu e.',vi:'không đói.',level:'easy'},
+      {han:'也很忙。',pin:'ye hen mang.',vi:'cũng rất bận.',level:'easy'},
+      {han:'也不忙。',pin:'ye bu mang.',vi:'cũng không bận.',level:'easy'}
+    ];
+
+    const questionTemplates = [
+      {han:'好吗？',pin:'hao ma?',vi:'tốt phải không?',level:'easy'},
+      {han:'很忙吗？',pin:'hen mang ma?',vi:'rất bận phải không?',level:'easy'},
+      {han:'不忙吗？',pin:'bu mang ma?',vi:'không bận phải không?',level:'easy'},
+      {han:'饿吗？',pin:'e ma?',vi:'đói phải không?',level:'easy'},
+      {han:'也很忙吗？',pin:'ye hen mang ma?',vi:'cũng rất bận phải không?',level:'easy'}
+    ];
+
+    subjects.forEach(sub=>{
+      statusTemplates.forEach(tmp=>{
+        const vi = capitalizeSentence(`${sub.vi} ${tmp.vi}`.replace(/\s+/g,' ').trim());
+        addSentence(sub.han + tmp.han, `${sub.pin} ${tmp.pin}`, vi, tmp.level);
+      });
+      questionTemplates.forEach(tmp=>{
+        const vi = capitalizeSentence(`${sub.vi} ${tmp.vi}`.replace(/\s+/g,' ').trim());
+        addSentence(sub.han + tmp.han, `${sub.pin} ${tmp.pin}`, vi, tmp.level);
+      });
+    });
+
+    const langs = [
+      {han:'汉语',pin:'han yu',vi:'tiếng Hán'},
+      {han:'英语',pin:'ying yu',vi:'tiếng Anh'},
+      {han:'法语',pin:'fa yu',vi:'tiếng Pháp'},
+      {han:'韩语',pin:'han yu',vi:'tiếng Hàn'},
+      {han:'日语',pin:'ri yu',vi:'tiếng Nhật'}
+    ];
+
+    subjects.forEach(sub=>{
+      langs.forEach(lang=>{
+        addSentence(`${sub.han}学${lang.han}。`, `${sub.pin} xue ${lang.pin}.`, `${sub.vi} học ${lang.vi}.`, 'easy');
+        addSentence(`${sub.han}学${lang.han}吗？`, `${sub.pin} xue ${lang.pin} ma?`, `${sub.vi} học ${lang.vi} phải không?`, 'easy');
+      });
+    });
+
+    langs.forEach(lang=>{
+      addSentence(`${lang.han}很难。`, `${lang.pin} hen nan.`, `${capitalizeSentence(lang.vi)} rất khó.`, 'easy');
+      addSentence(`${lang.han}太难吗？`, `${lang.pin} tai nan ma?`, `${capitalizeSentence(lang.vi)} quá khó phải không?`, 'hard');
+    });
+
+    const extras = [
+      {han:'白马很大。',pin:'bai ma hen da.',vi:'Con ngựa trắng rất lớn.',level:'easy'},
+      {han:'白马好吗？',pin:'bai ma hao ma?',vi:'Con ngựa trắng tốt phải không?',level:'easy'},
+      {han:'白天很忙。',pin:'bai tian hen mang.',vi:'Ban ngày rất bận.',level:'easy'},
+      {han:'白天不忙吗？',pin:'bai tian bu mang ma?',vi:'Ban ngày không bận phải không?',level:'easy'},
+      {han:'八人很忙。',pin:'ba ren hen mang.',vi:'Tám người rất bận.',level:'easy'},
+      {han:'五人也不忙。',pin:'wu ren ye bu mang.',vi:'Năm người cũng không bận.',level:'easy'},
+      {han:'男人也学汉语。',pin:'nan ren ye xue han yu.',vi:'Đàn ông cũng học tiếng Hán.',level:'easy'},
+      {han:'哥哥很饿。',pin:'ge ge hen e.',vi:'Anh trai rất đói.',level:'easy'},
+      {han:'妹妹也很忙。',pin:'mei mei ye hen mang.',vi:'Em gái cũng rất bận.',level:'easy'},
+      {han:'弟弟不饿吗？',pin:'di di bu e ma?',vi:'Em trai không đói phải không?',level:'easy'},
+      {han:'爸妈很忙，对吗？',pin:'ba ma hen mang, dui ma?',vi:'Ba mẹ rất bận, phải không?',level:'hard'},
+      {han:'你很忙，对吗？',pin:'ni hen mang, dui ma?',vi:'Bạn rất bận, phải không?',level:'hard'},
+      {han:'我得去邮局寄信。',pin:'wo dei qu you ju ji xin.',vi:'Tôi phải đi bưu điện gửi thư.',level:'hard'},
+      {han:'你得去邮局寄信吗？',pin:'ni dei qu you ju ji xin ma?',vi:'Bạn phải đi bưu điện gửi thư phải không?',level:'hard'},
+      {han:'他也去邮局寄信。',pin:'ta ye qu you ju ji xin.',vi:'Anh ấy cũng đi bưu điện gửi thư.',level:'hard'},
+      {han:'她得学汉语。',pin:'ta dei xue han yu.',vi:'Cô ấy phải học tiếng Hán.',level:'hard'},
+      {han:'明天见！',pin:'ming tian jian!',vi:'Hẹn gặp ngày mai!',level:'easy'},
+      {han:'明天你见他吗？',pin:'ming tian ni jian ta ma?',vi:'Ngày mai bạn gặp anh ấy phải không?',level:'hard'},
+      {han:'韩国人口很大。',pin:'han guo ren kou hen da.',vi:'Dân số Hàn Quốc rất lớn.',level:'hard'},
+      {han:'法国人很白吗？',pin:'fa guo ren hen bai ma?',vi:'Người Pháp rất trắng phải không?',level:'hard'},
+      {han:'日语也很难。',pin:'ri yu ye hen nan.',vi:'Tiếng Nhật cũng rất khó.',level:'hard'},
+      {han:'汉语口语很难。',pin:'han yu kou yu hen nan.',vi:'Khẩu ngữ tiếng Hán rất khó.',level:'hard'},
+      {han:'口语难吗？',pin:'kou yu nan ma?',vi:'Khẩu ngữ khó phải không?',level:'hard'},
+      {han:'我不太忙。',pin:'wo bu tai mang.',vi:'Tôi không quá bận.',level:'easy'},
+      {han:'你太忙吗？',pin:'ni tai mang ma?',vi:'Bạn quá bận phải không?',level:'easy'},
+      {han:'他也不太忙。',pin:'ta ye bu tai mang.',vi:'Anh ấy cũng không quá bận.',level:'easy'},
+      {han:'她很白。',pin:'ta hen bai.',vi:'Cô ấy rất trắng.',level:'easy'},
+      {han:'白马也很忙吗？',pin:'bai ma ye hen mang ma?',vi:'Con ngựa trắng cũng rất bận phải không?',level:'easy'}
+    ];
+    extras.forEach(item=>addSentence(item.han,item.pin,item.vi,item.level));
+
+    let reviewIndex = 0;
+    let reviewShowPinyin = true;
+    let reviewShowMeaning = true;
+
+    function currentReviewItem(){
+      return vocab[reviewIndex % vocab.length];
+    }
+    function renderReview(){
+      const item = currentReviewItem();
+      document.getElementById('reviewHan').textContent = item.han;
+      document.getElementById('reviewPin').textContent = reviewShowPinyin ? item.pinyin : '••••';
+      document.getElementById('reviewVi').textContent = reviewShowMeaning ? item.vi : '••••';
+    }
+
+    function speakHan(text){
+      const blocks = text.match(/[\u3400-\u9FFF\uF900-\uFAFF]+/g);
+      if(!blocks) return;
+      const utter = new SpeechSynthesisUtterance(blocks.join(' '));
+      utter.lang = 'zh-CN';
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utter);
+    }
+
+    const practiceState = {
+      mode:'random',
+      level:'easy',
+      timer:null,
+      remaining:60,
+      current:null,
+      wrongPool:[],
+      correct:0,
+      wrong:0,
+      streak:0,
+      bestStreak:0
+    };
+
+    function getPracticePool(){
+      if(practiceState.level==='easy') return sentences.filter(s=>s.level==='easy');
+      if(practiceState.level==='hard') return sentences.filter(s=>s.level==='hard');
+      return sentences;
+    }
+
+    function pickPracticeQuestion(){
+      const pool = getPracticePool();
+      let item;
+      if(practiceState.wrongPool.length){
+        item = practiceState.wrongPool.shift();
+      } else {
+        item = pool[Math.floor(Math.random()*pool.length)];
+      }
+      let mode = practiceState.mode;
+      if(mode==='random'){
+        mode = Math.random()>0.5?'han2vi':'vi2han';
+      }
+      let prompt, answer;
+      if(mode==='han2vi'){
+        prompt = item.han;
+        answer = item.vi;
+      } else {
+        prompt = item.vi;
+        answer = item.han;
+      }
+      practiceState.current = {item,mode,prompt,answer};
+      document.getElementById('practiceQuestion').textContent = prompt;
+      document.getElementById('practiceAnswer').value='';
+      document.getElementById('practiceAnswer').focus();
+      document.getElementById('practiceFeedback').textContent='';
+    }
+
+    function startPracticeTimer(){
+      clearInterval(practiceState.timer);
+      practiceState.timer = setInterval(()=>{
+        practiceState.remaining -= 1;
+        if(practiceState.remaining<=0){
+          practiceState.remaining = 0;
+          clearInterval(practiceState.timer);
+          document.getElementById('practiceFeedback').textContent = 'Hết thời gian!';
+          updateLeaderboard();
+        }
+        updatePracticeStats();
+      },1000);
+    }
+
+    function resetPracticeState(){
+      clearInterval(practiceState.timer);
+      practiceState.timer = null;
+      practiceState.remaining = 60;
+      practiceState.correct = 0;
+      practiceState.wrong = 0;
+      practiceState.streak = 0;
+      practiceState.bestStreak = 0;
+      practiceState.wrongPool = [];
+      practiceState.current = null;
+      document.getElementById('practiceQuestion').textContent='';
+      document.getElementById('practiceAnswer').value='';
+      document.getElementById('practiceFeedback').textContent='';
+      document.getElementById('wrongPoolList').textContent='';
+      updatePracticeStats();
+    }
+
+    function updatePracticeStats(){
+      document.getElementById('practiceTimer').textContent = practiceState.remaining;
+      document.getElementById('practiceCorrect').textContent = practiceState.correct;
+      document.getElementById('practiceWrong').textContent = practiceState.wrong;
+      document.getElementById('practiceStreak').textContent = practiceState.streak;
+      const total = practiceState.correct + practiceState.wrong;
+      const acc = total? Math.round(practiceState.correct/total*100):0;
+      document.getElementById('practiceAccuracy').textContent = acc + '%';
+      renderWrongPool();
+    }
+
+    function renderWrongPool(){
+      const box = document.getElementById('wrongPoolList');
+      if(practiceState.wrongPool.length){
+        const list = practiceState.wrongPool.map(s=>s.han).join(', ');
+        box.textContent = 'Cần ôn lại: ' + list;
+      } else {
+        box.textContent='';
+      }
+    }
+
+    function normalizeAnswer(text, mode){
+      let cleaned = text.trim().toLowerCase();
+      cleaned = cleaned.replace(/[.!?,，。！？]/g,'');
+      cleaned = cleaned.replace(/\s+/g,' ');
+      if(mode==='vi2han'){
+        cleaned = cleaned.replace(/\s/g,'');
+      }
+      return cleaned;
+    }
+
+    function checkPracticeAnswer(showAnswer=false){
+      if(!practiceState.current){return;}
+      const input = document.getElementById('practiceAnswer').value;
+      if(!input && !showAnswer){return;}
+      const expected = practiceState.current.answer;
+      if(showAnswer){
+        document.getElementById('practiceFeedback').textContent = `Đáp án: ${expected}`;
+        return;
+      }
+      const mode = practiceState.current.mode;
+      const user = normalizeAnswer(input, mode);
+      const expectNorm = normalizeAnswer(expected, mode);
+      if(user===expectNorm){
+        practiceState.correct += 1;
+        practiceState.streak += 1;
+        practiceState.bestStreak = Math.max(practiceState.bestStreak, practiceState.streak);
+        document.getElementById('practiceFeedback').textContent = 'Đúng rồi!';
+      } else {
+        practiceState.wrong += 1;
+        practiceState.streak = 0;
+        if(!practiceState.wrongPool.includes(practiceState.current.item)){
+          practiceState.wrongPool.push(practiceState.current.item);
+        }
+        document.getElementById('practiceFeedback').textContent = `Sai rồi, đáp án: ${expected}`;
+      }
+      updatePracticeStats();
+      updateLeaderboard();
+      pickPracticeQuestion();
+    }
+
+    function updateLeaderboard(){
+      const email = getSession();
+      if(!email){return;}
+      const db = getUsersDB();
+      const user = db[email];
+      if(!user){return;}
+      const board = JSON.parse(localStorage.getItem('hb:leaderboard')||'{}');
+      const current = board[email] || {correct:0,streak:0,name:user.displayName,updatedAt:0};
+      current.correct = Math.max(current.correct, practiceState.correct);
+      current.streak = Math.max(current.streak, practiceState.bestStreak);
+      current.name = user.displayName;
+      current.updatedAt = Date.now();
+      board[email] = current;
+      localStorage.setItem('hb:leaderboard', JSON.stringify(board));
+      renderLeaderboard();
+    }
+
+    function renderLeaderboard(){
+      const list = document.getElementById('leaderboardList');
+      const board = JSON.parse(localStorage.getItem('hb:leaderboard')||'{}');
+      const arr = Object.entries(board).map(([email,data])=>({email,...data}));
+      arr.sort((a,b)=> b.correct - a.correct || b.streak - a.streak || b.updatedAt - a.updatedAt);
+      if(!arr.length){
+        list.innerHTML = '<li class="muted">Chưa có dữ liệu</li>';
+        return;
+      }
+      list.innerHTML = arr.map(item=>`<li><span>${item.name}</span><span>${item.correct} đúng · chuỗi ${item.streak}</span></li>`).join('');
+    }
+
+    let bankShowPinyin = true;
+
+    function renderVocabBank(){
+      const wrap = document.querySelector('[data-bank="vocab"] .accordion-content');
+      const html = vocab.map(v=>`<div class="bank-card"><div class="han">${v.han}</div>${bankShowPinyin?`<div class="muted">${v.pinyin}</div>`:''}<div>${v.vi}</div></div>`).join('');
+      wrap.innerHTML = `<div class="bank-list">${html}</div>`;
+    }
+
+    function renderSentenceBank(){
+      const wrap = document.querySelector('[data-bank="sentences"] .accordion-content');
+      const html = sentences.map(s=>`<div class="bank-card"><div class="han">${s.han}</div>${bankShowPinyin?`<div class="muted">${s.pinyin}</div>`:''}<div>${s.vi}</div></div>`).join('');
+      wrap.innerHTML = `<div class="bank-list">${html}</div>`;
+    }
+
+    const frames = [
+      {id:'basic',name:'Khung cơ bản',price:0,vip:0,className:'frame-basic'},
+      {id:'vip1',name:'Khung VIP 1',price:120,vip:1,className:'frame-vip1'},
+      {id:'vip2',name:'Khung VIP 2',price:240,vip:2,className:'frame-vip2'},
+      {id:'vip3',name:'Khung VIP 3',price:360,vip:3,className:'frame-vip3'}
+    ];
+
+    function renderStore(){
+      const grid = document.getElementById('storeGrid');
+      const coinsEl = document.getElementById('storeCoins');
+      const email = getSession();
+      const db = getUsersDB();
+      const user = email?db[email]:null;
+      coinsEl.textContent = user?user.coins:0;
+      grid.innerHTML = frames.map(frame=>{
+        return `<div class="card" style="padding:18px"><div class="frame-preview ${frame.className}"><span>${frame.id.toUpperCase()}</span></div><div class="muted">Giá: ${frame.price} xu${frame.vip?` · cần VIP ${frame.vip}`:''}</div><button data-action="buyFrame" data-frame="${frame.id}" class="ghost-btn" style="margin-top:12px">${user&&user.frameId===frame.id?'Đang dùng':'Mua ngay'}</button></div>`;
+      }).join('');
+      renderHomeStore();
+    }
+
+    function renderHomeStore(){
+      const preview = document.getElementById('homeStorePreview');
+      preview.innerHTML = frames.map(frame=>`<div class="card" style="padding:16px"><div class="frame-preview ${frame.className}"><span>${frame.id.toUpperCase()}</span></div><div class="muted">${frame.name}</div><div>${frame.price} xu${frame.vip?` · VIP ${frame.vip}`:''}</div></div>`).join('');
+    }
+
+    function openTranslateModal(){
+      const modal = document.getElementById('translateModal');
+      modal.hidden = false;
+      modal.style.display='flex';
+      document.getElementById('translateResult').textContent='';
+    }
+    function closeTranslateModal(){
+      const modal = document.getElementById('translateModal');
+      modal.hidden = true;
+      modal.style.display='none';
+    }
+
+    document.getElementById('translateModal').addEventListener('click',e=>{
+      if(e.target.id==='translateModal'){closeTranslateModal();}
+    });
+
+    function translateNow(){
+      const input = document.getElementById('translateInput').value.trim();
+      if(!input){
+        document.getElementById('translateResult').textContent = 'Nhập câu cần dịch.';
+        return;
+      }
+      const mode = document.querySelector('input[name="translateMode"]:checked').value;
+      let output = '';
+      if(mode==='zh2vi'){
+        output = translateZh(input);
+      } else {
+        output = translateVi(input);
+      }
+      document.getElementById('translateResult').textContent = output;
+      if(output==='Không tìm thấy bản dịch phù hợp.'){
+        tryExternalTranslate(input, mode);
+      }
+    }
+
+    const zhPhraseMap = {
+      '汉语':'tiếng Hán',
+      '英语':'tiếng Anh',
+      '法语':'tiếng Pháp',
+      '韩语':'tiếng Hàn',
+      '日语':'tiếng Nhật',
+      '白马':'ngựa trắng',
+      '白天':'ban ngày',
+      '邮局':'bưu điện',
+      '寄信':'gửi thư',
+      '明天':'ngày mai',
+      '口语':'khẩu ngữ',
+      '爸妈':'ba mẹ',
+      '哥哥':'anh trai',
+      '弟弟':'em trai',
+      '妹妹':'em gái',
+      '男人':'đàn ông',
+      '法国人':'người Pháp',
+      '韩国人':'người Hàn',
+      '人口':'dân số',
+      '八人':'tám người',
+      '五人':'năm người'
+    };
+
+    const viPhraseMap = {
+      'tiếng hán':'汉语',
+      'tiếng anh':'英语',
+      'tiếng pháp':'法语',
+      'tiếng hàn':'韩语',
+      'tiếng nhật':'日语',
+      'ngựa trắng':'白马',
+      'ban ngày':'白天',
+      'bưu điện':'邮局',
+      'gửi thư':'寄信',
+      'ngày mai':'明天',
+      'khẩu ngữ':'口语',
+      'ba mẹ':'爸妈',
+      'anh trai':'哥哥',
+      'em trai':'弟弟',
+      'em gái':'妹妹',
+      'đàn ông':'男人',
+      'người pháp':'法国人',
+      'người hàn':'韩国人',
+      'dân số':'人口',
+      'tám người':'八人',
+      'năm người':'五人',
+      'phải không':'吗'
+    };
+
+    const viSingleMap = {};
+    vocab.forEach(item=>{
+      const key = item.vi.toLowerCase();
+      if(!viSingleMap[key]){viSingleMap[key]=item.han;}
+    });
+
+    function translateZh(text){
+      const normalized = normalizeHan(text);
+      if(sentenceMapZh[normalized]){
+        return sentenceMapZh[normalized].vi;
+      }
+      let result = '';
+      let i=0;
+      while(i<text.length){
+        const two = text.slice(i,i+2);
+        if(zhPhraseMap[two]){
+          result += zhPhraseMap[two] + ' ';
+          i+=2;continue;
+        }
+        const char = text[i];
+        if(/[\u3400-\u9FFF\uF900-\uFAFF]/.test(char)){
+          const vocabItem = vocab.find(v=>v.han===char);
+          result += (vocabItem?vocabItem.vi:char) + ' ';
+        } else {
+          result += char;
+        }
+        i+=1;
+      }
+      result = result.replace(/\s+([,。.！？!?])/g,'$1');
+      result = result.replace(/\s+/g,' ').trim();
+      return result || 'Không tìm thấy bản dịch phù hợp.';
+    }
+
+    function translateVi(text){
+      const normalized = normalizeVi(text);
+      if(sentenceMapVi[normalized]){
+        return sentenceMapVi[normalized].han;
+      }
+      let working = normalized;
+      const keys = Object.keys(viPhraseMap).sort((a,b)=>b.length-a.length);
+      keys.forEach(key=>{
+        if(working.includes(key)){
+          working = working.replace(new RegExp(key,'g'), viPhraseMap[key] + ' ');
+        }
+      });
+      const tokens = working.split(' ');
+      const result = tokens.map(tok=>{
+        if(!tok){return '';}
+        if(/^[\u3400-\u9FFF\uF900-\uFAFF]+$/.test(tok)){return tok;}
+        const mapped = viSingleMap[tok];
+        return mapped || tok;
+      }).join('');
+      return result || 'Không tìm thấy bản dịch phù hợp.';
+    }
+
+    async function tryExternalTranslate(input, mode){
+      const pair = mode==='zh2vi'?'zh|vi':'vi|zh';
+      try{
+        const resp = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(input)}&langpair=${pair}`);
+        const data = await resp.json();
+        if(data && data.responseData && data.responseData.translatedText){
+          document.getElementById('translateResult').textContent += `\nGợi ý: ${data.responseData.translatedText}`;
+        }
+      }catch(err){
+        document.getElementById('translateResult').textContent += '\nKhông thể truy cập dịch trực tuyến.';
+      }
+    }
+
+    function handleAppAction(action, el){
+      switch(action){
+        case 'toggleMeaning':
+          reviewShowMeaning = !reviewShowMeaning;
+          renderReview();
+          break;
+        case 'togglePinyin':
+          reviewShowPinyin = !reviewShowPinyin;
+          renderReview();
+          break;
+        case 'prev':
+          reviewIndex = (reviewIndex-1+vocab.length)%vocab.length;
+          renderReview();
+          break;
+        case 'next':
+          reviewIndex = (reviewIndex+1)%vocab.length;
+          renderReview();
+          break;
+        case 'shuffle':
+          reviewIndex = Math.floor(Math.random()*vocab.length);
+          renderReview();
+          break;
+        case 'speak':
+          speakHan(currentReviewItem().han);
+          break;
+        case 'openTranslate':
+          openTranslateModal();
+          break;
+        case 'selfCheck':
+          const value = document.getElementById('selfInput').value.trim().toLowerCase();
+          const target = currentReviewItem().vi.toLowerCase();
+          document.getElementById('selfFeedback').textContent = value && value===target ? 'Đúng rồi!' : `Đáp án: ${currentReviewItem().vi}`;
+          break;
+        case 'startPractice':
+          resetPracticeState();
+          practiceState.remaining = 60;
+          startPracticeTimer();
+          pickPracticeQuestion();
+          updatePracticeStats();
+          break;
+        case 'resetPractice':
+          resetPracticeState();
+          break;
+        case 'submitAnswer':
+          checkPracticeAnswer(false);
+          break;
+        case 'showAnswer':
+          checkPracticeAnswer(true);
+          break;
+        case 'toggleBankPinyin':
+          bankShowPinyin = !bankShowPinyin;
+          renderVocabBank();
+          renderSentenceBank();
+          break;
+        case 'toggleAllBank':
+          document.querySelectorAll('.accordion-content').forEach(content=>{
+            if(content.classList.contains('open')){
+              content.classList.remove('open');
+              content.previousElementSibling.querySelector('span').textContent='＋';
+            } else {
+              content.classList.add('open');
+              content.previousElementSibling.querySelector('span').textContent='－';
+            }
+          });
+          break;
+        case 'toggleAccordion':
+          const item = el.closest('.accordion-item');
+          const content = item.querySelector('.accordion-content');
+          const icon = el.querySelector('span');
+          content.classList.toggle('open');
+          icon.textContent = content.classList.contains('open')?'－':'＋';
+          break;
+        case 'openStore':
+          document.getElementById('storePanel').scrollIntoView({behavior:'smooth',block:'center'});
+          break;
+        case 'buyFrame':
+          const frameId = el.dataset.frame;
+          purchaseFrame(frameId);
+          break;
+        case 'chatConnect':
+          initChatConnection();
+          break;
+        case 'chatSend':
+          sendChatMessage();
+          break;
+        case 'translateNow':
+          translateNow();
+          break;
+        case 'useCurrentHan':
+          document.getElementById('translateInput').value = currentReviewItem().han;
+          break;
+        case 'closeTranslate':
+          closeTranslateModal();
+          break;
+      }
+    }
+
+    function purchaseFrame(frameId){
+      const email = getSession();
+      if(!email){alert('Vui lòng đăng nhập.');return;}
+      const db = getUsersDB();
+      const user = db[email];
+      if(!user){return;}
+      const frame = frames.find(f=>f.id===frameId);
+      if(!frame){return;}
+      if(frame.vip>user.vip){
+        alert(`Cần VIP ${frame.vip} để mở khóa.`);
+        return;
+      }
+      if(frame.price>user.coins){
+        alert('Không đủ xu.');
+        return;
+      }
+      if(user.frameId!==frame.id){
+        user.coins -= frame.price;
+        user.frameId = frame.id;
+        saveUsersDB(db);
+        loadSessionData();
+        openSettings();
+        alert('Đã áp dụng khung mới!');
+      }
+    }
+
+    function switchTab(tab){
+      document.querySelectorAll('#appSection .tab-btn').forEach(btn=>btn.classList.toggle('active',btn.dataset.tab===tab));
+      document.querySelectorAll('#appSection .tab-panel').forEach(panel=>panel.hidden=true);
+      const panel = document.getElementById(`tab${tab.charAt(0).toUpperCase()+tab.slice(1)}`);
+      if(panel){panel.hidden=false;}
+    }
+
+    function loadSessionData(){
+      const email = getSession();
+      const db = getUsersDB();
+      if(email && db[email]){
+        const user = db[email];
+        document.getElementById('settingsCoins').textContent = user.coins;
+        document.getElementById('settingsVip').textContent = user.vip;
+        document.getElementById('settingsFrame').textContent = user.frameId;
+        document.getElementById('storeCoins').textContent = user.coins;
+        const avatarPreview = document.getElementById('settingsAvatarPreview');
+        const avatar = localStorage.getItem(`hb:avatar:${email}`);
+        avatarPreview.innerHTML = avatar ? `<img src="${avatar}" alt="avatar" style="width:100%;height:100%;object-fit:cover">` : email.charAt(0).toUpperCase();
+        avatarPreview.className = `avatar-preview frame-${user.frameId}`;
+        const btn = document.getElementById('accountBtn');
+        frames.forEach(f=>btn.classList.remove(`frame-${f.id}`));
+        btn.classList.add(`frame-${user.frameId}`);
+        renderStore();
+        ensureFirebaseProfile(user);
+      } else {
+        document.getElementById('settingsCoins').textContent = '0';
+        document.getElementById('settingsVip').textContent = '0';
+        document.getElementById('settingsFrame').textContent = 'basic';
+        document.getElementById('storeCoins').textContent = '0';
+        const btn = document.getElementById('accountBtn');
+        frames.forEach(f=>btn.classList.remove(`frame-${f.id}`));
+        renderStore();
+      }
+      renderLeaderboard();
+    }
+
+    const practicePills = document.querySelectorAll('#tabPractice .pill');
+
+    function updatePracticePills(){
+      practicePills.forEach(pill=>{
+        const mode = pill.dataset.mode;
+        const level = pill.dataset.level;
+        pill.classList.remove('active');
+        if(mode && mode===practiceState.mode){pill.classList.add('active');}
+        if(level && level===practiceState.level){pill.classList.add('active');}
+      });
+    }
+
+    document.addEventListener('click',e=>{
+      const tabBtn = e.target.closest('#appSection .tab-btn');
+      if(tabBtn){
+        switchTab(tabBtn.dataset.tab);
+        return;
+      }
+      const modeBtn = e.target.closest('#tabPractice [data-mode]');
+      if(modeBtn){
+        practiceState.mode = modeBtn.dataset.mode;
+        updatePracticePills();
+        return;
+      }
+      const levelBtn = e.target.closest('#tabPractice [data-level]');
+      if(levelBtn){
+        practiceState.level = levelBtn.dataset.level;
+        updatePracticePills();
+        return;
+      }
+      const actionEl = e.target.closest('[data-action]');
+      if(actionEl && (actionEl.closest('#appSection') || actionEl.closest('#translateModal'))){
+        handleAppAction(actionEl.dataset.action, actionEl);
+      }
+    });
+
+    document.getElementById('practiceAnswer').addEventListener('keydown',e=>{
+      if(e.key==='Enter'){
+        e.preventDefault();
+        handleAppAction('submitAnswer');
+      }
+    });
+
+    document.addEventListener('focusin',e=>{
+      if(['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName)){
+        setTimeout(()=>{
+          try{e.target.scrollIntoView({block:'center',behavior:'smooth'});}catch(err){}
+        },350);
+      }
+    });
+
+    function loadBank(){
+      renderVocabBank();
+      renderSentenceBank();
+    }
+
+    function initApp(){
+      updateAccountBtn();
+      renderReview();
+      updatePracticeStats();
+      updatePracticePills();
+      renderStore();
+      loadBank();
+      renderHomeStore();
+      renderLeaderboard();
+      loadSessionData();
+      setupFirebase();
+    }
+
+    function ensureFirebaseProfile(user){
+      if(!firebaseReady){return;}
+      if(!firebaseAuthUser){return;}
+      if(!user){return;}
+      const dbRef = firebase.database().ref(`profiles/${firebaseAuthUser.uid}`);
+      dbRef.update({
+        email: getSession(),
+        displayName: user.displayName,
+        createdAt: firebase.database.ServerValue.TIMESTAMP
+      });
+    }
+
+    let firebaseReady = Object.values(FB).every(v=>v && !String(v).includes('PASTE'));
+    let firebaseAuthUser = null;
+    let profilesCache = {};
+    let chatListener = null;
+    let chatId = null;
+
+    function setupFirebase(){
+      const chatTab = document.getElementById('chatTab');
+      if(!firebaseReady){
+        chatTab.style.display='none';
+        return;
+      }
+      try{
+        firebase.initializeApp(FB);
+        const auth = firebase.auth();
+        auth.signInAnonymously().catch(()=>{});
+        auth.onAuthStateChanged(user=>{
+          if(user){
+            firebaseAuthUser = user;
+            firebase.database().ref('profiles').on('value',snap=>{
+              profilesCache = snap.val()||{};
+            });
+            ensureFirebaseProfile(getSession()?getUsersDB()[getSession()]:null);
+            document.getElementById('chatUnavailable').hidden = true;
+            document.getElementById('chatOnline').hidden = false;
+          }
+        });
+      }catch(err){
+        firebaseReady = false;
+        chatTab.style.display='none';
+      }
+    }
+
+    function findUidByEmail(email){
+      if(!profilesCache){return null;}
+      return Object.keys(profilesCache).find(uid=>profilesCache[uid].email===email);
+    }
+
+    function initChatConnection(){
+      if(!firebaseReady || !firebaseAuthUser){alert('Chat chưa sẵn sàng.');return;}
+      const friendEmail = document.getElementById('chatFriend').value.trim().toLowerCase();
+      const myEmail = getSession();
+      if(!friendEmail || !myEmail){alert('Nhập email.');return;}
+      const friendUid = findUidByEmail(friendEmail);
+      const myUid = firebaseAuthUser.uid;
+      if(!friendUid){alert('Chưa tìm thấy bạn trong hệ thống.');return;}
+      chatId = [myUid, friendUid].sort().join('__');
+      if(chatListener){chatListener.off();}
+      const ref = firebase.database().ref(`chats/${chatId}/messages`).limitToLast(100);
+      const box = document.getElementById('chatBox');
+      box.innerHTML='';
+      chatListener = ref;
+      ref.on('child_added',snap=>{
+        const msg = snap.val();
+        const div = document.createElement('div');
+        div.className = 'chat-bubble';
+        if(msg.from===myUid){div.classList.add('self');}
+        div.textContent = msg.text;
+        box.appendChild(div);
+        box.scrollTop = box.scrollHeight;
+      });
+    }
+
+    function sendChatMessage(){
+      if(!firebaseReady || !firebaseAuthUser || !chatId){return;}
+      const input = document.getElementById('chatInput');
+      const text = input.value.trim();
+      if(!text){return;}
+      firebase.database().ref(`chats/${chatId}/messages`).push({
+        from: firebaseAuthUser.uid,
+        text,
+        createdAt: firebase.database.ServerValue.TIMESTAMP
+      });
+      input.value='';
+    }
+
+    updateAccountBtn();
+    initApp();
+
+    console.log('HB_V16_READY');
+  </script>
+</body>
+</html>
