@@ -2,26 +2,28 @@
   account.js - renders account tab with avatar, VIP toggle, export/import.
 */
 
-import {
-  getCurrentUser,
-  storageKeys,
-  getStorage,
-  setStorage,
-  showToast,
-  downloadJSON,
-  readJSONFile,
-  getAllowlist,
-  setAllowlist,
-  getCoins,
-  setCoins,
-  modifyCoins,
-  getFrameInventory,
-  setFrameInventory,
-  applyFrameClass,
-  buildStatsSummary,
-  emit,
-} from './utils.js';
-import { logout } from './auth.js';
+(function (global) {
+  const HB = (global.HB = global.HB || {});
+  const {
+    getCurrentUser,
+    storageKeys,
+    getStorage,
+    setStorage,
+    showToast,
+    downloadJSON,
+    readJSONFile,
+    getAllowlist,
+    setAllowlist,
+    getCoins,
+    setCoins,
+    modifyCoins,
+    getFrameInventory,
+    setFrameInventory,
+    applyFrameClass,
+    buildStatsSummary,
+    emit,
+  } = HB;
+  const { logout } = HB;
 
 const container = document.querySelector('[data-account="container"]');
 const headerAvatar = document.querySelector('[data-avatar-emoji]');
@@ -190,7 +192,7 @@ function renderLoggedIn(username) {
   });
 }
 
-export function renderAccount() {
+function renderAccount() {
   const username = getCurrentUser();
   if (!username) {
     renderLoggedOut();
@@ -205,3 +207,5 @@ export function renderAccount() {
 
 emit('account:ready');
 document.addEventListener('DOMContentLoaded', renderAccount);
+  HB.renderAccount = renderAccount;
+})(window);

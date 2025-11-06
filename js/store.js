@@ -2,20 +2,23 @@
   store.js - avatar frame shop using CSS-only frames.
 */
 
-import {
-  getCurrentUser,
-  getCoins,
-  modifyCoins,
-  getFrameInventory,
-  setFrameInventory,
-  setStorage,
-  getStorage,
-  storageKeys,
-  showToast,
-  applyFrameClass,
-} from './utils.js';
+(function (global) {
+  const HB = (global.HB = global.HB || {});
+  const {
+    getCurrentUser,
+    getCoins,
+    modifyCoins,
+    getFrameInventory,
+    setFrameInventory,
+    setStorage,
+    getStorage,
+    storageKeys,
+    showToast,
+    applyFrameClass,
+  } = HB;
 
 let framesData = [];
+let isLoadingFrames = false;
 
 const storeContainer = document.querySelector('[data-store="container"]');
 const headerAvatarFrame = document.querySelector('[data-avatar-vip]');
@@ -123,17 +126,23 @@ function handleAction(action, frameId) {
   renderStore();
 }
 
-export function initStore() {
+function initStore() {
   if (framesData.length === 0) {
+    if (isLoadingFrames) {
+      return;
+    }
+    isLoadingFrames = true;
     storeContainer.textContent = 'Đang tải khung...';
     fetch('./data/frames.json')
       .then((res) => res.json())
       .then((data) => {
         framesData = data;
+        isLoadingFrames = false;
         renderStore();
       })
       .catch(() => {
         showToast('Không thể tải danh sách khung.');
+        isLoadingFrames = false;
       });
   } else {
     renderStore();
@@ -141,3 +150,5 @@ export function initStore() {
 }
 
 document.addEventListener('DOMContentLoaded', initStore);
+  HB.initStore = initStore;
+})(window);

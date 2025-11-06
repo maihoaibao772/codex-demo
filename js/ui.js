@@ -2,18 +2,19 @@
   ui.js - handles theme toggling, navigation, keyboard shortcuts.
 */
 
-import { initRouter, navigate } from './router.js';
-import {
-  storageKeys,
-  getStorage,
-  registerShortcut,
-  formatDateTime,
-  getCurrentUser,
-  applyFrameClass,
-} from './utils.js';
-import { dataMeta } from './data.js';
-import { openTranslateModal } from './translate.js';
-import { initStore } from './store.js';
+(function (global) {
+  const HB = (global.HB = global.HB || {});
+  const {
+    storageKeys,
+    getStorage,
+    registerShortcut,
+    formatDateTime,
+    getCurrentUser,
+    applyFrameClass,
+    dataMeta,
+    initRouter,
+    navigate,
+  } = HB;
 
 const themeToggle = document.querySelector('[data-theme-toggle]');
 const body = document.documentElement;
@@ -44,7 +45,7 @@ function initNav() {
       if (target === 'faq') navigate('#/faq');
       if (target === 'account') navigate('#/app');
       if (target === 'translate') {
-        openTranslateModal();
+        HB.openTranslateModal?.();
       }
     });
   });
@@ -68,7 +69,7 @@ function initBuildTime() {
 
 function initShortcuts() {
   registerShortcut('ctrl+k', () => {
-    openTranslateModal();
+    HB.openTranslateModal?.();
   });
   registerShortcut('enter', (event) => {
     const active = document.activeElement;
@@ -98,7 +99,9 @@ function initAvatar() {
 }
 
 function initTitle() {
-  document.title = `${document.title} [UI v10]`;
+  if (!document.title.includes('[UI v10]')) {
+    document.title = `${document.title} [UI v10]`;
+  }
   console.log('HB_UI_V10_READY');
 }
 
@@ -111,4 +114,10 @@ initBuildTime();
 initShortcuts();
 initAvatar();
 initTitle();
-initStore();
+
+  window.addEventListener('DOMContentLoaded', () => {
+    if (typeof HB.initStore === 'function') {
+      HB.initStore();
+    }
+  });
+})(window);

@@ -435,6 +435,7 @@ html[data-theme='dark'] .hb-form-control select {
   color: var(--hb-color-danger);
 }
 
+
 .hb-modal {
   position: fixed;
   inset: 0;
@@ -444,10 +445,12 @@ html[data-theme='dark'] .hb-form-control select {
   justify-content: center;
   padding: 24px;
   z-index: 100;
+  pointer-events: none;
 }
 
 .hb-modal.is-open {
   display: flex;
+  pointer-events: auto;
 }
 
 .hb-modal__dialog {
@@ -459,6 +462,29 @@ html[data-theme='dark'] .hb-form-control select {
   display: flex;
   flex-direction: column;
   gap: 24px;
+  transition: transform 0.24s ease;
+}
+
+.hb-modal.is-dragging .hb-modal__dialog {
+  transition: none;
+}
+
+.sheet-handle {
+  width: 40px;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--hb-color-muted);
+  opacity: 0.3;
+  margin: 6px auto;
+}
+
+@keyframes sheetIn {
+  from {
+    transform: translateY(24px);
+  }
+  to {
+    transform: translateY(0);
+  }
 }
 
 .hb-modal__dialog--wide {
@@ -508,6 +534,26 @@ html[data-theme='dark'] .hb-form-control select {
   height: 320px;
   border-radius: var(--hb-radius-sm);
   border: 1px solid rgba(108, 77, 255, 0.25);
+}
+
+@media (max-width: 640px) {
+  .hb-modal {
+    align-items: flex-end;
+    padding: 12px;
+  }
+
+  .hb-modal__dialog {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 16px 16px 0 0;
+    animation: sheetIn 0.32s ease;
+    padding: 20px;
+  }
+
+  .hb-modal__dialog--wide {
+    max-width: 100%;
+    max-height: 90vh;
+  }
 }
 
 .hb-translate-fallback {

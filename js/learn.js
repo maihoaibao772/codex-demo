@@ -2,17 +2,24 @@
   learn.js - controls the "Ôn bài" tab.
 */
 
-import { vocabList, allSentences } from './data.js';
-import {
-  shuffle,
-  normalizeVN,
-  normalizeCN,
-  pushWrongItem,
-  buildSpeakText,
-  getCurrentUser,
-  emit,
-} from './utils.js';
-import { speakText, startRecording, stopRecording, playbackRecording, isAudioSupported } from './audio.js';
+(function (global) {
+  const HB = (global.HB = global.HB || {});
+  const {
+    vocabList,
+    allSentences,
+    shuffle,
+    normalizeVN,
+    normalizeCN,
+    pushWrongItem,
+    buildSpeakText,
+    getCurrentUser,
+    emit,
+    speakText,
+    startRecording,
+    stopRecording,
+    playbackRecording,
+    isAudioSupported,
+  } = HB;
 
 const hanText = document.getElementById('hanText');
 const pinyinText = document.getElementById('pinyinText');
@@ -138,7 +145,7 @@ function initAudio() {
   });
 }
 
-export function initLearn() {
+function initLearn() {
   initControls();
   initAudio();
   renderCurrent();
@@ -146,3 +153,5 @@ export function initLearn() {
 }
 
 document.addEventListener('DOMContentLoaded', initLearn);
+  HB.initLearn = initLearn;
+})(window);

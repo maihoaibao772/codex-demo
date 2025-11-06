@@ -6,7 +6,10 @@
   to document edge cases and design rationale.
 */
 
-export const storageKeys = {
+(function (global) {
+  const HB = (global.HB = global.HB || {});
+
+const storageKeys = {
   theme: 'hb:theme',
   users: 'hb:users',
   session: 'hb:session',
@@ -25,7 +28,7 @@ export const storageKeys = {
  * @param {any} fallback
  * @returns {any}
  */
-export function safeParse(value, fallback = null) {
+function safeParse(value, fallback = null) {
   try {
     if (typeof value !== 'string') return fallback;
     return JSON.parse(value);
@@ -38,7 +41,7 @@ export function safeParse(value, fallback = null) {
 /**
  * Serialize object to JSON with indentation.
  */
-export function safeStringify(value, pretty = true) {
+function safeStringify(value, pretty = true) {
   try {
     return pretty ? JSON.stringify(value, null, 2) : JSON.stringify(value);
   } catch (error) {
@@ -50,7 +53,7 @@ export function safeStringify(value, pretty = true) {
 /**
  * Get an item from localStorage. Returns fallback if not found.
  */
-export function getStorage(key, fallback = null) {
+function getStorage(key, fallback = null) {
   const raw = localStorage.getItem(key);
   if (raw == null) return fallback;
   return safeParse(raw, fallback);
@@ -59,7 +62,7 @@ export function getStorage(key, fallback = null) {
 /**
  * Set an item in localStorage. Automatically stringifies objects.
  */
-export function setStorage(key, value) {
+function setStorage(key, value) {
   if (value === undefined) {
     localStorage.removeItem(key);
     return;
@@ -74,7 +77,7 @@ export function setStorage(key, value) {
 /**
  * Create a DOM element with optional classes and attributes.
  */
-export function createElement(tag, options = {}) {
+function createElement(tag, options = {}) {
   const el = document.createElement(tag);
   if (options.className) el.className = options.className;
   if (options.dataset) {
@@ -90,7 +93,7 @@ export function createElement(tag, options = {}) {
 /**
  * Shuffle array (Fisher–Yates).
  */
-export function shuffle(array) {
+function shuffle(array) {
   const arr = array.slice();
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -102,7 +105,7 @@ export function shuffle(array) {
 /**
  * Normalize Vietnamese text for comparison.
  */
-export function normalizeVN(input) {
+function normalizeVN(input) {
   if (!input) return '';
   let text = input
     .toLowerCase()
@@ -122,7 +125,7 @@ export function normalizeVN(input) {
 /**
  * Normalize Chinese answer to accept Hanzi or Pinyin.
  */
-export function normalizeCN(input) {
+function normalizeCN(input) {
   if (!input) return '';
   return input.trim().toLowerCase();
 }
@@ -130,7 +133,7 @@ export function normalizeCN(input) {
 /**
  * Assert condition; throw error with message if false.
  */
-export function assert(condition, message) {
+function assert(condition, message) {
   if (!condition) {
     throw new Error(message || 'Assertion failed');
   }
@@ -139,7 +142,7 @@ export function assert(condition, message) {
 /**
  * Format timestamp to human readable string.
  */
-export function formatDateTime(date = new Date()) {
+function formatDateTime(date = new Date()) {
   const pad = (num) => String(num).padStart(2, '0');
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
 }
@@ -147,7 +150,7 @@ export function formatDateTime(date = new Date()) {
 /**
  * Event helper: delegate click handler.
  */
-export function delegate(root, selector, handler) {
+function delegate(root, selector, handler) {
   root.addEventListener('click', (event) => {
     const target = event.target.closest(selector);
     if (target && root.contains(target)) {
@@ -159,7 +162,7 @@ export function delegate(root, selector, handler) {
 /**
  * Build a toast element and append to body.
  */
-export function showToast(message, timeout = 2600) {
+function showToast(message, timeout = 2600) {
   let toast = document.querySelector('.hb-toast');
   if (!toast) {
     toast = createElement('div', { className: 'hb-toast', dataset: { visible: 'false' } });
@@ -177,7 +180,7 @@ export function showToast(message, timeout = 2600) {
 /**
  * Keyboard shortcut helper.
  */
-export function registerShortcut(combo, callback) {
+function registerShortcut(combo, callback) {
   const normalized = combo.toLowerCase();
   window.addEventListener('keydown', (event) => {
     const parts = [];
@@ -195,7 +198,7 @@ export function registerShortcut(combo, callback) {
 /**
  * Access session user from storage.
  */
-export function getCurrentUser() {
+function getCurrentUser() {
   const session = getStorage(storageKeys.session);
   return session?.username || null;
 }
@@ -203,14 +206,14 @@ export function getCurrentUser() {
 /**
  * Return stored stats object.
  */
-export function getStats() {
+function getStats() {
   return getStorage(storageKeys.stats, {});
 }
 
 /**
  * Update stats for a given username.
  */
-export function updateStats(username, updater) {
+function updateStats(username, updater) {
   const stats = getStats();
   const current = stats[username] || { correct: 0, incorrect: 0, streak: 0, bestStreak: 0 };
   const updated = updater(current) || current;
@@ -222,11 +225,11 @@ export function updateStats(username, updater) {
 /**
  * Manage wrong answer pool.
  */
-export function getWrongPool() {
+function getWrongPool() {
   return getStorage(storageKeys.wrongPool, {});
 }
 
-export function pushWrongItem(username, itemId) {
+function pushWrongItem(username, itemId) {
   const pool = getWrongPool();
   const userPool = new Set(pool[username] || []);
   userPool.add(itemId);
@@ -234,13 +237,13 @@ export function pushWrongItem(username, itemId) {
   setStorage(storageKeys.wrongPool, pool);
 }
 
-export function clearWrongPool(username) {
+function clearWrongPool(username) {
   const pool = getWrongPool();
   delete pool[username];
   setStorage(storageKeys.wrongPool, pool);
 }
 
-export function popWrongItem(username) {
+function popWrongItem(username) {
   const pool = getWrongPool();
   const items = pool[username] || [];
   if (!items.length) return null;
@@ -253,23 +256,23 @@ export function popWrongItem(username) {
 /**
  * Frame inventory helpers.
  */
-export function getFrameInventory() {
+function getFrameInventory() {
   return getStorage(storageKeys.frames, {});
 }
 
-export function setFrameInventory(data) {
+function setFrameInventory(data) {
   setStorage(storageKeys.frames, data);
 }
 
-export function getCoins() {
+function getCoins() {
   return Number(localStorage.getItem(storageKeys.coins) || '0');
 }
 
-export function setCoins(value) {
+function setCoins(value) {
   localStorage.setItem(storageKeys.coins, String(Math.max(0, Number(value) || 0)));
 }
 
-export function modifyCoins(delta) {
+function modifyCoins(delta) {
   const current = getCoins();
   setCoins(current + delta);
   return getCoins();
@@ -278,7 +281,7 @@ export function modifyCoins(delta) {
 /**
  * Debounce helper for input events.
  */
-export function debounce(fn, delay = 300) {
+function debounce(fn, delay = 300) {
   let timer = null;
   return (...args) => {
     clearTimeout(timer);
@@ -291,7 +294,7 @@ export function debounce(fn, delay = 300) {
  */
 const subscribers = new Map();
 
-export function on(eventName, callback) {
+function on(eventName, callback) {
   if (!subscribers.has(eventName)) {
     subscribers.set(eventName, new Set());
   }
@@ -299,13 +302,13 @@ export function on(eventName, callback) {
   return () => off(eventName, callback);
 }
 
-export function off(eventName, callback) {
+function off(eventName, callback) {
   const set = subscribers.get(eventName);
   if (!set) return;
   set.delete(callback);
 }
 
-export function emit(eventName, payload) {
+function emit(eventName, payload) {
   const set = subscribers.get(eventName);
   if (!set) return;
   set.forEach((callback) => {
@@ -320,14 +323,14 @@ export function emit(eventName, payload) {
 /**
  * Build unique identifier based on dataset.
  */
-export function makeItemId(item) {
+function makeItemId(item) {
   return `${item.hanzi || item.zh}-${item.meaning || item.vi}`;
 }
 
 /**
  * Format accuracy percentage.
  */
-export function formatAccuracy(correct, incorrect) {
+function formatAccuracy(correct, incorrect) {
   const total = correct + incorrect;
   if (!total) return '0%';
   return `${Math.round((correct / total) * 100)}%`;
@@ -336,14 +339,14 @@ export function formatAccuracy(correct, incorrect) {
 /**
  * Determine allowlist.
  */
-export function getAllowlist() {
+function getAllowlist() {
   const raw = localStorage.getItem(storageKeys.allow);
   if (!raw) return null;
   const list = raw.split(',').map((item) => item.trim()).filter(Boolean);
   return list.length ? list : null;
 }
 
-export function setAllowlist(list) {
+function setAllowlist(list) {
   if (!list || !list.length) {
     localStorage.removeItem(storageKeys.allow);
     return;
@@ -354,7 +357,7 @@ export function setAllowlist(list) {
 /**
  * Frame CSS class to highlight active frame.
  */
-export function applyFrameClass(element, className) {
+function applyFrameClass(element, className) {
   Array.from(element.classList).forEach((cls) => {
     if (cls.startsWith('frame-')) {
       element.classList.remove(cls);
@@ -368,7 +371,7 @@ export function applyFrameClass(element, className) {
 /**
  * Utility to map Chinese content to speakable string.
  */
-export function buildSpeakText(item) {
+function buildSpeakText(item) {
   if (!item) return '';
   const parts = [item.hanzi];
   if (item.pinyin) parts.push(item.pinyin);
@@ -379,7 +382,7 @@ export function buildSpeakText(item) {
 /**
  * Accessibility helper: focus main container.
  */
-export function focusMain() {
+function focusMain() {
   const main = document.getElementById('app');
   if (main) main.focus();
 }
@@ -387,7 +390,7 @@ export function focusMain() {
 /**
  * Save JSON file by creating a blob and triggering download.
  */
-export function downloadJSON(filename, data) {
+function downloadJSON(filename, data) {
   const blob = new Blob([safeStringify(data)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
@@ -402,7 +405,7 @@ export function downloadJSON(filename, data) {
 /**
  * Read JSON file from input element.
  */
-export function readJSONFile(file) {
+function readJSONFile(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => {
@@ -421,7 +424,7 @@ export function readJSONFile(file) {
 /**
  * Determine if user is owner (in allowlist or no allowlist).
  */
-export function isOwner(username) {
+function isOwner(username) {
   const list = getAllowlist();
   if (!list) return false;
   return list.includes(username);
@@ -430,10 +433,55 @@ export function isOwner(username) {
 /**
  * Build markdown-like summary of stats for exporting.
  */
-export function buildStatsSummary(stats) {
+function buildStatsSummary(stats) {
   const entries = Object.entries(stats || {});
   if (!entries.length) return 'No stats recorded.';
   return entries
     .map(([user, value]) => `${user}: đúng ${value.correct}, sai ${value.incorrect}, streak ${value.streak}, best ${value.bestStreak}`)
     .join('\n');
 }
+
+  Object.assign(HB, {
+    storageKeys,
+    safeParse,
+    safeStringify,
+    getStorage,
+    setStorage,
+    createElement,
+    shuffle,
+    normalizeVN,
+    normalizeCN,
+    assert,
+    formatDateTime,
+    delegate,
+    showToast,
+    registerShortcut,
+    getCurrentUser,
+    getStats,
+    updateStats,
+    getWrongPool,
+    pushWrongItem,
+    clearWrongPool,
+    popWrongItem,
+    getFrameInventory,
+    setFrameInventory,
+    getCoins,
+    setCoins,
+    modifyCoins,
+    debounce,
+    on,
+    off,
+    emit,
+    makeItemId,
+    formatAccuracy,
+    getAllowlist,
+    setAllowlist,
+    applyFrameClass,
+    buildSpeakText,
+    focusMain,
+    downloadJSON,
+    readJSONFile,
+    isOwner,
+    buildStatsSummary,
+  });
+})(window);

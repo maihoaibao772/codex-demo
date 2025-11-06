@@ -2,7 +2,9 @@
   router.js - simple hash router for three primary routes: home, faq, app.
 */
 
-import { focusMain, emit } from './utils.js';
+(function (global) {
+  const HB = (global.HB = global.HB || {});
+  const { focusMain, emit } = HB;
 
 const routes = new Map([
   ['#/faq', 'faq'],
@@ -32,11 +34,11 @@ function setActiveRoute(routeName) {
   emit('route:change', routeName);
 }
 
-export function navigate(hash) {
+  function navigate(hash) {
   window.location.hash = hash;
 }
 
-export function initRouter() {
+  function initRouter() {
   function handleHashChange() {
     const hash = window.location.hash || '#/home';
     const routeName = resolveRoute(hash);
@@ -45,3 +47,7 @@ export function initRouter() {
   window.addEventListener('hashchange', handleHashChange);
   handleHashChange();
 }
+
+  HB.navigate = navigate;
+  HB.initRouter = initRouter;
+})(window);

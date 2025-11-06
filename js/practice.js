@@ -2,17 +2,21 @@
   practice.js - interactive practice module with timer and stats.
 */
 
-import { easySentences, hardSentences, allSentences } from './data.js';
-import {
-  shuffle,
-  normalizeVN,
-  normalizeCN,
-  updateStats,
-  pushWrongItem,
-  getCurrentUser,
-  formatAccuracy,
-  emit,
-} from './utils.js';
+(function (global) {
+  const HB = (global.HB = global.HB || {});
+  const {
+    easySentences,
+    hardSentences,
+    allSentences,
+    shuffle,
+    normalizeVN,
+    normalizeCN,
+    updateStats,
+    pushWrongItem,
+    getCurrentUser,
+    formatAccuracy,
+    emit,
+  } = HB;
 
 const promptEl = document.querySelector('[data-practice="prompt"]');
 const answerInput = document.querySelector('[data-practice="answer"]');
@@ -207,7 +211,7 @@ function initEvents() {
   });
 }
 
-export function initPractice() {
+function initPractice() {
   selectDataset();
   pickItem();
   renderItem();
@@ -218,3 +222,5 @@ export function initPractice() {
 }
 
 document.addEventListener('DOMContentLoaded', initPractice);
+  HB.initPractice = initPractice;
+})(window);

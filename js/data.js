@@ -2,7 +2,10 @@
   data.js - contains vocabulary and sentence seeds.
 */
 
-export const vocabList = [
+(function (global) {
+  const HB = (global.HB = global.HB || {});
+
+const vocabList = [
   { hanzi: '你', pinyin: 'ni', meaning: 'bạn' },
   { hanzi: '好', pinyin: 'hao', meaning: 'tốt' },
   { hanzi: '我', pinyin: 'wo', meaning: 'tôi' },
@@ -48,7 +51,7 @@ export const vocabList = [
   { hanzi: '信', pinyin: 'xin', meaning: 'thư' },
 ];
 
-export const easySentences = [
+const easySentences = [
   { hanzi: '你好吗？', pinyin: 'ni hao ma', meaning: 'Bạn khỏe không?' },
   { hanzi: '我很好。', pinyin: 'wo hen hao', meaning: 'Tôi rất khỏe.' },
   { hanzi: '你忙吗？', pinyin: 'ni mang ma', meaning: 'Bạn bận không?' },
@@ -61,7 +64,7 @@ export const easySentences = [
   { hanzi: '我去邮局寄信。', pinyin: 'wo qu you ju ji xin', meaning: 'Tôi đi bưu điện gửi thư.' },
 ];
 
-export const hardSentences = [
+const hardSentences = [
   { hanzi: '你弟弟忙不忙？', pinyin: 'ni di di mang bu mang', meaning: 'Em trai bạn bận không?' },
   { hanzi: '他太忙了。', pinyin: 'ta tai mang le', meaning: 'Nó bận quá.' },
   { hanzi: '你哥哥是哪国人？', pinyin: 'ni ge ge shi na guo ren', meaning: 'Anh trai bạn là người nước nào?' },
@@ -75,9 +78,18 @@ export const hardSentences = [
   { hanzi: '我去寄信。', pinyin: 'wo qu ji xin', meaning: 'Tôi đi gửi thư.' },
 ];
 
-export const allSentences = [...easySentences, ...hardSentences];
+const allSentences = [...easySentences, ...hardSentences];
 
-export const dataMeta = {
+const dataMeta = {
   vocabCount: vocabList.length,
   sentenceCount: allSentences.length,
 };
+
+  Object.assign(HB, {
+    vocabList,
+    easySentences,
+    hardSentences,
+    allSentences,
+    dataMeta,
+  });
+})(window);

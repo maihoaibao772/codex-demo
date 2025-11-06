@@ -302,6 +302,7 @@
   <!-- Modals -->
   <div class="hb-modal" data-modal="auth" role="dialog" aria-modal="true" aria-labelledby="authTitle">
     <div class="hb-modal__dialog">
+      <div class="sheet-handle" aria-hidden="true"></div>
       <header class="hb-modal__header">
         <h2 id="authTitle">Đăng nhập</h2>
         <button class="hb-modal__close" data-modal-close>×</button>
@@ -330,6 +331,7 @@
 
   <div class="hb-modal" data-modal="translate" role="dialog" aria-modal="true" aria-labelledby="translateTitle">
     <div class="hb-modal__dialog hb-modal__dialog--wide">
+      <div class="sheet-handle" aria-hidden="true"></div>
       <header class="hb-modal__header">
         <h2 id="translateTitle">Dịch nhanh</h2>
         <button class="hb-modal__close" data-modal-close>×</button>
@@ -362,17 +364,33 @@
   </footer>
 
   <!-- Application scripts -->
-  <script src="js/utils.js"></script>
-  <script src="js/data.js"></script>
-  <script src="js/router.js"></script>
-  <script src="js/ui.js"></script>
-  <script src="js/audio.js"></script>
-  <script src="js/auth.js"></script>
-  <script src="js/translate.js"></script>
-  <script src="js/learn.js"></script>
-  <script src="js/practice.js"></script>
-  <script src="js/bank.js"></script>
-  <script src="js/account.js"></script>
-  <script src="js/store.js"></script>
+  <!-- Helpers + data -->
+  <script src="js/utils.js" defer></script>
+  <script src="js/data.js" defer></script>
+
+  <!-- Hạ tầng UI/route -->
+  <script src="js/router.js" defer></script>
+  <script src="js/ui.js" defer></script>
+
+  <!-- Account / audio / translate -->
+  <script src="js/auth.js" defer></script>
+  <script src="js/audio.js" defer></script>
+  <script src="js/translate.js" defer></script>
+
+  <!-- Tabs học -->
+  <script src="js/learn.js" defer></script>
+  <script src="js/practice.js" defer></script>
+  <script src="js/bank.js" defer></script>
+  <script src="js/account.js" defer></script>
+
+  <!-- Cửa hàng (nếu có) -->
+  <script src="js/store.js" defer></script>
+
+  <!-- Healthcheck -->
+  <script defer>
+    window.addEventListener('DOMContentLoaded', () => {
+      console.log('HB_OK: scripts loaded');
+    });
+  </script>
 </body>
 </html>

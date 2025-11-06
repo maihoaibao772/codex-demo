@@ -2,8 +2,19 @@
   bank.js - renders vocabulary and sentence banks with mini quizzes.
 */
 
-import { vocabList, easySentences, hardSentences } from './data.js';
-import { createElement, normalizeVN, normalizeCN, pushWrongItem, getCurrentUser, emit } from './utils.js';
+(function (global) {
+  const HB = (global.HB = global.HB || {});
+  const {
+    vocabList,
+    easySentences,
+    hardSentences,
+    createElement,
+    normalizeVN,
+    normalizeCN,
+    pushWrongItem,
+    getCurrentUser,
+    emit,
+  } = HB;
 
 const container = document.querySelector('[data-bank="list"]');
 const togglePinyin = document.querySelector('[data-bank="togglePinyin"]');
@@ -82,7 +93,7 @@ function updatePinyinVisibility() {
   });
 }
 
-export function initBank() {
+function initBank() {
   render();
   updatePinyinVisibility();
   togglePinyin.addEventListener('change', updatePinyinVisibility);
@@ -90,3 +101,5 @@ export function initBank() {
 }
 
 document.addEventListener('DOMContentLoaded', initBank);
+  HB.initBank = initBank;
+})(window);

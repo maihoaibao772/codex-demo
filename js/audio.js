@@ -2,17 +2,19 @@
   audio.js - speech synthesis and recording utilities.
 */
 
-import { showToast } from './utils.js';
+(function (global) {
+  const HB = (global.HB = global.HB || {});
+  const { showToast } = HB;
 
 let mediaRecorder = null;
 let audioChunks = [];
 let playbackUrl = null;
 
-export function isAudioSupported() {
+function isAudioSupported() {
   return 'speechSynthesis' in window && 'MediaRecorder' in window;
 }
 
-export function speakText(text) {
+function speakText(text) {
   if (!('speechSynthesis' in window)) {
     showToast('Trình duyệt không hỗ trợ đọc tiếng.');
     return;
@@ -31,7 +33,7 @@ export function speakText(text) {
   }
 }
 
-export async function startRecording() {
+async function startRecording() {
   if (!navigator.mediaDevices) {
     showToast('Thiết bị không hỗ trợ ghi âm.');
     return;
@@ -57,14 +59,14 @@ export async function startRecording() {
   }
 }
 
-export async function stopRecording() {
+async function stopRecording() {
   if (mediaRecorder && mediaRecorder.state !== 'inactive') {
     mediaRecorder.stop();
     showToast('Đã lưu đoạn ghi âm.');
   }
 }
 
-export function playbackRecording() {
+function playbackRecording() {
   if (!playbackUrl) {
     showToast('Chưa có đoạn ghi âm.');
     return;
@@ -72,3 +74,12 @@ export function playbackRecording() {
   const audio = new Audio(playbackUrl);
   audio.play();
 }
+
+  Object.assign(HB, {
+    isAudioSupported,
+    speakText,
+    startRecording,
+    stopRecording,
+    playbackRecording,
+  });
+})(window);
