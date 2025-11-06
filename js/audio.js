@@ -11,45 +11,52 @@
   let playbackUrl = null;
 
   // --- TTS speak HAN only ---
-  let zhVoice = null;
+  (function () {
+    if (typeof window.speechSynthesis === 'undefined') {
+      global.speakHan = function () {};
+      return;
+    }
+    let zhVoice = null;
 
-  function pickZhVoice() {
-    const voices = window.speechSynthesis?.getVoices?.() || [];
-    zhVoice =
-      voices.find((voice) => /^(zh|cmn)/i.test(voice.lang)) ||
-      voices.find((voice) => /chinese/i.test(`${voice.name}${voice.lang}`)) ||
-      null;
-  }
-
-  if (typeof speechSynthesis !== 'undefined') {
+    function pickZhVoice() {
+      const vs = window.speechSynthesis.getVoices() || [];
+      zhVoice =
+        vs.find((v) => /^(zh|cmn)/i.test(v.lang)) ||
+        vs.find((v) => /chinese/i.test(v.name + v.lang)) ||
+        null;
+    }
     if (speechSynthesis.onvoiceschanged !== undefined) {
       speechSynthesis.onvoiceschanged = pickZhVoice;
     }
     pickZhVoice();
-  }
 
-  function onlyHan(str) {
-    const match = (str || '').match(/[\u3400-\u9FFF\uF900-\uFAFF\u{20000}-\u{2EBEF}]/gu);
-    return match ? match.join('') : '';
-  }
-
-  function speakHan(rawText) {
-    try {
-      if (!('speechSynthesis' in window)) {
-        showToast('Trình duyệt không hỗ trợ đọc tiếng.');
-        return;
-      }
-      const text = onlyHan(rawText);
-      if (!text) return;
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'zh-CN';
-      if (zhVoice) utterance.voice = zhVoice;
-      window.speechSynthesis.cancel();
-      window.speechSynthesis.speak(utterance);
-    } catch (error) {
-      console.warn('TTS error', error);
+    function onlyHan(str) {
+      const m = (str || '').match(/[\u3400-\u9FFF\uF900-\uFAFF]+/g);
+      return m ? m.join('') : '';
     }
-  }
+
+    window.speakHan = function (raw) {
+      try {
+        const text = onlyHan(raw);
+        if (!text) return;
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = 'zh-CN';
+        if (zhVoice) u.voice = zhVoice;
+        speechSynthesis.cancel();
+        speechSynthesis.speak(u);
+      } catch (e) {
+        console.warn('TTS error', e);
+      }
+    };
+
+    const btn = document.getElementById('speak');
+    if (btn) {
+      btn.addEventListener('click', () => {
+        const hanEl = document.getElementById('hanText');
+        if (hanEl) window.speakHan(hanEl.textContent || '');
+      });
+    }
+  })();
 
   function isRecorderSupported() {
     return 'MediaRecorder' in window && navigator.mediaDevices;
@@ -98,7 +105,7 @@
   }
 
   Object.assign(HB, {
-    speakHan,
+    speakHan: global.speakHan,
     isRecorderSupported,
     startRecording,
     stopRecording,

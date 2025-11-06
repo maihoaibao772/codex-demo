@@ -1,20 +1,10 @@
 /*
-  bank.js - renders vocabulary and sentence banks with mini quizzes.
+  bank.js - renders vocabulary and sentence banks with simple toggles.
 */
 
 (function (global) {
   const HB = (global.HB = global.HB || {});
-  const {
-    vocabList,
-    easySentences,
-    hardSentences,
-    createElement,
-    normalizeVN,
-    normalizeCN,
-    pushWrongItem,
-    getCurrentUser,
-    emit,
-  } = HB;
+  const { vocabList, easySentences, hardSentences, createElement, emit } = HB;
 
   const state = {
     showPinyin: true,
@@ -43,43 +33,9 @@
       pinyin.dataset.role = 'pinyin';
       const meaning = createElement('p', { text: item.meaning });
 
-      const quiz = createElement('div', { className: 'hb-mini-quiz' });
-      const prompt = createElement('p', { text: 'Mini quiz: điền nghĩa hoặc pinyin' });
-      const inputWrapper = createElement('div', { className: 'hb-mini-quiz__input' });
-      const input = createElement('input', { dataset: { role: 'miniInput' } });
-      input.type = 'text';
-      input.placeholder = 'Trả lời ở đây';
-      const button = createElement('button', { className: 'hb-btn hb-btn--secondary', text: 'Kiểm tra' });
-      const result = createElement('p', { className: 'hb-feedback' });
-
-      inputWrapper.appendChild(input);
-      inputWrapper.appendChild(button);
-      quiz.appendChild(prompt);
-      quiz.appendChild(inputWrapper);
-      quiz.appendChild(result);
-
-      button.addEventListener('click', () => {
-        const value = input.value.trim();
-        if (!value) return;
-        const normalized = normalizeVN(value);
-        const correctVN = normalizeVN(item.meaning);
-        const correctHanzi = normalizeCN(item.hanzi);
-        const correctPinyin = normalizeCN(item.pinyin);
-        if (normalized === correctVN || normalizeCN(value) === correctHanzi || normalizeCN(value) === correctPinyin) {
-          result.dataset.state = 'success';
-          result.textContent = 'Chuẩn!';
-        } else {
-          result.dataset.state = 'error';
-          result.textContent = `Sai, đáp án: ${item.meaning}`;
-          const user = getCurrentUser();
-          if (user) pushWrongItem(user, item.hanzi);
-        }
-      });
-
       entry.appendChild(han);
       entry.appendChild(pinyin);
       entry.appendChild(meaning);
-      entry.appendChild(quiz);
       section.appendChild(entry);
     });
 

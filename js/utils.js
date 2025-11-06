@@ -337,14 +337,26 @@ function formatAccuracy(correct, incorrect) {
   return `${Math.round((correct / total) * 100)}%`;
 }
 
+function readConfigAllowlist() {
+  if (!Array.isArray(global.HB_ALLOW)) return [];
+  return global.HB_ALLOW.map((item) => String(item).trim()).filter(Boolean);
+}
+
 /**
- * Determine allowlist.
+ * Determine allowlist, preferring runtime overrides stored in localStorage.
  */
 function getAllowlist() {
   const raw = localStorage.getItem(storageKeys.allow);
-  if (!raw) return null;
-  const list = raw.split(',').map((item) => item.trim()).filter(Boolean);
-  return list.length ? list : null;
+  if (typeof raw === 'string' && raw.trim().length) {
+    const list = raw
+      .split(',')
+      .map((item) => item.trim())
+      .filter(Boolean);
+    if (list.length) {
+      return list;
+    }
+  }
+  return readConfigAllowlist();
 }
 
 function setAllowlist(list) {
@@ -353,6 +365,16 @@ function setAllowlist(list) {
     return;
   }
   localStorage.setItem(storageKeys.allow, list.join(','));
+}
+
+function getAccessCode() {
+  return typeof global.HB_ACCESS_CODE === 'string' ? global.HB_ACCESS_CODE.trim() : '';
+}
+
+function isUserAllowed(username) {
+  if (!username) return false;
+  const list = getAllowlist();
+  return Array.isArray(list) && list.includes(username);
 }
 
 /**
@@ -423,12 +445,10 @@ function readJSONFile(file) {
 }
 
 /**
- * Determine if user is owner (in allowlist or no allowlist).
+ * Determine if user is owner (present trong allowlist).
  */
 function isOwner(username) {
-  const list = getAllowlist();
-  if (!list) return false;
-  return list.includes(username);
+  return isUserAllowed(username);
 }
 
 /**
@@ -477,6 +497,8 @@ function buildStatsSummary(stats) {
     formatAccuracy,
     getAllowlist,
     setAllowlist,
+    getAccessCode,
+    isUserAllowed,
     applyFrameClass,
     buildSpeakText,
     focusMain,

@@ -57,6 +57,13 @@
   function handleHashChange() {
     const hash = window.location.hash || '#/home';
     const routeName = resolveRoute(hash);
+    if (routeName === 'app' && typeof HB.ensureLoggedIn === 'function') {
+      if (!HB.ensureLoggedIn()) {
+        HB.rememberRoute?.('app');
+        routeTo('home');
+        return;
+      }
+    }
     setActiveRoute(routeName);
   }
 

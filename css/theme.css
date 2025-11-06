@@ -53,6 +53,35 @@ html[data-theme='dark'] {
   --hb-shadow-sm: 0 6px 16px rgba(0, 0, 0, 0.22);
 }
 
+html,
+body {
+  height: 100%;
+}
+
+body {
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  touch-action: manipulation;
+}
+
+input,
+select,
+textarea {
+  font-size: 16px;
+}
+
 body {
   background: var(--hb-color-bg);
   color: var(--hb-color-text);
@@ -88,7 +117,7 @@ select {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 24px;
+  padding: calc(env(safe-area-inset-top, 0px) + 16px) 24px 16px;
   background: var(--hb-glass-bg);
   backdrop-filter: blur(var(--hb-blur));
   border-bottom: 1px solid var(--hb-color-border);
@@ -569,7 +598,7 @@ html[data-theme='dark'] .hb-form-control select {
     width: 100%;
     max-width: 100%;
     border-radius: 16px 16px 0 0;
-    animation: sheetIn 0.32s ease;
+    animation: sheetIn 0.24s ease-out both;
     padding: 20px;
   }
 
@@ -598,7 +627,7 @@ html[data-theme='dark'] .hb-translate-fallback {
 }
 
 .hb-footer {
-  padding: 32px 24px;
+  padding: 32px 24px calc(env(safe-area-inset-bottom, 0px) + 24px);
   text-align: center;
   color: var(--hb-color-muted);
 }
@@ -688,18 +717,6 @@ html[data-theme='dark'] .hb-translate-fallback {
 .hb-bank__item:first-of-type {
   border-top: none;
   padding-top: 0;
-}
-
-.hb-mini-quiz {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.hb-mini-quiz__input {
-  display: flex;
-  gap: 12px;
-  align-items: center;
 }
 
 .hb-account {

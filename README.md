@@ -1,4 +1,4 @@
-# Hanzi Bridge UI v10
+# Hanzi Bridge UI v12
 
 Ứng dụng web tĩnh giúp ôn luyện tiếng Trung ⇄ Việt với vibe Hanzii/Duolingo. Toàn bộ mã nguồn thuần HTML/CSS/JS, không backend, lưu dữ liệu bằng localStorage nên chạy được offline.
 
@@ -7,6 +7,7 @@
 - `index.html` – landing page + shell SPA.
 - `css/` – reset, theme, landing, app, store.
 - `js/` – module chức năng (router, auth, học, bài tập, ngân hàng, tài khoản, cửa hàng, audio, translate, ui…).
+- `js/config.js` – cấu hình allowlist & mã truy cập mặc định cho deploy.
 - `data/frames.json` – danh sách khung CSS.
 - `data/ui_version.json` – thông tin version UI.
 
@@ -53,3 +54,8 @@ npx http-server .
 - Nếu deploy lên domain HTTPS, Google Translate iframe sẽ hoạt động tốt. Nếu iframe bị chặn, app hiển thị fallback và nút mở tab mới.
 
 Chúc học vui!
+## Phân quyền truy cập
+
+- Mặc định chỉ các username trong `HB_ALLOW` (định nghĩa tại `js/config.js` hoặc localStorage `hb:allow`) mới đăng nhập/đăng ký được.
+- Có thể đặt thêm mã truy cập thông qua `HB_ACCESS_CODE`; form đăng nhập sẽ yêu cầu mã nếu cấu hình khác rỗng.
+- Chủ site có thể cập nhật allowlist trực tiếp trong tab Tài khoản (mục Allowlist) để ghi đè giá trị runtime.

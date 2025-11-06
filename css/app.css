@@ -52,10 +52,6 @@ html[data-theme='dark'] .hb-practice__stats {
   font-family: var(--hb-font-han);
 }
 
-.hb-mini-quiz__input input {
-  flex: 1;
-}
-
 .hb-account__avatar-preview {
   width: 88px;
   height: 88px;

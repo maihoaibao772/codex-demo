@@ -1,7 +1,7 @@
 /*
   auth.js - registration and login management using localStorage.
   Includes mobile bottom-sheet interactions with swipe-to-close and
-  auto-dismiss on scroll per UI v10 guidelines.
+  auto-dismiss on scroll per UI v12 guidelines.
 */
 
 (function (global) {
@@ -15,16 +15,21 @@
     emit,
     setAllowlist,
     getAllowlist,
+    getAccessCode,
+    isUserAllowed,
   } = HB;
 
   const authModal = document.querySelector('[data-modal="auth"]');
   if (!authModal) return;
+  authModal.style.display = 'none';
 
   const modalDialog = authModal.querySelector('.hb-modal__dialog');
   const authForm = authModal.querySelector('[data-auth-form]');
   const authFeedback = authModal.querySelector('[data-auth-feedback]');
   const authToggleBtn = authModal.querySelector('[data-auth-toggle]');
   const authTitle = authModal.querySelector('#authTitle');
+  const accessWrapper = authModal.querySelector('[data-auth-access]');
+  const accessInput = authModal.querySelector('input[name="access"]');
 
   let authMode = 'login';
   let startY = 0;
@@ -57,6 +62,7 @@
 
   function closeModal() {
     authModal.classList.remove('is-open');
+    authModal.style.display = 'none';
     resetSheetPosition();
     authFeedback.textContent = '';
     authFeedback.dataset.state = '';
@@ -65,16 +71,27 @@
   function openModal(mode = 'login') {
     authMode = mode;
     authModal.classList.add('is-open');
+    authModal.style.display = 'flex';
     resetSheetPosition();
     authTitle.textContent = mode === 'login' ? 'Đăng nhập' : 'Đăng ký';
     authToggleBtn.textContent = mode === 'login' ? 'Chuyển sang đăng ký' : 'Chuyển sang đăng nhập';
     authFeedback.textContent = '';
     authFeedback.dataset.state = '';
     authForm.reset();
+    if (accessInput) accessInput.value = '';
     const remember = localStorage.getItem(storageKeys.remember);
     if (remember) {
       authForm.username.value = remember;
       authForm.remember.checked = true;
+    }
+    const code = getAccessCode();
+    if (accessWrapper) {
+      accessWrapper.hidden = !code;
+      if (code) {
+        accessWrapper.removeAttribute('aria-hidden');
+      } else {
+        accessWrapper.setAttribute('aria-hidden', 'true');
+      }
     }
   }
 
@@ -98,9 +115,8 @@
     if (hash !== user.pass) {
       throw new Error('Sai mật khẩu.');
     }
-    const allowlist = getAllowlist();
-    if (allowlist && !allowlist.includes(username)) {
-      throw new Error('Tài khoản chưa nằm trong allowlist.');
+    if (!isUserAllowed(username)) {
+      throw new Error('Tài khoản chưa được cấp quyền.');
     }
     setSession(username);
   }
@@ -109,6 +125,9 @@
     const users = loadUsers();
     if (users[username]) {
       throw new Error('Tên đăng nhập đã tồn tại.');
+    }
+    if (!isUserAllowed(username)) {
+      throw new Error('Tài khoản chưa được cấp quyền.');
     }
     const hash = await hashPassword(password);
     users[username] = { pass: hash, created: Date.now() };
@@ -130,9 +149,14 @@
     const username = formData.get('username').trim();
     const password = formData.get('password').trim();
     const remember = Boolean(formData.get('remember'));
+    const accessCode = (formData.get('access') || '').trim();
+    const requiredCode = getAccessCode();
     authFeedback.dataset.state = '';
     authFeedback.textContent = 'Đang xử lý...';
     try {
+      if (requiredCode && accessCode !== requiredCode) {
+        throw new Error('Sai mã truy cập.');
+      }
       if (authMode === 'login') {
         await handleLogin(username, password);
         authFeedback.dataset.state = 'success';
@@ -163,16 +187,6 @@
     if (event.target === authModal) {
       closeModal();
     }
-  });
-
-  document.querySelectorAll('[data-modal-close]').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const modal = btn.closest('.hb-modal');
-      modal?.classList.remove('is-open');
-      if (modal === authModal) {
-        resetSheetPosition();
-      }
-    });
   });
 
   modalDialog.addEventListener(
@@ -240,7 +254,16 @@
 
   window.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') {
-      document.querySelectorAll('.hb-modal.is-open').forEach((modal) => modal.classList.remove('is-open'));
+      if (authModal.classList.contains('is-open')) {
+        closeModal();
+      }
+      document
+        .querySelectorAll('.hb-modal.is-open')
+        .forEach((modal) => {
+          if (modal !== authModal) {
+            modal.classList.remove('is-open');
+          }
+        });
       resetSheetPosition();
     }
   });
@@ -248,11 +271,15 @@
   function logout() {
     clearSession();
     showToast('Đã đăng xuất.');
+    HB.routeTo?.('home');
   }
 
   function ensureLoggedIn() {
     const user = getCurrentUser();
-    if (!user) {
+    if (!user || !isUserAllowed(user)) {
+      if (user && !isUserAllowed(user)) {
+        clearSession();
+      }
       openModal('login');
       return false;
     }

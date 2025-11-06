@@ -2,7 +2,7 @@
 <html lang="vi" data-theme="light">
 <head>
   <!--
-    UI v10 Hanzi Builder
+    UI v12 Hanzi Bridge build
     File: index.html
     Description: Landing page + shell for SPA style app with sections Home, FAQ, App.
     The document is designed to be verbose with explanatory comments so other
@@ -11,8 +11,12 @@
   -->
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hanzii Builder [UI v10]</title>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
+  >
+  <meta name="format-detection" content="telephone=no">
+  <title>Hanzi Bridge [UI v12]</title>
   <!-- Google Fonts: Inter for Latin text, Noto Sans SC for Chinese characters -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -61,7 +65,7 @@
   </header>
 
   <!-- Floating badge for UI build version -->
-  <div class="hb-badge hb-badge--floating" id="uiVersionBadge" role="status">UI v10 LIVE</div>
+  <div class="hb-badge hb-badge--floating" id="uiVersionBadge" role="status">UI v12 LIVE</div>
 
   <main id="app" tabindex="-1">
     <!-- Landing/Home view -->
@@ -72,7 +76,7 @@
           <p class="hb-hero__subtitle">
             Bộ công cụ học Hanzi thân thiện mobile, chạy hoàn toàn offline với localStorage.
             Giao diện gradient mượt mà, tab học/ôn/bài tập rõ ràng, kèm ngân hàng câu linh hoạt.
-            Được xây dựng như một bộ UI v10 tối ưu cho Netlify.
+            Được xây dựng như một bộ UI v12 tối ưu cho Netlify và iOS Safari.
           </p>
           <div class="hb-hero__cta">
             <button class="hb-btn hb-btn--primary" data-route="app">Bắt đầu học</button>
@@ -110,7 +114,7 @@
                 </article>
                 <article>
                   <h2>Ngân hàng câu</h2>
-                  <p>Accordion gọn gàng, mỗi câu có mini-quiz kiểm tra nhanh.</p>
+                  <p>Accordion gọn gàng với pinyin bật/tắt và tùy chọn thu gọn toàn bộ.</p>
                 </article>
               </div>
               <div class="hb-phone__dots" aria-hidden="true">
@@ -132,7 +136,7 @@
         </article>
         <article class="hb-feature-card">
           <h3>Ngân hàng</h3>
-          <p>Accordion rõ ràng, mini quiz từng mục, bật tắt pinyin và chế độ luyện nhanh.</p>
+          <p>Accordion rõ ràng, bật tắt pinyin linh hoạt, thu gọn/mở rộng mọi mục tức thì.</p>
         </article>
         <article class="hb-feature-card">
           <h3>Khung VIP</h3>
@@ -308,6 +312,10 @@
           <span>Mật khẩu</span>
           <input type="password" name="password" required autocomplete="current-password">
         </label>
+        <label class="hb-form-control" data-auth-access hidden aria-hidden="true">
+          <span>Mã truy cập</span>
+          <input type="password" name="access" autocomplete="one-time-code" inputmode="text">
+        </label>
         <label class="hb-form-control hb-form-control--inline">
           <span>Nhớ tên đăng nhập</span>
           <input type="checkbox" name="remember">
@@ -352,37 +360,25 @@
   </div>
 
   <footer class="hb-footer">
-    <p>© Build bởi Hoài Bảo • UI v10 • build:<span data-build-time></span></p>
+    <p>© Build bởi Hoài Bảo • UI v12 • build:<span data-build-time></span></p>
   </footer>
 
   <!-- Application scripts -->
-  <!-- Helpers + data -->
   <script src="js/utils.js" defer></script>
   <script src="js/data.js" defer></script>
-
-  <!-- Hạ tầng UI/route -->
+  <script src="js/config.js" defer></script>
   <script src="js/router.js" defer></script>
   <script src="js/ui.js" defer></script>
-
-  <!-- Account / audio / translate -->
   <script src="js/auth.js" defer></script>
   <script src="js/audio.js" defer></script>
   <script src="js/translate.js" defer></script>
-
-  <!-- Tabs học -->
   <script src="js/learn.js" defer></script>
   <script src="js/practice.js" defer></script>
   <script src="js/bank.js" defer></script>
   <script src="js/account.js" defer></script>
-
-  <!-- Cửa hàng (nếu có) -->
   <script src="js/store.js" defer></script>
-
-  <!-- Healthcheck -->
   <script defer>
-    window.addEventListener('DOMContentLoaded', () => {
-      console.log('HB_FIX_V11_READY');
-    });
+    window.addEventListener('DOMContentLoaded', () => console.log('HB_V12_READY'));
   </script>
 </body>
 </html>

@@ -10,6 +10,7 @@
     registerShortcut,
     formatDateTime,
     getCurrentUser,
+    isUserAllowed,
     applyFrameClass,
     dataMeta,
     initRouter,
@@ -27,6 +28,16 @@
 
   const TAB_STORAGE_KEY = storageKeys.lastTab;
   let pendingRoute = null;
+
+  function callHBAction(path, ...args) {
+    const [scope, method] = path.split('.');
+    const ctx = HB[scope];
+    if (ctx && typeof ctx[method] === 'function') {
+      return ctx[method](...args);
+    }
+    console.warn(`[HB] Missing action: ${path}`);
+    return undefined;
+  }
 
   function toggleTheme() {
     const next = docEl.dataset.theme === 'dark' ? 'light' : 'dark';
@@ -91,7 +102,7 @@
   function handleRouteIntent(routeName) {
     if (routeName === 'account') {
       const user = getCurrentUser();
-      if (!user) {
+      if (!user || !isUserAllowed(user)) {
         pendingRoute = 'account';
         HB.openAuthModal?.('login');
         return;
@@ -103,7 +114,7 @@
     }
     if (routeName === 'app') {
       const user = getCurrentUser();
-      if (!user) {
+      if (!user || !isUserAllowed(user)) {
         pendingRoute = 'app';
         HB.openAuthModal?.('login');
         return;
@@ -120,7 +131,7 @@
 
   function handleAvatarTrigger() {
     const user = getCurrentUser();
-    if (user) {
+    if (user && isUserAllowed(user)) {
       routeTo('app');
       activateTab('account');
     } else {
@@ -187,123 +198,123 @@
 
     if (target.closest('#prevStudy')) {
       event.preventDefault();
-      HB.learn?.prev();
+      callHBAction('learn.prev');
       return;
     }
 
     if (target.closest('#nextStudy')) {
       event.preventDefault();
-      HB.learn?.next();
+      callHBAction('learn.next');
       return;
     }
 
     if (target.closest('#shuffleStudy')) {
       event.preventDefault();
-      HB.learn?.shuffle();
+      callHBAction('learn.shuffle');
       return;
     }
 
     if (target.closest('#toggleViet')) {
       event.preventDefault();
-      HB.learn?.toggleMeaning();
+      callHBAction('learn.toggleMeaning');
       return;
     }
 
     if (target.closest('#togglePinyinStudy')) {
       event.preventDefault();
-      HB.learn?.togglePinyin();
+      callHBAction('learn.togglePinyin');
       return;
     }
 
     if (target.closest('#checkSelf')) {
       event.preventDefault();
-      HB.learn?.check();
+      callHBAction('learn.check');
       return;
     }
 
     if (target.closest('#speak')) {
       event.preventDefault();
-      HB.learn?.speak();
+      callHBAction('learn.speak');
       return;
     }
 
     if (target.closest('#recordStudy')) {
       event.preventDefault();
-      HB.learn?.record();
+      callHBAction('learn.record');
       return;
     }
 
     if (target.closest('#playbackStudy')) {
       event.preventDefault();
-      HB.learn?.playback();
+      callHBAction('learn.playback');
       return;
     }
 
     const modeBtn = target.closest('[data-mode]');
     if (modeBtn) {
       event.preventDefault();
-      HB.practice?.setMode(modeBtn.dataset.mode);
+      callHBAction('practice.setMode', modeBtn.dataset.mode);
       return;
     }
 
     const levelBtn = target.closest('[data-level]');
     if (levelBtn) {
       event.preventDefault();
-      HB.practice?.setLevel(levelBtn.dataset.level);
+      callHBAction('practice.setLevel', levelBtn.dataset.level);
       return;
     }
 
     if (target.closest('#toggleWrongPool')) {
       event.preventDefault();
-      HB.practice?.toggleWrongReview();
+      callHBAction('practice.toggleWrongReview');
       return;
     }
 
     if (target.closest('#check')) {
       event.preventDefault();
-      HB.practice?.evaluate();
+      callHBAction('practice.evaluate');
       return;
     }
 
     if (target.closest('#show')) {
       event.preventDefault();
-      HB.practice?.revealAnswer();
+      callHBAction('practice.revealAnswer');
       return;
     }
 
     if (target.closest('#next')) {
       event.preventDefault();
-      HB.practice?.skipQuestion();
+      callHBAction('practice.skipQuestion');
       return;
     }
 
     if (target.closest('#resetStats')) {
       event.preventDefault();
-      HB.practice?.resetStats();
+      callHBAction('practice.resetStats');
       return;
     }
 
     if (target.closest('#startTimer')) {
       event.preventDefault();
-      HB.practice?.startTimer();
+      callHBAction('practice.startTimer');
       return;
     }
 
     if (target.closest('#stopTimer')) {
       event.preventDefault();
-      HB.practice?.stopTimer();
+      callHBAction('practice.stopTimer');
       return;
     }
 
     if (target.closest('#togglePinyin')) {
       event.preventDefault();
-      HB.bank?.togglePinyin();
+      callHBAction('bank.togglePinyin');
       return;
     }
 
     if (target.closest('#toggleAll')) {
       event.preventDefault();
-      HB.bank?.toggleAll();
+      callHBAction('bank.toggleAll');
       return;
     }
 
@@ -325,19 +336,19 @@
       const active = document.activeElement;
       if (active?.id === 'answer') {
         event.preventDefault();
-        HB.practice?.evaluate();
+        callHBAction('practice.evaluate');
       } else if (active?.dataset?.learn === 'quizInput') {
         event.preventDefault();
-        HB.learn?.check();
+        callHBAction('learn.check');
       }
     });
   }
 
   function initTitle() {
-    if (!document.title.includes('[UI v10]')) {
-      document.title = `${document.title} [UI v10]`;
+    if (!document.title.includes('[UI v12]')) {
+      document.title = `${document.title} [UI v12]`;
     }
-    console.log('HB_UI_V10_READY');
+    console.log('HB_UI_V12_READY');
   }
 
   function init() {
@@ -360,9 +371,14 @@
     on?.('auth:change', (username) => {
       updateAvatarDisplay();
       HB.renderAccount?.();
-      if (username && pendingRoute === 'account') {
-        routeTo('app');
-        activateTab('account');
+      if (username && isUserAllowed(username)) {
+        if (pendingRoute === 'account') {
+          routeTo('app');
+          activateTab('account');
+        } else if (pendingRoute === 'app') {
+          routeTo('app');
+          restoreTab();
+        }
       }
       pendingRoute = null;
     });
@@ -371,4 +387,7 @@
   document.addEventListener('DOMContentLoaded', init);
 
   HB.activateTab = activateTab;
+  HB.rememberRoute = (name) => {
+    pendingRoute = name;
+  };
 })(window);

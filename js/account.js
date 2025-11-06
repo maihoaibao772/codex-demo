@@ -47,6 +47,8 @@ function renderLoggedIn(username) {
   const avatarEmoji = localStorage.getItem('hb:avatar') || '🙂';
   const coins = getCoins();
   const allow = getAllowlist();
+  const isOwnerUser = allow.includes(username);
+  const allowDisplay = allow.length ? allow.join(', ') : 'Không thiết lập';
   const activeFrame = prefs.activeFrame;
 
   container.innerHTML = `
@@ -94,17 +96,17 @@ function renderLoggedIn(username) {
 
     <section class="hb-account__section">
       <h3>Allowlist</h3>
-      <p>CSV allowlist hiện tại: <code>${allow ? allow.join(', ') : 'Không thiết lập'}</code></p>
+      <p>CSV allowlist hiện tại: <code>${allowDisplay}</code></p>
       <label class="hb-form-control">
         <span>Cập nhật allowlist (CSV)</span>
-        <input type="text" data-account-input="allow" placeholder="user1,user2" value="${allow ? allow.join(',') : ''}">
+        <input type="text" data-account-input="allow" placeholder="user1,user2" value="${allow.length ? allow.join(',') : ''}">
       </label>
       <button class="hb-btn hb-btn--ghost" data-account-action="allow">Lưu allowlist</button>
     </section>
 
     <section class="hb-account__section">
       <h3>Admin coin</h3>
-      <div class="hb-account__admin" data-account="admin" ${allow && !allow.includes(username) ? 'hidden' : ''}>
+      <div class="hb-account__admin" data-account="admin" ${allow.length ? (isOwnerUser ? '' : 'hidden') : 'hidden'}>
         <p>Chỉ owner mới thấy mục này. Bạn có thể cộng coin cho tài khoản hiện tại.</p>
         <label class="hb-form-control">
           <span>Số coin thêm</span>
