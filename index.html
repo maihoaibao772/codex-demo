@@ -12,6 +12,78 @@
   <link rel="manifest" href="/manifest.webmanifest" />
   <link rel="stylesheet" href="/css/style.css" />
   <link rel="stylesheet" href="/css/animations.css" />
+  <style>
+    :root{
+      --space-1:6px; --space-2:10px; --space-3:14px; --space-4:18px; --space-5:24px; --space-6:32px;
+      --shadow-1:0 6px 20px rgba(0,0,0,.18); --shadow-2:0 20px 60px rgba(0,0,0,.35);
+    }
+    .wrap{max-width:1200px;}
+    .card{border-radius:16px;}
+    .btn{border-radius:999px; padding:12px 16px; font-weight:600; transition:transform .12s ease, box-shadow .2s ease;}
+    .btn:hover{transform:translateY(-1px);}
+    .btn.accent{background:linear-gradient(180deg, color-mix(in srgb, var(--accent) 85%, transparent), var(--accent)); color:#fff; border-color:transparent; box-shadow:var(--shadow-1);}
+    .btn.ghost{background:transparent; border:1px solid #2a3555;}
+    .landing{position:relative; overflow:hidden; padding:var(--space-6) 0 var(--space-4); border:none; background:transparent;}
+    .landing-bg{position:absolute; inset:-20% -10% 0 -10%; z-index:-1; filter:saturate(120%);}
+    .blob{position:absolute; width:50vw; height:50vw; border-radius:50%; filter:blur(60px); opacity:.35;}
+    .blob.b1{background:radial-gradient(closest-side, var(--accent), transparent); top:-10%; left:-5%;}
+    .blob.b2{background:radial-gradient(closest-side, #3b82f6, transparent); top:-15%; right:-10%;}
+    .blob.b3{background:radial-gradient(closest-side, #8b5cf6, transparent); bottom:-10%; left:20%;}
+    .noise{position:absolute; inset:0; background:repeating-linear-gradient(90deg, transparent 0 2px, rgba(255,255,255,.02) 2px 4px); mix-blend-mode:overlay; opacity:.3;}
+    .landing-grid{display:grid; grid-template-columns:1.05fr .95fr; gap:28px; align-items:center;}
+    .hero-title{font-size:clamp(32px,6vw,56px); line-height:1.18; margin:0 0 10px; font-weight:800; letter-spacing:-.02em;}
+    .brand-grad{background:linear-gradient(90deg, var(--accent), #22c55e 30%, #3b82f6 65%, #8b5cf6); -webkit-background-clip:text; background-clip:text; color:transparent;}
+    .hero-sub{color:var(--muted); font-size:clamp(14px,2.4vw,18px); max-width:62ch;}
+    .cta-row{display:flex; flex-wrap:wrap; gap:10px; margin:16px 0 6px;}
+    .trust-row{display:flex; flex-wrap:wrap; gap:8px; margin-top:8px;}
+    .trust-badge{background:rgba(255,255,255,.06); border:1px solid #2a3555; border-radius:999px; padding:6px 10px; font-size:12px; color:var(--muted);}
+    .metric-row{display:flex; gap:18px; margin-top:14px;}
+    .metric b{font-size:22px;}
+    .metric span{display:block; color:var(--muted); font-size:12px;}
+    .phone{width:min(340px,86vw); aspect-ratio:9/18; border-radius:30px; padding:14px; background:linear-gradient(180deg,#18203a,#0d1325); border:1px solid #223055; box-shadow:var(--shadow-2); margin-inline:auto;}
+    .phone-notch{width:46%; height:20px; background:#0b1220; border-radius:0 0 16px 16px; margin:0 auto 8px;}
+    .screen{background:var(--card); border:1px solid #223055; border-radius:18px; height:calc(100% - 28px); display:flex; flex-direction:column; overflow:hidden;}
+    .screen-tabs{display:flex; gap:6px; padding:8px; border-bottom:1px solid #223055; background:rgba(255,255,255,.02);}
+    .s-tab{flex:1; font-size:12px; border:1px solid #2a3555; background:transparent; color:var(--ink); border-radius:10px; padding:6px; cursor:pointer;}
+    .s-tab.is-active{border-color:var(--accent); box-shadow:0 0 0 2px color-mix(in srgb, var(--accent) 25%, transparent) inset;}
+    .screen-body{padding:10px; flex:1; overflow:auto;}
+    .demo-card{background:linear-gradient(180deg,#0c152f,#0b132a); border:1px solid #20305a; border-radius:14px; padding:10px;}
+    .demo-hz{font-size:22px;}
+    .btn-row{display:flex; gap:6px; margin-top:8px; flex-wrap:wrap;}
+    .mini-btn{border:1px solid #2a3555; border-radius:999px; padding:6px 10px; font-size:12px;}
+    .mini-input{border:1px dashed #2a3555; border-radius:12px; padding:8px; font-size:13px; color:var(--muted); margin:6px 0;}
+    .demo-list{display:grid; gap:6px;}
+    .demo-item{display:flex; gap:8px; align-items:baseline;}
+    .screen-footer{display:grid; place-items:center; padding:8px; gap:6px;}
+    .dot{width:6px; height:6px; border-radius:50%; background:#39476b; display:inline-block; margin:0 2px;}
+    .dot.is-active{background:var(--accent);}
+    .features{display:grid; grid-template-columns:repeat(6,minmax(140px,1fr)); gap:12px; margin-top:24px;}
+    .f-card{background:var(--card); border:1px solid #213055; border-radius:14px; padding:12px;}
+    .f-ico{font-size:18px; margin-bottom:6px;}
+    .f-title{font-weight:600;}
+    .f-txt{color:var(--muted); font-size:13px;}
+    @media (max-width:900px){
+      .landing-grid{grid-template-columns:1fr; gap:22px;}
+      .features{grid-template-columns:repeat(2,minmax(140px,1fr));}
+    }
+    html,body{line-height:1.6;}
+    .row{display:flex; align-items:center; flex-wrap:wrap; gap:10px;}
+    .big{margin:6px 0;}
+    .muted{margin:4px 0; color:var(--muted);}
+    .header .avatar{
+      width:32px; height:32px; border-radius:999px; display:grid; place-items:center;
+      background:linear-gradient(180deg,#1a2442,#111a34); border:1px solid #2a3555; color:#fff; font-weight:700; cursor:pointer;
+    }
+    .header .avatar.vip{position:relative; box-shadow:0 0 0 2px color-mix(in srgb, var(--accent) 45%, transparent) inset;}
+    .header .avatar.vip::after{
+      content:''; position:absolute; inset:-3px; border-radius:999px;
+      background:conic-gradient(from 0deg, var(--accent), #3b82f6, #8b5cf6, var(--accent));
+      -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite:xor; mask-composite:exclude;
+      padding:2px; animation:spin 4s linear infinite; opacity:.9;
+    }
+    @keyframes spin{to{transform:rotate(1turn);}}
+  </style>
 </head>
 <body>
   <header class="header">
@@ -20,6 +92,7 @@
         <span class="brand"><i class="logo"></i> Học Trung ⇄ Việt</span>
         <span class="badge" id="userBadge" hidden>👤</span>
         <span class="badge coin" id="coinBadge" hidden>🟡 0</span>
+        <div id="headerAvatar" class="avatar" title="Tài khoản" hidden>🙂</div>
         <button class="iconbtn" id="accountBtn" title="Tài khoản">👤</button>
         <button class="auth-btn" id="btnOpenLogin">Đăng nhập</button>
         <button class="logout" id="btnLogout" hidden>Đăng xuất</button>
@@ -58,27 +131,18 @@
 
   <main class="wrap">
     <section class="landing" id="home">
-      <div class="landing-bg">
-        <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
-        <div class="noise"></div>
-      </div>
-
+      <div class="landing-bg"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div class="noise"></div></div>
       <div class="wrap landing-grid">
         <div class="l-col">
-          <h1 class="hero-title">
-            Học Trung–Việt <span class="brand-grad">nhanh, gọn, mượt</span>
-          </h1>
-          <p class="hero-sub">
-            Ôn từ vựng • Luyện dịch Hán⇄Việt • Pinyin có dấu • Kiểm tra chuẩn “phải không?” • Dark/Light • Offline (PWA).
-          </p>
+          <h1 class="hero-title">Học Trung–Việt <span class="brand-grad">nhanh, gọn, mượt</span></h1>
+          <p class="hero-sub">Ôn từ vựng • Luyện dịch Hán⇄Việt • Pinyin có dấu • Kiểm tra chuẩn “phải không?” • Dark/Light • Offline (PWA).</p>
           <div class="cta-row">
             <button class="btn accent" data-route="app" id="ctaStart">Bắt đầu học</button>
             <button class="btn ghost" data-route="faq">FAQ</button>
             <button class="btn ghost" id="ctaAccount">👤 Tài khoản</button>
-            <a class="btn ghost" href="/cheatsheet.html" target="_blank" rel="noopener">Cheat-sheet</a>
           </div>
           <div class="trust-row">
-            <span class="trust-badge">⚡ Nhanh & mượt</span>
+            <span class="trust-badge">⚡ Nhanh &amp; mượt</span>
             <span class="trust-badge">📱 Tối ưu mobile</span>
             <span class="trust-badge">🔒 Local-first</span>
           </div>
@@ -88,7 +152,6 @@
             <div class="metric"><b>100%</b><span>Không ảnh/binary</span></div>
           </div>
         </div>
-
         <div class="r-col">
           <div class="phone">
             <div class="phone-notch"></div>
@@ -103,79 +166,40 @@
                   <div class="demo-card">
                     <div class="muted">Tiếng Hán</div>
                     <div class="big demo-hz">你好吗？</div>
-                    <div class="muted">Pinyin</div>
-                    <div class="py">nǐ hǎo ma?</div>
-                    <div class="muted">Nghĩa</div>
-                    <div class="big">bạn khoẻ phải không?</div>
-                    <div class="btn-row">
-                      <div class="mini-btn">Ẩn/hiện nghĩa</div>
-                      <div class="mini-btn">Ẩn/hiện pinyin</div>
-                      <div class="mini-btn">🔊</div>
-                    </div>
+                    <div class="muted">Pinyin</div><div class="py">ni hao ma?</div>
+                    <div class="muted">Nghĩa</div><div class="big">bạn khoẻ phải không?</div>
+                    <div class="btn-row"><div class="mini-btn">Ẩn/hiện nghĩa</div><div class="mini-btn">Ẩn/hiện pinyin</div><div class="mini-btn">🔊</div></div>
                   </div>
                 </div>
                 <div class="demo demo-practice">
                   <div class="demo-card">
                     <div class="muted">Chế độ: <b>Hán → Việt</b> • Cấp: <b>Dễ</b></div>
-                    <div class="big">他很忙。</div>
-                    <div class="muted">Gợi ý: pinyin</div>
-                    <div class="py">tā hěn máng.</div>
+                    <div class="big">他很忙。</div><div class="muted">Gợi ý: pinyin</div><div class="py">ta hen mang.</div>
                     <div class="mini-input">Nhập đáp án…</div>
-                    <div class="btn-row">
-                      <div class="mini-btn">Kiểm tra</div>
-                      <div class="mini-btn">Hiện đáp án</div>
-                      <div class="mini-btn">▶</div>
-                    </div>
+                    <div class="btn-row"><div class="mini-btn">Kiểm tra</div><div class="mini-btn">Hiện đáp án</div><div class="mini-btn">▶</div></div>
                   </div>
                 </div>
                 <div class="demo demo-bank">
                   <div class="demo-list">
-                    <div class="demo-item"><b>你</b> <span class="muted">(nǐ)</span> <span class="muted">bạn</span></div>
-                    <div class="demo-item"><b>好</b> <span class="muted">(hǎo)</span> <span class="muted">tốt</span></div>
-                    <div class="demo-item"><b>忙</b> <span class="muted">(máng)</span> <span class="muted">bận</span></div>
-                    <div class="demo-item"><b>汉语</b> <span class="muted">(Hànyǔ)</span> <span class="muted">tiếng Hán</span></div>
+                    <div class="demo-item"><b>你</b> <span class="muted">(ni)</span> <span class="muted">bạn</span></div>
+                    <div class="demo-item"><b>好</b> <span class="muted">(hao)</span> <span class="muted">tốt</span></div>
+                    <div class="demo-item"><b>忙</b> <span class="muted">(mang)</span> <span class="muted">bận</span></div>
+                    <div class="demo-item"><b>汉语</b> <span class="muted">(han yu)</span> <span class="muted">tiếng Hán</span></div>
                   </div>
                 </div>
               </div>
-              <div class="screen-footer">
-                <span class="dot is-active"></span><span class="dot"></span><span class="dot"></span>
-              </div>
+              <div class="screen-footer"><span class="dot is-active"></span><span class="dot"></span><span class="dot"></span></div>
             </div>
           </div>
         </div>
       </div>
-
       <div class="wrap features">
-        <div class="f-card">
-          <div class="f-ico">🎯</div>
-          <div class="f-title">Ôn bài mạch lạc</div>
-          <div class="f-txt">Ẩn/hiện nghĩa &amp; pinyin, phát âm, phím tắt J/K.</div>
-        </div>
-        <div class="f-card">
-          <div class="f-ico">🧠</div>
-          <div class="f-title">Bài tập chuẩn</div>
-          <div class="f-txt">Hán→Việt / Việt→Hán, timer 60s, ôn sai.</div>
-        </div>
-        <div class="f-card">
-          <div class="f-ico">📚</div>
-          <div class="f-title">Ngân hàng gọn</div>
-          <div class="f-txt">Accordion + pinyin tuỳ chọn, không rối.</div>
-        </div>
-        <div class="f-card">
-          <div class="f-ico">💎</div>
-          <div class="f-title">Khung VIP</div>
-          <div class="f-txt">Animation CSS text-only, đổi accent 1 chạm.</div>
-        </div>
-        <div class="f-card">
-          <div class="f-ico">☁️</div>
-          <div class="f-title">PWA Offline</div>
-          <div class="f-txt">Cache text assets, offline.html dự phòng.</div>
-        </div>
-        <div class="f-card">
-          <div class="f-ico">🔐</div>
-          <div class="f-title">Local-first</div>
-          <div class="f-txt">Lưu localStorage, Export/Import JSON.</div>
-        </div>
+        <div class="f-card"><div class="f-ico">🎯</div><div class="f-title">Ôn bài mạch lạc</div><div class="f-txt">Ẩn/hiện nghĩa &amp; pinyin, phát âm, phím tắt J/K.</div></div>
+        <div class="f-card"><div class="f-ico">🧠</div><div class="f-title">Bài tập chuẩn</div><div class="f-txt">Hán→Việt / Việt→Hán, timer 60s, ôn sai.</div></div>
+        <div class="f-card"><div class="f-ico">📚</div><div class="f-title">Ngân hàng gọn</div><div class="f-txt">Accordion + pinyin tuỳ chọn, không rối.</div></div>
+        <div class="f-card"><div class="f-ico">💎</div><div class="f-title">Khung VIP</div><div class="f-txt">Animation CSS text-only, avatar viền sống động.</div></div>
+        <div class="f-card"><div class="f-ico">☁️</div><div class="f-title">PWA Offline</div><div class="f-txt">Cache text assets, offline.html dự phòng.</div></div>
+        <div class="f-card"><div class="f-ico">🔐</div><div class="f-title">Local-first</div><div class="f-txt">Lưu localStorage, Export/Import JSON.</div></div>
       </div>
     </section>
 
@@ -215,6 +239,9 @@
                 <button class="btn" id="prevStudy">◀ Trước</button>
                 <button class="btn accent" id="nextStudy">Tiếp ▶</button>
                 <button class="btn" id="shuffleStudy">Xáo trộn</button>
+                <button class="btn" id="speak">🔊 Phát âm</button>
+                <button class="btn" id="recBtn">🎙️ Ghi</button>
+                <button class="btn" id="playRecBtn">▶️ Nghe lại</button>
               </div>
             </div>
             <div class="card">
@@ -448,5 +475,285 @@
   </div>
 
   <script type="module" src="/js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if(!window.__landingPreviewEnhanced){
+        window.__landingPreviewEnhanced = true;
+        const tabs = Array.from(document.querySelectorAll('.s-tab'));
+        const demos = {
+          study: document.querySelector('.demo-study'),
+          practice: document.querySelector('.demo-practice'),
+          bank: document.querySelector('.demo-bank')
+        };
+        const dots = Array.from(document.querySelectorAll('.screen-footer .dot'));
+        if(tabs.length){
+          const activate = (name, idx) => {
+            tabs.forEach(btn => btn.classList.toggle('is-active', btn.dataset.demo === name));
+            Object.values(demos).forEach(el => el && el.classList.remove('is-active'));
+            if(demos[name]) demos[name].classList.add('is-active');
+            dots.forEach((dot,i) => dot.classList.toggle('is-active', i === idx));
+          };
+          tabs.forEach((btn,i) => btn.addEventListener('click', () => activate(btn.dataset.demo, i)));
+          activate('study', 0);
+        }
+      }
+
+      (function initTranslateFallback(){
+        const modal = document.getElementById('gtModal');
+        const input = document.getElementById('gtInput');
+        const frame = document.getElementById('gtFrame');
+        const openBtn = document.getElementById('gtOpenNew');
+        const useCur = document.getElementById('gtUseCurrent');
+        const closeBtn = document.getElementById('gtClose');
+        if(!modal || !input || !frame || !openBtn) return;
+        let sl = 'zh-CN';
+        let tl = 'vi';
+        let fallbackTimer;
+
+        function removeNotice(){
+          const hint = document.getElementById('gtBlocked');
+          if(hint) hint.remove();
+        }
+        function showNotice(){
+          if(document.getElementById('gtBlocked')) return;
+          const info = document.createElement('div');
+          info.id = 'gtBlocked';
+          info.className = 'muted small';
+          info.style.margin = '8px 0';
+          info.textContent = 'Nếu trang dịch không hiển thị, hãy bấm “Mở tab Google Dịch”.';
+          frame.parentElement?.prepend(info);
+        }
+
+        function openTranslate(text=''){
+          modal.hidden = false;
+          const query = encodeURIComponent(text || input.value || '你好');
+          const url = `https://translate.google.com/?sl=${sl}&tl=${tl}&op=translate&text=${query}`;
+          openBtn.href = url;
+          removeNotice();
+          try{ frame.src = url; }catch(e){}
+          if(fallbackTimer) clearTimeout(fallbackTimer);
+          fallbackTimer = setTimeout(() => {
+            let blocked = false;
+            try{
+              const doc = frame.contentDocument;
+              blocked = !doc || !doc.body || doc.body.childElementCount === 0;
+            }catch(e){
+              blocked = true;
+            }
+            if(blocked) showNotice();
+          }, 800);
+        }
+
+        frame.addEventListener('load', () => {
+          if(fallbackTimer) clearTimeout(fallbackTimer);
+          removeNotice();
+        });
+
+        closeBtn?.addEventListener('click', () => {
+          if(fallbackTimer) clearTimeout(fallbackTimer);
+          removeNotice();
+          modal.hidden = true;
+          try{ frame.src = 'about:blank'; }catch(e){}
+        });
+
+        useCur?.addEventListener('click', () => {
+          const han = document.getElementById('hanText')?.textContent?.trim() || '你好';
+          input.value = han;
+          openTranslate(han);
+        });
+
+        if(!openBtn.previousElementSibling || !openBtn.previousElementSibling.classList?.contains('swap-lang')){
+          const swap = document.createElement('button');
+          swap.type = 'button';
+          swap.className = 'btn ghost swap-lang';
+          swap.textContent = 'Đổi ZH⇄VI';
+          openBtn.parentElement?.insertBefore(swap, openBtn);
+          swap.addEventListener('click', () => {
+            [sl, tl] = [tl, sl];
+            openTranslate();
+          });
+        }
+
+        window.openTranslate = openTranslate;
+      })();
+
+      document.getElementById('ctaAccount')?.addEventListener('click', () => {
+        if(typeof window.currentUser === 'function' && window.currentUser()){
+          window.routeTo?.('app');
+          document.querySelector('.tab[data-tab="account"]')?.click();
+        }else{
+          window.openAuth?.('login');
+        }
+      });
+
+      (function initHeaderAvatar(){
+        const avatar = document.getElementById('headerAvatar');
+        if(!avatar) return;
+        const userBadge = document.getElementById('userBadge');
+
+        function initials(username){
+          if(!username) return '🙂';
+          const clean = String(username).trim();
+          const parts = clean.split(/[\s._-]+/).filter(Boolean);
+          const first = parts[0]?.[0] || clean[0] || '';
+          const second = parts[1]?.[0] || '';
+          const out = (first + second).toUpperCase();
+          return out || '🙂';
+        }
+
+        function sessionInfo(){
+          try{
+            return JSON.parse(localStorage.getItem('hb:session')||'null');
+          }catch(e){
+            return null;
+          }
+        }
+
+        function resolveEmoji(user){
+          if(!user) return '🙂';
+          const stored = localStorage.getItem(`hb:av:${user}`);
+          return stored || initials(user);
+        }
+
+        function hasVipFrame(user, session){
+          if(!user) return false;
+          if(session?.vip) return true;
+          return localStorage.getItem(`hb:eq:${user}`) === 'vip_angel_gold';
+        }
+
+        function refresh(){
+          const name = typeof window.currentUser === 'function' ? window.currentUser() : '';
+          const sess = sessionInfo();
+          if(!name){
+            avatar.hidden = true;
+            avatar.classList.remove('vip');
+            return;
+          }
+          avatar.hidden = false;
+          avatar.textContent = resolveEmoji(name);
+          avatar.classList.toggle('vip', hasVipFrame(name, sess));
+        }
+
+        avatar.addEventListener('click', () => {
+          if(typeof window.currentUser === 'function' && window.currentUser()){
+            window.routeTo?.('app');
+            document.querySelector('.tab[data-tab="account"]')?.click();
+          }else{
+            window.openAuth?.('login');
+          }
+        });
+
+        if(userBadge){
+          const observer = new MutationObserver(() => refresh());
+          observer.observe(userBadge, {attributes:true, attributeFilter:['hidden'], childList:true, characterData:true, subtree:true});
+        }
+        document.getElementById('saveAvatar')?.addEventListener('click', () => setTimeout(refresh, 0));
+        window.addEventListener('storage', () => refresh());
+        refresh();
+      })();
+
+      (function initAudioTools(){
+        const speakBtn = document.getElementById('speak');
+        const recBtn = document.getElementById('recBtn');
+        const playBtn = document.getElementById('playRecBtn');
+        let audioEl;
+        let recorder;
+        let chunks = [];
+        let stream;
+
+        function showError(msg){
+          const out = document.getElementById('selfResult') || document.getElementById('result');
+          if(out){
+            out.textContent = msg;
+            out.style.color = 'var(--bad)';
+          }
+        }
+
+        function ensureAudio(){
+          if(!audioEl){
+            audioEl = document.createElement('audio');
+            audioEl.style.display = 'none';
+            document.body.appendChild(audioEl);
+          }
+        }
+
+        if(speakBtn){
+          if(!('speechSynthesis' in window)){
+            speakBtn.addEventListener('click', () => showError('Thiết bị không hỗ trợ TTS.'));
+          }else{
+            const getVoices = () => {
+              const voices = speechSynthesis.getVoices();
+              if(voices.length) return Promise.resolve(voices);
+              return new Promise(resolve => {
+                const handler = () => {
+                  speechSynthesis.removeEventListener('voiceschanged', handler);
+                  resolve(speechSynthesis.getVoices());
+                };
+                speechSynthesis.addEventListener('voiceschanged', handler);
+              });
+            };
+            speakBtn.addEventListener('click', async () => {
+              const text = document.getElementById('hanText')?.textContent?.trim();
+              if(!text) return;
+              try{
+                const voices = await getVoices();
+                const utter = new SpeechSynthesisUtterance(text);
+                utter.lang = 'zh-CN';
+                const zh = voices.find(v => /zh|cmn|chinese/i.test((v.lang||'') + (v.name||'')));
+                if(zh) utter.voice = zh;
+                speechSynthesis.cancel();
+                speechSynthesis.speak(utter);
+              }catch(e){
+                showError('Thiết bị không hỗ trợ TTS.');
+              }
+            });
+          }
+        }
+
+        if(!navigator.mediaDevices || typeof window.MediaRecorder === 'undefined'){
+          recBtn?.remove();
+          playBtn?.remove();
+          return;
+        }
+
+        if(playBtn) playBtn.disabled = true;
+
+        recBtn?.addEventListener('click', async () => {
+          if(recorder && recorder.state === 'recording'){
+            recorder.stop();
+            return;
+          }
+          try{
+            stream = await navigator.mediaDevices.getUserMedia({audio:true});
+            recorder = new MediaRecorder(stream);
+            chunks = [];
+            recorder.ondataavailable = e => { if(e.data?.size) chunks.push(e.data); };
+            recorder.onstop = () => {
+              try{ stream?.getTracks().forEach(t => t.stop()); }catch(e){}
+              stream = null;
+              ensureAudio();
+              const blob = new Blob(chunks, {type: recorder.mimeType || 'audio/webm'});
+              audioEl.src = URL.createObjectURL(blob);
+              if(playBtn) playBtn.disabled = false;
+              recBtn.textContent = '🎙️ Ghi';
+            };
+            recorder.start();
+            recBtn.textContent = '⏺️ Đang ghi…';
+            if(playBtn) playBtn.disabled = true;
+          }catch(e){
+            recBtn.textContent = '🎙️ Ghi';
+            showError('Không truy cập được micro.');
+          }
+        });
+
+        playBtn?.addEventListener('click', () => {
+          ensureAudio();
+          if(audioEl?.src){
+            audioEl.play().catch(() => {});
+          }
+        });
+      })();
+    });
+  </script>
 </body>
 </html>
