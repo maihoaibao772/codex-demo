@@ -1,10 +1,10 @@
-const CACHE='hb-cache-v2';
+const CACHE='hb-cache-v5';
 const ASSETS=[
   '/', '/index.html',
   '/css/style.css','/css/animations.css',
-  '/js/app.js','/js/auth.js','/js/practice.js','/js/shop.js','/js/settings.js','/js/translate.js','/js/vip.js',
+  '/js/app.js','/js/auth.js','/js/practice.js','/js/shop.js','/js/settings.js','/js/translate.js','/js/vip.js','/js/audio.js',
   '/js/components/toast.js','/js/components/chart.js','/js/utils/pinyinTone.js',
-  '/data/users.json','/data/vocab.json','/data/sentences_easy.json','/data/sentences_hard.json','/data/frames.json',
+  '/data/users.json','/data/vocab.json','/data/sentences_easy.json','/data/sentences_hard.json','/data/frames.json','/data/ui_version.json',
   '/cheatsheet.html','/offline.html'
 ];
 self.addEventListener('install',e=>{

@@ -71,7 +71,7 @@ export function initShop(state, wallet){
 
   const avatarEmoji=document.getElementById('avatarEmoji');
   const picker=document.getElementById('avatarPicker'); const save=document.getElementById('saveAvatar');
-  save.onclick=()=>{ if(!state.user){ toast('Cần đăng nhập'); return; } const e=(picker.value||'😀').slice(0,2); avatarEmoji.textContent=e; localStorage.setItem(`hb:av:${state.user?.username||'guest'}`, e); toast('Đã lưu avatar'); };
+  save.onclick=()=>{ if(!state.user){ toast('Cần đăng nhập'); return; } const e=(picker.value||'😀').slice(0,2); avatarEmoji.textContent=e; localStorage.setItem(`hb:av:${state.user?.username||'guest'}`, e); window.dispatchEvent(new Event('hb:avatar-change')); toast('Đã lưu avatar'); };
 
   $('#filterTheme').onchange=renderList; $('#filterAnim').onchange=renderList; $('#sortPrice').onchange=renderList;
 

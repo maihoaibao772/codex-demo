@@ -3,6 +3,7 @@ import { initPractice } from './practice.js';
 import { initShop } from './shop.js';
 import { initSettings } from './settings.js';
 import { initTranslate } from './translate.js';
+import { initAudio } from './audio.js';
 import { renderVipFrame, enableVipParticles, disableVipParticles } from './vip.js';
 import { drawStats } from './components/chart.js';
 import { toast } from './components/toast.js';
@@ -15,6 +16,7 @@ const tabs={
   account:$('#account'), admin:$('#admin')
 };
 const userBadge=$('#userBadge'); const coinBadge=$('#coinBadge');
+const headerAvatar=$('#headerAvatar');
 const themeBtn=$('#themeToggle'); const body=document.body;
 
 const accentPalettes={
@@ -41,9 +43,42 @@ const state={
 
 let syncAccountPanel=()=>{};
 
+function initials(name=''){
+  const clean=String(name).trim();
+  if(!clean) return '🙂';
+  const parts=clean.split(/[\s._-]+/).filter(Boolean);
+  return (parts[0]?.[0]||clean[0]||'🙂').toUpperCase();
+}
+
+function readPrefs(){
+  try{return JSON.parse(localStorage.getItem('hb:prefs')||'{}')||{};}catch{return {};}
+}
+
+function getAvatarEmojiFor(user){
+  if(!user) return '';
+  return localStorage.getItem(`hb:av:${user}`)||localStorage.getItem('avatarEmoji')||'';
+}
+
+function updateHeaderAvatar(){
+  if(!headerAvatar) return;
+  const user=currentUser();
+  if(!user){
+    headerAvatar.hidden=true;
+    headerAvatar.classList.remove('vip');
+    return;
+  }
+  headerAvatar.hidden=false;
+  headerAvatar.textContent=getAvatarEmojiFor(user)||initials(user);
+  const prefs=readPrefs();
+  const vipRing = prefs.vipFrame===true || !!state.user?.vip;
+  headerAvatar.classList.toggle('vip', vipRing);
+}
+
 function currentUser(){
   return state.user?.username || '';
 }
+
+updateHeaderAvatar();
 
 function norm(s){return (s||'').toLowerCase().replace(/[\s\u00A0]+/g,' ').replace(/[。．\.!！!？?]+$/g,'').replace(/\bcậu\b/g,'bạn').replace(/(\s)không$/g,' phải không').trim()}
 
@@ -84,6 +119,7 @@ function setAuthedUI(){
     $('.tab.admin').hidden = true;
   }
   syncAccountPanel();
+  updateHeaderAvatar();
 }
 function getCoins(user){ return Number(localStorage.getItem(`hb:coins:${user}`) ?? uCoinsSeed(user)); }
 function setCoins(user,val){ localStorage.setItem(`hb:coins:${user}`, String(Math.max(0,Math.floor(val||0)))); if(state.user?.username===user) coinBadge.textContent='🟡 '+getCoins(user); }
@@ -114,6 +150,19 @@ if(accountBtn){
     }
   };
 }
+
+headerAvatar?.addEventListener('click',()=>{
+  if(currentUser()){
+    routeTo('app');
+    document.querySelector('.tab[data-tab="account"]')?.click();
+  }else{
+    openAuth();
+  }
+});
+
+window.addEventListener('storage',()=>updateHeaderAvatar());
+window.addEventListener('hb:avatar-change',()=>updateHeaderAvatar());
+window.addEventListener('hb:prefs-change',()=>updateHeaderAvatar());
 
 (() => {
   const tabsPreview=Array.from(document.querySelectorAll('.s-tab'));
@@ -240,6 +289,7 @@ initSettings(state, {toToneMarked}, ()=>{
 });
 
 initTranslate();
+initAudio();
 initAuth();
 
 function restorePrefs(){
@@ -262,6 +312,39 @@ async function init(){
   const themes=[...new Set(state.frames.map(f=>f.theme))]; const ft=$('#filterTheme'); themes.forEach(t=>{ const o=document.createElement('option'); o.value=t;o.textContent=t; ft.appendChild(o);});
 }
 init();
+
+async function applyUIVersionMeta(){
+  let version='UI v5';
+  try{
+    const res=await fetch('/data/ui_version.json',{cache:'no-store'});
+    if(res.ok){
+      const data=await res.json();
+      if(data?.uiVersion) version=String(data.uiVersion);
+    }
+  }catch{}
+  const upper=version.toUpperCase();
+  const badge=document.createElement('div');
+  badge.id='uiVersionBadge';
+  badge.textContent=`${upper} LIVE`;
+  badge.classList.add('hide');
+  document.body.appendChild(badge);
+  requestAnimationFrame(()=>badge.classList.remove('hide'));
+  setTimeout(()=>{
+    badge.classList.add('hide');
+    setTimeout(()=>badge.remove(),600);
+  },2000);
+  const footerVersion=document.getElementById('footerUiVersion');
+  if(footerVersion) footerVersion.textContent=upper;
+  const stampEl=document.getElementById('buildStamp');
+  if(stampEl){
+    const now=new Date();
+    const pad=n=>String(n).padStart(2,'0');
+    stampEl.textContent=`${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
+  }
+  document.title=document.title.replace(/\s*\[UI\s*v[^\]]*\]/i,'')+` [${upper}]`;
+  console.log('HB_UI_V5_APPLIED');
+}
+applyUIVersionMeta();
 
 $('#btnOpenTranslate')?.addEventListener('click',()=> window.openTranslate && window.openTranslate());
 

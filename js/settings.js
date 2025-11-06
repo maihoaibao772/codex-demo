@@ -26,6 +26,7 @@ export function initSettings(state, libs, onSaved){
     };
     localStorage.setItem('hb:prefs', JSON.stringify(state.prefs));
     if(state.user?.vip && state.prefs.anim) enableVipParticles(); else disableVipParticles();
+    window.dispatchEvent(new Event('hb:prefs-change'));
     onSaved?.(); if(state.prefs.toast!==false) toast('Đã lưu cài đặt');
   };
 
