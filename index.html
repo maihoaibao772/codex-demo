@@ -76,14 +76,11 @@
     #accountBtn:active{transform:scale(.96)}
     #accountBtn .avatar-shell{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.05rem}
     #accountBtn img{width:100%;height:100%;object-fit:cover}
-    #accountBtn .vip-badge{position:absolute;bottom:2px;right:4px;font-size:.6rem;background:var(--accent);color:#fff;border-radius:999px;padding:2px 5px;box-shadow:0 4px 12px rgba(0,0,0,0.25);display:none}
-    #accountBtn[data-vip="1"] .vip-badge,#accountBtn[data-vip="2"] .vip-badge,#accountBtn[data-vip="3"] .vip-badge{display:inline-flex}
-    #accountBtn[data-vip="1"] .vip-badge{background:linear-gradient(135deg,#f2b705,#ffef95)}
-    #accountBtn[data-vip="2"] .vip-badge{background:linear-gradient(135deg,#74a0ff,#c9d4ff)}
-    #accountBtn[data-vip="3"] .vip-badge{background:linear-gradient(135deg,#ff5f9e,#ffd166)}
-    #accountBtn.frame-vip1{box-shadow:0 0 18px rgba(255,215,0,0.55);border:1px solid rgba(255,215,0,0.6)}
-    #accountBtn.frame-vip2{border:1px solid rgba(123,167,255,0.6);box-shadow:0 0 20px rgba(95,141,255,0.45)}
-    #accountBtn.frame-vip3{box-shadow:0 0 26px rgba(255,90,150,0.5)}
+    #accountBtn .vip-badge{position:absolute;bottom:2px;right:4px;font-size:.6rem;background:linear-gradient(135deg,#f2b705,#ffef95);color:#111;border-radius:999px;padding:2px 6px;box-shadow:0 4px 12px rgba(0,0,0,0.25);display:inline-flex;align-items:center;justify-content:center;font-weight:700}
+    #accountBtn.frame-basic{border:1px solid rgba(255,255,255,0.12);box-shadow:0 0 0 2px rgba(255,255,255,0.08) inset}
+    #accountBtn.frame-neon{border:1px solid transparent;box-shadow:0 0 22px rgba(255,122,182,0.45)}
+    #accountBtn.frame-ice{border:1px solid rgba(122,170,255,0.5);box-shadow:0 0 24px rgba(122,170,255,0.35)}
+    #accountBtn.frame-sakura{border:1px solid rgba(255,143,177,0.6);box-shadow:0 0 22px rgba(255,143,177,0.35)}
     main{max-width:1100px;margin:0 auto;padding:24px 20px 80px;display:grid;gap:32px}
     section{display:none;animation:fadeIn .4s ease forwards}
     section.active{display:block}
@@ -98,6 +95,17 @@
     .home-hero::before{content:"";position:absolute;inset:-30%;background:radial-gradient(circle at top right,rgba(95,141,255,0.5),rgba(15,24,46,0) 55%);filter:blur(0);opacity:.7}
     .home-hero::after{content:"";position:absolute;inset:-20%;background:radial-gradient(circle at bottom left,rgba(122,255,214,0.35),rgba(12,18,32,0) 50%);mix-blend-mode:screen;opacity:.8}
     .home-hero > *{position:relative;z-index:1}
+    #bgNeon{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+    #bgNeon .blob{position:absolute;width:40vmax;height:40vmax;filter:blur(60px);opacity:.35;border-radius:50%}
+    #bgNeon .b1{background:radial-gradient(circle at 30% 30%,#6ee7ff,transparent 60%);left:-10vmax;top:-6vmax;animation:float1 12s ease-in-out infinite}
+    #bgNeon .b2{background:radial-gradient(circle at 60% 70%,#a78bfa,transparent 60%);right:-12vmax;bottom:-10vmax;animation:float2 14s ease-in-out infinite}
+    @keyframes float1{50%{transform:translate(2vmax,2vmax)}}
+    @keyframes float2{50%{transform:translate(-2vmax,-1vmax)}}
+    #bgNeon .hash{position:absolute;font-weight:800;letter-spacing:.08em;color:#ffffff10;mix-blend-mode:overlay;font-size:clamp(24px,8vw,60px)}
+    #bgNeon .hash:nth-child(3){top:14%;left:6%;animation:marq 22s linear infinite}
+    #bgNeon .hash:nth-child(4){bottom:12%;right:8%;animation:marq2 26s linear infinite}
+    @keyframes marq{0%{transform:translateX(-10%)}100%{transform:translateX(110%)}}
+    @keyframes marq2{0%{transform:translateX(10%)}100%{transform:translateX(-110%)}}
     .home-title{font-size:2.2rem;margin-bottom:12px;line-height:1.25}
     .home-sub{max-width:520px;font-size:1.05rem}
     .home-quick{display:flex;flex-wrap:wrap;gap:16px;margin-top:28px}
@@ -107,6 +115,11 @@
     body[data-theme="light"] .feature-card{background:rgba(255,255,255,0.9);border-color:rgba(30,40,70,0.1)}
     .feature-card h3{margin-top:0;margin-bottom:10px;font-size:1.15rem}
     .feature-card span{display:inline-flex;width:36px;height:36px;border-radius:12px;background:var(--accent-soft);align-items:center;justify-content:center;margin-bottom:12px;font-size:1.2rem}
+    .knowledge-grid{display:grid;gap:18px;margin-top:26px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+    .knowledge-card{background:rgba(12,20,36,0.85);border-radius:18px;padding:20px;border:1px solid rgba(95,141,255,0.18);box-shadow:0 18px 38px rgba(9,15,33,0.45)}
+    body[data-theme="light"] .knowledge-card{background:rgba(255,255,255,0.92)}
+    .knowledge-card h4{margin:0 0 8px;font-size:1.05rem}
+    .knowledge-card span{font-size:1.4rem;display:inline-block;margin-bottom:10px}
     [data-animate]{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
     [data-animate].show{opacity:1;transform:none}
     .tab-bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
@@ -134,17 +147,17 @@
     .status-line{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
     .stat-box{background:rgba(255,255,255,0.05);padding:10px 16px;border-radius:12px}
     .list-clean{list-style:none;padding:0;margin:0;display:grid;gap:6px}
-    .store-grid{display:grid;gap:16px;margin-top:16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
-    .frame-preview{width:120px;height:120px;border-radius:24px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.1rem}
-    .frame-basic{border:3px solid rgba(255,255,255,0.35);background:rgba(255,255,255,0.05)}
-    .frame-vip1{border:3px solid rgba(255,215,0,0.75);box-shadow:0 0 18px rgba(255,215,0,0.55);background:rgba(255,255,255,0.08)}
-    .frame-vip2{border:3px solid transparent;background:linear-gradient(135deg,rgba(255,255,255,0.1),rgba(0,0,0,0.35));box-shadow:0 0 24px rgba(95,141,255,0.45);position:relative}
-    .frame-vip2::before{content:"";position:absolute;inset:2px;border-radius:20px;background:linear-gradient(135deg,#f5f7ff,#6a83ff);opacity:0.6;z-index:-1}
-    .frame-vip3{position:relative;overflow:hidden;border-radius:24px}
-    .frame-vip3::before{content:"";position:absolute;inset:-8px;background:conic-gradient(from 0deg,rgba(255,0,122,0.7),rgba(255,180,0,0.7),rgba(51,87,255,0.8),rgba(255,0,122,0.7));animation:spin 6s linear infinite}
-    .frame-vip3::after{content:"";position:absolute;inset:6px;border-radius:18px;background:rgba(15,20,40,0.85)}
-    .frame-vip3 span{position:relative;z-index:1}
-    @keyframes spin{to{transform:rotate(360deg)}}
+    .store-grid{display:grid;gap:18px;margin-top:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+    .store-item{padding:20px;border-radius:20px;background:rgba(95,141,255,0.08);border:1px solid rgba(95,141,255,0.18);display:grid;gap:14px;align-content:start}
+    .avatar-wrap{position:relative;width:112px;height:112px;margin:0 auto}
+    .avatar-wrap .avatar{position:absolute;inset:8px;width:calc(100% - 16px);height:calc(100% - 16px);border-radius:16px;background:rgba(12,18,32,0.8);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.1rem;color:var(--text);background-size:cover;background-position:center}
+    .frame{position:absolute;inset:0;border-radius:20px;pointer-events:none}
+    .frame-basic{box-shadow:0 0 0 3px #ffffff22 inset,0 0 16px #ffffff18}
+    .frame-neon{background:conic-gradient(from 0deg,#ff7ab6,#7aa2ff,#7affc6,#ffec7a,#ff7ab6);-webkit-mask:radial-gradient(closest-side,transparent 62%,#000 64%);mask:radial-gradient(closest-side,transparent 62%,#000 64%);animation:spin 6s linear infinite}
+    .frame-ice{background:linear-gradient(180deg,#a5d8ff,#cce5ff,#f0faff);box-shadow:0 0 24px #7cc0ff55}
+    .frame-sakura{background:conic-gradient(from 45deg,#ffc0cb77,#ff77a877,#ffc0cb77);box-shadow:0 0 18px #ff8fb177}
+    @keyframes spin{to{transform:rotate(1turn)}}
+    .vip-badge{position:absolute;top:-6px;right:-6px;background:#ffd54a;color:#111;font-weight:700;padding:2px 6px;border-radius:10px;font-size:12px;box-shadow:0 6px 18px rgba(0,0,0,0.35)}
     #authModal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:90;background:rgba(0,0,0,.6);backdrop-filter:blur(8px)}
     #authModal[hidden]{display:none!important}
     #authCard{max-width:420px;width:calc(100% - 24px);background:var(--card);border:1px solid #213055;border-radius:16px;overflow:hidden}
@@ -155,32 +168,29 @@
     .auth-tab.active{background:var(--accent);color:#fff}
     .auth-body{padding:20px;display:grid;gap:12px}
     .auth-body form{display:grid;gap:12px}
-    #accountSheet{position:fixed;inset:0;display:none;z-index:95}
+    #accountSheet{position:fixed;inset:0;display:none;z-index:95;background:rgba(10,12,20,.6);backdrop-filter:blur(10px)}
     #accountSheet[hidden]{display:none!important}
-    .account-backdrop{position:absolute;inset:0;background:rgba(0,0,0,0.55);backdrop-filter:blur(6px)}
-    .account-panel{position:absolute;top:0;right:0;height:100%;max-width:520px;width:min(90vw,420px);background:var(--card);border-left:1px solid var(--border);box-shadow:-12px 0 45px rgba(0,0,0,0.45);display:flex;flex-direction:column;border-radius:0 0 0 18px;transform:translateX(100%);transition:transform .28s ease}
-    .account-panel.open{transform:translateX(0)}
-    .account-header{display:flex;align-items:center;justify-content:space-between;padding:22px 24px;border-bottom:1px solid var(--border)}
-    .account-body{flex:1;display:flex;min-height:0}
-    .account-nav{width:42%;max-width:180px;border-right:1px solid var(--border);padding:20px 16px;display:grid;gap:10px}
-    .account-nav button{background:rgba(95,141,255,0.12);color:var(--accent);border-radius:12px;padding:10px 14px;text-align:left;font-weight:600}
-    .account-nav button.active{background:var(--accent);color:#fff}
-    .account-content{flex:1;padding:24px;overflow-y:auto;display:grid;gap:20px}
-    .sheet-page{display:none}
-    .sheet-page.active{display:grid;gap:18px}
-    .sheet-page h3{margin:0}
-    .avatar-preview{width:88px;height:88px;border-radius:50%;overflow:hidden;margin-bottom:12px;border:3px solid var(--accent);display:flex;align-items:center;justify-content:center;font-weight:600;position:relative}
-    .avatar-preview.frame-vip1{border-color:rgba(255,215,0,0.8);box-shadow:0 0 18px rgba(255,215,0,0.55)}
-    .avatar-preview.frame-vip2{border-color:rgba(123,167,255,0.7);box-shadow:0 0 20px rgba(95,141,255,0.4)}
-    .avatar-preview.frame-vip3{border:3px solid transparent;box-shadow:0 0 26px rgba(255,90,150,0.5)}
-    .avatar-preview.frame-vip3::after{content:"";position:absolute;inset:-4px;border-radius:50%;background:conic-gradient(from 0deg,rgba(255,0,122,0.5),rgba(255,180,0,0.6),rgba(51,87,255,0.6),rgba(255,0,122,0.5));z-index:-1;animation:spin 6s linear infinite}
+    .account-backdrop{position:absolute;inset:0}
+    #accountPanel{position:absolute;right:0;top:0;bottom:0;width:min(920px,100%);background:var(--card);display:grid;grid-template-columns:220px 1fr;overflow:hidden;border-left:1px solid var(--border);transform:translateX(100%);transition:transform .28s ease}
+    #accountPanel.open{transform:translateX(0)}
+    #acctNav{background:linear-gradient(180deg,#0c1326,#0a1122);border-right:1px solid #203055;padding:10px;display:flex;flex-direction:column;gap:10px;overflow:auto}
+    .acct-item{border-radius:16px;padding:12px 14px;border:1px solid #223255;background:#0c1428;cursor:pointer;display:flex;align-items:center;gap:8px;font-weight:600;color:var(--text);transition:transform .2s ease,box-shadow .2s ease}
+    .acct-item:hover{transform:translateY(-1px);box-shadow:0 10px 28px rgba(9,15,33,0.35)}
+    .acct-item[aria-selected="true"]{border-color:var(--accent);box-shadow:0 0 0 2px rgba(77,163,255,.15) inset}
+    #acctBody{padding:16px;overflow:auto;display:grid;align-content:start;gap:20px}
+    .acct-page{display:none;gap:18px}
+    .acct-page.active{display:grid}
+    .acct-page h3{margin:0}
+    .acct-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:12px;margin-bottom:12px;border-bottom:1px solid var(--border);position:sticky;top:0;background:inherit;z-index:2}
     .account-note{font-size:.95rem;color:var(--muted);border:1px dashed var(--border);padding:12px 14px;border-radius:12px}
     .account-inline{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
     .account-stat{background:rgba(255,255,255,0.05);padding:10px 14px;border-radius:12px}
-    @media(max-width:720px){
-      .account-nav{display:flex;flex-wrap:wrap;width:100%;border-right:none;border-bottom:1px solid var(--border);padding:16px}
-      .account-nav button{flex:1 1 calc(50% - 8px);text-align:center}
-      .account-body{flex-direction:column}
+    .profile-header{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+    .profile-header .avatar-wrap{margin:0}
+    @media(max-width:820px){
+      #accountPanel{grid-template-columns:1fr}
+      #acctNav{flex-direction:row;position:sticky;top:0;z-index:1;background:var(--card);border-right:0;border-bottom:1px solid #203055}
+      .acct-item{flex:1;white-space:nowrap}
     }
     #translateModal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:70;background:rgba(0,0,0,0.55);backdrop-filter:blur(8px)}
     #translateModal[hidden]{display:none!important}
@@ -215,6 +225,12 @@
   <main>
     <section id="homeSection" class="active">
       <div class="card home-hero" data-animate>
+        <div id="bgNeon" aria-hidden="true">
+          <div class="blob b1"></div>
+          <div class="blob b2"></div>
+          <div class="hash">#HoaiBaoBuild</div>
+          <div class="hash">#HanziBridge</div>
+        </div>
         <div class="pill">Lộ trình chữ Hán</div>
         <h1 class="home-title">Hanzi Bridge giúp bạn luyện chữ Hán mượt mà và luôn có động lực.</h1>
         <p class="home-sub">Từ ôn tập từ vựng, bài tập tốc độ đến ngân hàng câu linh hoạt – tất cả nằm trong một trang duy nhất, tối ưu cho mobile và an toàn dữ liệu.</p>
@@ -249,6 +265,31 @@
           <span>🔒</span>
           <h3>An toàn dữ liệu</h3>
           <p class="muted">Đăng nhập, xu, VIP và khung avatar đều lưu trong thiết bị; chỉ admin mới cấp quyền nâng cấp.</p>
+        </div>
+      </div>
+      <div class="card" data-animate>
+        <h2>Góc Hán học</h2>
+        <div class="knowledge-grid">
+          <div class="knowledge-card" data-animate>
+            <span>🔤</span>
+            <h4>Pinyin là gì?</h4>
+            <p class="muted">Pinyin là hệ ký âm Latinh hóa tiếng Hán. Trong Hanzi Bridge, pinyin hiển thị không dấu thanh để bạn nhập nhanh trên di động.</p>
+          </div>
+          <div class="knowledge-card" data-animate>
+            <span>❓</span>
+            <h4>Trợ từ nghi vấn 吗 / 对吗</h4>
+            <p class="muted">Khi gặp câu hỏi kết thúc bằng 吗 hoặc 对吗, bản dịch tiếng Việt sẽ luôn ở dạng “... phải không?” để bạn ghi nhớ cấu trúc chuẩn.</p>
+          </div>
+          <div class="knowledge-card" data-animate>
+            <span>🧱</span>
+            <h4>Cấu trúc cơ bản</h4>
+            <p class="muted">Câu tiếng Hán cơ bản đi theo S + V + O. Ví dụ: 我学汉语。→ “Tôi học tiếng Hán.” Nhấn mạnh động từ sau chủ ngữ.</p>
+          </div>
+          <div class="knowledge-card" data-animate>
+            <span>🧩</span>
+            <h4>Từ ghép tiêu biểu</h4>
+            <p class="muted">Ghép nghĩa để đoán nhanh: 邮局 = bưu điện, 学汉语 = học tiếng Hán. Hãy liên kết hình ảnh để tăng tốc ghi nhớ.</p>
+          </div>
         </div>
       </div>
     </section>
@@ -400,90 +441,96 @@
 
   <div id="accountSheet" hidden>
     <div class="account-backdrop" data-action="closeAccount"></div>
-    <div class="account-panel" id="accountPanel">
-      <div class="account-header">
-        <div>
-          <h3 style="margin:0">Hồ sơ Hanzi Bridge</h3>
-          <div class="muted" id="accountEmailLabel">Đăng nhập để quản lý tài khoản.</div>
+    <div id="accountPanel">
+      <nav id="acctNav">
+        <button class="acct-item" data-acct="profile" aria-selected="true">Hồ sơ &amp; Cài đặt</button>
+        <button class="acct-item" data-acct="utils" data-requires-activation="true">Tiện ích</button>
+        <button class="acct-item" data-acct="store" data-requires-activation="true">Cửa hàng khung</button>
+        <button class="acct-item" data-acct="access">Mã truy cập</button>
+        <button class="acct-item" data-acct="chat" id="acctChatItem" hidden>Bạn bè &amp; Chat</button>
+      </nav>
+      <div id="acctBody">
+        <div class="acct-head">
+          <div>
+            <h3 style="margin:0">Bảng điều khiển Hanzi Bridge</h3>
+            <div class="muted" id="accountEmailLabel">Đăng nhập để quản lý tài khoản.</div>
+          </div>
+          <button class="ghost-btn" data-action="closeAccount">Đóng</button>
         </div>
-        <button class="ghost-btn" data-action="closeAccount">Đóng</button>
-      </div>
-      <div class="account-body">
-        <nav class="account-nav" id="accountNav">
-          <button data-page="profile" class="active">Hồ sơ &amp; Cài đặt</button>
-          <button data-page="utilities" data-requires-activation="true">Tiện ích</button>
-          <button data-page="store" data-requires-activation="true">Cửa hàng khung</button>
-          <button data-page="access">Mã truy cập</button>
-          <button data-page="chat" id="accountChatNav" hidden>Bạn bè &amp; Chat</button>
-        </nav>
-        <div class="account-content">
-          <section id="pageProfile" class="sheet-page active">
-            <div>
-              <div class="avatar-preview" id="profileAvatarPreview">🙂</div>
-              <div class="account-inline">
-                <div class="account-stat">Khung: <span id="profileFrame">basic</span></div>
-                <div class="account-stat">VIP: <span id="profileVip">0</span></div>
-                <div class="account-stat">Xu: <span id="profileCoins">0</span></div>
-              </div>
+        <section id="pageProfile" class="acct-page active" data-acct-page="profile">
+          <div class="profile-header">
+            <div class="avatar-wrap" id="profileAvatarWrap">
+              <div class="frame frame-basic" id="profileFrameRing"></div>
+              <div class="avatar" id="profileAvatar">🙂</div>
+              <div class="vip-badge" id="vipBadge" hidden>VIP</div>
             </div>
-            <form id="profileForm" class="grid">
-              <input type="text" id="profileName" placeholder="Tên hiển thị">
-              <div class="grid two">
-                <div><input type="password" id="oldPassword" placeholder="Mật khẩu hiện tại"></div>
-                <div><input type="password" id="newPassword" placeholder="Mật khẩu mới"></div>
+            <div class="account-inline">
+              <div class="account-stat">Khung: <span id="profileFrame">basic</span></div>
+              <div class="account-stat">VIP: <span id="profileVip">0</span></div>
+              <div class="account-stat">Xu: <span id="profileCoins">0</span></div>
+            </div>
+          </div>
+          <form id="profileForm" class="grid">
+            <input type="text" id="profileName" placeholder="Tên hiển thị">
+            <div class="grid two">
+              <div><input type="password" id="oldPassword" placeholder="Mật khẩu hiện tại"></div>
+              <div><input type="password" id="newPassword" placeholder="Mật khẩu mới"></div>
+            </div>
+            <div>
+              <label class="muted" style="display:block;margin-bottom:8px">Ảnh đại diện</label>
+              <input type="file" id="avatarUpload" accept="image/*">
+            </div>
+            <button type="submit">Lưu thay đổi</button>
+          </form>
+          <div id="adminControls" hidden>
+            <h3>Điều khiển quản trị</h3>
+            <div class="grid two">
+              <div>
+                <input type="number" id="adminCoins" placeholder="Thêm xu">
+                <button class="ghost-btn" data-action="grantCoins" style="margin-top:8px">Cộng xu</button>
               </div>
               <div>
-                <label class="muted" style="display:block;margin-bottom:8px">Ảnh đại diện</label>
-                <input type="file" id="avatarUpload" accept="image/*">
-              </div>
-              <button type="submit">Lưu thay đổi</button>
-            </form>
-            <div id="adminControls" hidden>
-              <h3>Điều khiển quản trị</h3>
-              <div class="grid two">
-                <div>
-                  <input type="number" id="adminCoins" placeholder="Thêm xu">
-                  <button class="ghost-btn" data-action="grantCoins" style="margin-top:8px">Cộng xu</button>
-                </div>
-                <div>
-                  <select id="adminVip">
-                    <option value="0">VIP 0</option>
-                    <option value="1">VIP 1</option>
-                    <option value="2">VIP 2</option>
-                    <option value="3">VIP 3</option>
-                  </select>
-                  <button class="ghost-btn" data-action="setVip" style="margin-top:8px">Cập nhật VIP</button>
-                </div>
+                <select id="adminVip">
+                  <option value="0">VIP 0</option>
+                  <option value="1">VIP 1</option>
+                  <option value="2">VIP 2</option>
+                  <option value="3">VIP 3</option>
+                </select>
+                <button class="ghost-btn" data-action="setVip" style="margin-top:8px">Cập nhật VIP</button>
               </div>
             </div>
-            <button class="ghost-btn" data-action="logout">Đăng xuất</button>
-          </section>
-          <section id="pageUtilities" class="sheet-page">
-            <div class="account-note">Tiện ích mở nhanh giúp bạn dịch câu và xem thông tin quan trọng mà không rời khỏi bài học.</div>
-            <div class="account-inline">
-              <div class="account-stat">Email: <span id="utilitiesEmail">-</span></div>
-              <div class="account-stat">Tài khoản: <span id="utilitiesStatus">Chưa kích hoạt</span></div>
-            </div>
-            <button data-action="openTranslate" class="ghost-btn">🌐 Dịch ZH↔VI</button>
-          </section>
-          <section id="pageStore" class="sheet-page">
-            <div class="account-note">Coins do admin nạp; VIP chỉ do admin kích hoạt. Chọn khung yêu thích để làm nổi bật avatar của bạn.</div>
-            <div class="account-stat">Xu hiện tại: <span id="storeCoinsAccount">0</span></div>
-            <div class="store-grid" id="storeGridAccount"></div>
-          </section>
-          <section id="pageAccess" class="sheet-page">
-            <div class="account-note">Nhập hoặc đổi mã truy cập để mở toàn bộ trải nghiệm học Hanzi Bridge.</div>
-            <form id="accessForm" class="grid">
-              <input type="text" id="accessCodeInput" placeholder="Nhập mã truy cập" autocomplete="off">
-              <button type="submit">Kích hoạt</button>
-            </form>
-            <div class="muted">Trạng thái hiện tại: <strong id="accessStatus">Chưa kích hoạt</strong></div>
-          </section>
-          <section id="pageChat" class="sheet-page">
-            <div class="account-note">Kết nối bạn bè để trò chuyện realtime khi bạn đã cấu hình Firebase.</div>
-            <p class="muted">Truy cập tab Chat trong ứng dụng để bắt đầu trò chuyện.</p>
-          </section>
-        </div>
+          </div>
+          <button class="ghost-btn" data-action="logout">Đăng xuất</button>
+        </section>
+        <section id="pageUtilities" class="acct-page" data-acct-page="utils">
+          <div class="account-note">Tiện ích mở nhanh giúp bạn dịch câu và xem thông tin quan trọng mà không rời khỏi bài học.</div>
+          <div class="account-inline">
+            <div class="account-stat">Email: <span id="utilitiesEmail">-</span></div>
+            <div class="account-stat">Tài khoản: <span id="utilitiesStatus">Chưa kích hoạt</span></div>
+            <div class="account-stat">Ngày tạo: <span id="utilitiesCreated">-</span></div>
+          </div>
+          <div class="grid two">
+            <button data-action="openTranslate" class="ghost-btn">🌐 Mở bộ dịch ZH↔VI</button>
+            <div class="account-stat" style="flex:1">Trạng thái VIP: <strong id="utilitiesVip">VIP0</strong> · Xu: <strong id="utilitiesCoins">0</strong></div>
+          </div>
+        </section>
+        <section id="pageStoreFrames" class="acct-page" data-acct-page="store">
+          <div class="account-note">Coins do admin nạp; VIP chỉ do admin kích hoạt. Chọn khung yêu thích để làm nổi bật avatar của bạn.</div>
+          <div class="account-stat">Xu hiện tại: <span id="storeCoinsAccount">0</span></div>
+          <div class="store-grid" id="storeGridAccount"></div>
+        </section>
+        <section id="pageAccess" class="acct-page" data-acct-page="access">
+          <div class="account-note">Nhập hoặc đổi mã truy cập để mở toàn bộ trải nghiệm học Hanzi Bridge.</div>
+          <form id="accessForm" class="grid">
+            <input type="text" id="accessCodeInput" placeholder="Nhập mã truy cập" autocomplete="off">
+            <button type="submit">Kích hoạt</button>
+          </form>
+          <div class="muted">Trạng thái hiện tại: <strong id="accessStatus">Chưa kích hoạt</strong></div>
+        </section>
+        <section id="pageChat" class="acct-page" data-acct-page="chat">
+          <div class="account-note">Kết nối bạn bè để trò chuyện realtime khi bạn đã cấu hình Firebase.</div>
+          <p class="muted">Khi bật Firebase, mục Chat trong ứng dụng sẽ cho phép bạn nhập email bạn bè để trò chuyện ngay.</p>
+        </section>
       </div>
     </div>
   </div>
@@ -518,10 +565,10 @@
     const OWNER_EMAIL = "owner@hanzi.bridge";
     const ACT_CODE = 'HOCMETVCL_CODE123';
     const frames = [
-      {id:'basic',name:'Khung cơ bản',price:0,vip:0,className:'frame-basic'},
-      {id:'vip1',name:'Khung VIP 1',price:120,vip:1,className:'frame-vip1'},
-      {id:'vip2',name:'Khung VIP 2',price:240,vip:2,className:'frame-vip2'},
-      {id:'vip3',name:'Khung VIP 3',price:360,vip:3,className:'frame-vip3'}
+      {id:'basic',name:'Khung cơ bản',price:0,className:'frame-basic'},
+      {id:'neon',name:'Khung Neon',price:160,className:'frame-neon'},
+      {id:'ice',name:'Khung Băng',price:200,className:'frame-ice'},
+      {id:'sakura',name:'Khung Sakura',price:240,className:'frame-sakura'}
     ];
 
     const navButtons = document.querySelectorAll('.nav-button');
@@ -609,8 +656,8 @@
 
     function selectAuthTab(tab){
       const isReg = tab==='register';
-      document.getElementById('tabLogin').setAttribute('aria-selected', (!isReg).toString());
-      document.getElementById('tabRegister').setAttribute('aria-selected', isReg.toString());
+      document.getElementById('tabLogin').setAttribute('aria-selected', String(!isReg));
+      document.getElementById('tabRegister').setAttribute('aria-selected', String(isReg));
       document.getElementById('formLogin').hidden = isReg;
       document.getElementById('formRegister').hidden = !isReg;
       document.getElementById('tabLogin').classList.toggle('active', !isReg);
@@ -637,23 +684,43 @@
       return localStorage.getItem('sessionUser');
     }
 
+    function ensureFrameInventory(user){
+      if(!user){return false;}
+      let changed = false;
+      if(!Array.isArray(user.framesOwned)){
+        user.framesOwned = ['basic'];
+        changed = true;
+      }
+      if(!user.framesOwned.includes('basic')){
+        user.framesOwned.push('basic');
+        changed = true;
+      }
+      if(user.frameId && !user.framesOwned.includes(user.frameId)){
+        user.framesOwned.push(user.frameId);
+        changed = true;
+      }
+      return changed;
+    }
+
     function updateAccountBtn(){
       const btn = document.getElementById('accountBtn');
       const email = getSession();
       const db = getUsersDB();
       const user = email && db[email] ? db[email] : null;
       frames.forEach(f=>btn.classList.remove(`frame-${f.id}`));
-      const frameId = user?user.frameId:'basic';
+      const frameId = user && frames.some(f=>f.id===user.frameId) ? user.frameId : 'basic';
       btn.classList.add(`frame-${frameId}`);
       const avatarData = email?localStorage.getItem(`hb:avatar:${email}`):null;
+      const vipLevel = user?user.vip:0;
+      const badge = vipLevel>0 ? `<span class="vip-badge">VIP${vipLevel}</span>` : '';
       if(avatarData){
-        btn.innerHTML = `<div class="avatar-shell"><img src="${avatarData}" alt="avatar"></div><span class="vip-badge">VIP${user?user.vip:0}</span>`;
+        btn.innerHTML = `<div class="avatar-shell"><img src="${avatarData}" alt="avatar"></div>${badge}`;
       } else if(email){
-        btn.innerHTML = `<div class="avatar-shell">${email.charAt(0).toUpperCase()}</div><span class="vip-badge">VIP${user?user.vip:0}</span>`;
+        btn.innerHTML = `<div class="avatar-shell">${email.charAt(0).toUpperCase()}</div>${badge}`;
       } else {
-        btn.innerHTML = `<div class="avatar-shell">🙂</div><span class="vip-badge">VIP0</span>`;
+        btn.innerHTML = `<div class="avatar-shell">🙂</div>`;
       }
-      btn.dataset.vip = user?String(user.vip):'0';
+      btn.dataset.vip = String(vipLevel||0);
     }
 
     document.getElementById('accountBtn').addEventListener('click',()=>{
@@ -694,7 +761,8 @@
         createdAt: Date.now(),
         coins: 0,
         vip: 0,
-        frameId: 'basic'
+        frameId: 'basic',
+        framesOwned: ['basic']
       };
       saveUsersDB(db);
       alert('Đăng ký thành công, mời đăng nhập.');
@@ -703,7 +771,8 @@
 
     const accountSheetEl = document.getElementById('accountSheet');
     const accountPanel = document.getElementById('accountPanel');
-    const accountNav = document.getElementById('accountNav');
+    const accountNav = document.getElementById('acctNav');
+    const acctBody = document.getElementById('acctBody');
     let accountSheetVisible = false;
 
     function isActivated(){
@@ -720,10 +789,12 @@
 
     function activateAccountPage(page){
       if(!page){page='profile';}
-      document.querySelectorAll('#accountNav button').forEach(btn=>btn.classList.toggle('active',btn.dataset.page===page));
-      document.querySelectorAll('#accountSheet .sheet-page').forEach(sec=>{
-        const targetId = `page${page.charAt(0).toUpperCase()+page.slice(1)}`;
-        sec.classList.toggle('active', sec.id===targetId);
+      document.querySelectorAll('#acctNav .acct-item').forEach(btn=>{
+        const selected = btn.dataset.acct===page;
+        btn.setAttribute('aria-selected', String(selected));
+      });
+      document.querySelectorAll('#acctBody .acct-page').forEach(sec=>{
+        sec.classList.toggle('active', sec.dataset.acctPage===page);
       });
     }
 
@@ -736,15 +807,52 @@
       const utilitiesEmail = document.getElementById('utilitiesEmail');
       if(utilitiesEmail){utilitiesEmail.textContent = email || '-';}
       updateActivationStatus();
-      if(!user){return;}
-      document.getElementById('profileFrame').textContent = user.frameId;
+      const status = document.getElementById('utilitiesStatus');
+      if(status){status.textContent = isActivated() ? 'Đã kích hoạt' : 'Chưa kích hoạt';}
+      const created = document.getElementById('utilitiesCreated');
+      if(created){created.textContent = user ? new Date(user.createdAt).toLocaleDateString('vi-VN') : '-';}
+      const utilitiesVip = document.getElementById('utilitiesVip');
+      if(utilitiesVip){utilitiesVip.textContent = `VIP${user?user.vip:0}`;}
+      const utilitiesCoins = document.getElementById('utilitiesCoins');
+      if(utilitiesCoins){utilitiesCoins.textContent = user?user.coins:0;}
+      if(!user){
+        const nameInput = document.getElementById('profileName');
+        if(nameInput){nameInput.value='';}
+        return;
+      }
+      if(ensureFrameInventory(user)){
+        saveUsersDB(db);
+      }
+      const validFrame = frames.find(f=>f.id===user.frameId) ? user.frameId : 'basic';
+      if(validFrame!==user.frameId){
+        user.frameId = validFrame;
+        saveUsersDB(db);
+      }
+      document.getElementById('profileFrame').textContent = validFrame;
       document.getElementById('profileVip').textContent = user.vip;
       document.getElementById('profileCoins').textContent = user.coins;
       document.getElementById('profileName').value = user.displayName;
-      const avatarPreview = document.getElementById('profileAvatarPreview');
+      const avatarEl = document.getElementById('profileAvatar');
       const avatarData = localStorage.getItem(`hb:avatar:${email}`);
-      avatarPreview.innerHTML = avatarData ? `<img src="${avatarData}" alt="avatar" style="width:100%;height:100%;object-fit:cover">` : email.charAt(0).toUpperCase();
-      avatarPreview.className = `avatar-preview frame-${user.frameId}`;
+      if(avatarData){
+        avatarEl.style.backgroundImage = `url(${avatarData})`;
+        avatarEl.textContent = '';
+      } else {
+        avatarEl.style.backgroundImage = 'none';
+        avatarEl.textContent = email.charAt(0).toUpperCase();
+      }
+      const frameRing = document.getElementById('profileFrameRing');
+      const frameConfig = frames.find(f=>f.id===validFrame) || frames[0];
+      frameRing.className = `frame ${frameConfig.className}`;
+      const badge = document.getElementById('vipBadge');
+      if(badge){
+        if(user.vip>0){
+          badge.hidden = false;
+          badge.textContent = `VIP${user.vip}`;
+        } else {
+          badge.hidden = true;
+        }
+      }
       document.getElementById('adminControls').hidden = email!==OWNER_EMAIL;
     }
 
@@ -799,12 +907,12 @@
     });
 
     accountNav.addEventListener('click',e=>{
-      const btn = e.target.closest('button[data-page]');
+      const btn = e.target.closest('.acct-item[data-acct]');
       if(!btn){return;}
       if(btn.dataset.requiresActivation && !isActivated()){
         if(!requireActivation()){return;}
       }
-      activateAccountPage(btn.dataset.page);
+      activateAccountPage(btn.dataset.acct);
     });
 
     document.getElementById('profileForm').addEventListener('submit',async e=>{
@@ -1288,14 +1396,32 @@
       const db = getUsersDB();
       const user = email?db[email]:null;
       coinsEl.textContent = user?user.coins:0;
+      if(!user){
+        grid.innerHTML = '<div class="account-note">Đăng nhập và kích hoạt tài khoản để truy cập cửa hàng khung.</div>';
+        return;
+      }
+      if(!isActivated()){
+        grid.innerHTML = '<div class="account-note">Nhập mã truy cập <strong>HOCMETVCL_CODE123</strong> để mở cửa hàng khung.</div>';
+        return;
+      }
+      let changed = false;
+      if(ensureFrameInventory(user)){changed = true;}
+      const avatarData = localStorage.getItem(`hb:avatar:${email}`);
+      const initial = user.displayName ? user.displayName.charAt(0).toUpperCase() : email.charAt(0).toUpperCase();
       grid.innerHTML = frames.map(frame=>{
-        const owned = user && user.frameId===frame.id;
-        const lackVip = user && frame.vip>user.vip;
-        const lackCoins = user && frame.price>user.coins;
-        const disabled = !user || owned || lackCoins || lackVip;
-        const caption = !user ? 'Đăng nhập để mua' : owned ? 'Đang dùng' : lackVip ? `Cần VIP ${frame.vip}` : frame.price ? `Mua ${frame.price} xu` : 'Sử dụng';
-        return `<div class="card" style="padding:18px"><div class="frame-preview ${frame.className}"><span>${frame.id.toUpperCase()}</span></div><div class="muted">Giá: ${frame.price} xu${frame.vip?` · cần VIP ${frame.vip}`:''}</div><button data-action="buyFrame" data-frame="${frame.id}" class="ghost-btn" ${disabled?'disabled':''} style="margin-top:12px">${caption}</button></div>`;
+        const owned = user.framesOwned.includes(frame.id);
+        const isCurrent = user.frameId===frame.id;
+        const canBuy = !owned && user.coins>=frame.price;
+        const buyLabel = owned ? 'Đã sở hữu' : frame.price ? `Mua ${frame.price} xu` : 'Miễn phí';
+        const buyDisabled = owned || !canBuy;
+        const applyDisabled = !owned || isCurrent;
+        const avatarStyle = avatarData ? ` style="background-image:url(${avatarData})"` : '';
+        const avatarContent = avatarData ? '' : initial;
+        return `<div class="store-item"><div class="avatar-wrap"><div class="frame ${frame.className}"></div><div class="avatar"${avatarStyle}>${avatarContent}</div></div><div><strong>${frame.name}</strong></div><div class="muted">${frame.price?`${frame.price} xu`:'Miễn phí'}</div><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="ghost-btn" data-action="buyFrame" data-frame="${frame.id}" ${buyDisabled?'disabled':''}>${buyLabel}</button><button data-action="applyFrame" data-frame="${frame.id}" ${applyDisabled?'disabled':''}>${isCurrent?'Đang dùng':'Áp dụng'}</button></div></div>`;
       }).join('');
+      if(changed){
+        saveUsersDB(db);
+      }
     }
 
     let translateMode = 'zh2vi';
@@ -1543,6 +1669,9 @@
           const frameId = el.dataset.frame;
           purchaseFrame(frameId);
           break;
+        case 'applyFrame':
+          applyFrame(el.dataset.frame);
+          break;
         case 'chatConnect':
           initChatConnection();
           break;
@@ -1569,22 +1698,46 @@
       if(!user){return;}
       const frame = frames.find(f=>f.id===frameId);
       if(!frame){return;}
-      if(frame.vip>user.vip){
-        alert(`Cần VIP ${frame.vip} để mở khóa.`);
+      if(ensureFrameInventory(user)){saveUsersDB(db);}
+      if(user.framesOwned.includes(frame.id)){
+        alert('Bạn đã sở hữu khung này. Hãy dùng nút Áp dụng.');
         return;
       }
       if(frame.price>user.coins){
         alert('Không đủ xu.');
         return;
       }
-      if(user.frameId!==frame.id){
-        user.coins -= frame.price;
-        user.frameId = frame.id;
-        saveUsersDB(db);
-        loadSessionData();
-        renderStore();
-        alert('Đã áp dụng khung mới!');
+      user.coins -= frame.price;
+      user.framesOwned.push(frame.id);
+      user.frameId = frame.id;
+      saveUsersDB(db);
+      loadSessionData();
+      renderStore();
+      alert('Đã mua và áp dụng khung mới!');
+    }
+
+    function applyFrame(frameId){
+      const email = getSession();
+      if(!email){alert('Vui lòng đăng nhập.');return;}
+      const db = getUsersDB();
+      const user = db[email];
+      if(!user){return;}
+      const frame = frames.find(f=>f.id===frameId);
+      if(!frame){return;}
+      if(ensureFrameInventory(user)){saveUsersDB(db);}
+      if(!user.framesOwned.includes(frame.id)){
+        alert('Bạn cần mua khung này trước.');
+        return;
       }
+      if(user.frameId===frame.id){
+        alert('Bạn đang dùng khung này.');
+        return;
+      }
+      user.frameId = frame.id;
+      saveUsersDB(db);
+      loadSessionData();
+      renderStore();
+      alert('Đã áp dụng khung.');
     }
 
     function switchTab(tab){
@@ -1603,6 +1756,7 @@
       renderStore();
       renderLeaderboard();
       if(user){
+        if(ensureFrameInventory(user)){saveUsersDB(db);}
         ensureFirebaseProfile(user);
         if(accountSheetVisible){refreshAccountSheet();}
       }
@@ -1694,7 +1848,7 @@
 
     function setupFirebase(){
       const chatTab = document.getElementById('chatTab');
-      const chatNavBtn = document.getElementById('accountChatNav');
+      const chatNavBtn = document.getElementById('acctChatItem');
       if(!firebaseReady){
         chatTab.style.display='none';
         if(chatNavBtn) chatNavBtn.hidden = true;
@@ -1770,7 +1924,7 @@
     updateAccountBtn();
     initApp();
 
-    console.log('HB_V16_1_READY');
+    console.log('HB_V16_2_READY');
   </script>
 </body>
 </html>
