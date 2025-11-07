@@ -64,9 +64,10 @@
     .theme-toggle:hover{background:rgba(95,141,255,0.24)}
     .theme-toggle:focus-visible{outline:3px solid rgba(95,141,255,0.45)}
     .theme-toggle *{pointer-events:none}
-    header{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);background:rgba(10,16,30,0.86);border-bottom:1px solid rgba(255,255,255,0.05);transition:background .3s ease}
-    body[data-theme="light"] header{background:rgba(242,245,255,0.85);border-bottom:1px solid rgba(20,30,70,0.08)}
-    .nav-wrap{max-width:1100px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:14px}
+    #navbar{position:sticky;top:0;z-index:60;backdrop-filter:blur(12px);background:rgba(10,16,30,0.86);border-bottom:1px solid rgba(255,255,255,0.05);transition:background .3s ease,transform .4s ease}
+    #navbar.hide{transform:translateY(-100%)}
+    body[data-theme="light"] #navbar{background:rgba(242,245,255,0.85);border-bottom:1px solid rgba(20,30,70,0.08)}
+    .nav-wrap{max-width:1100px;margin:0 auto;padding:calc(env(safe-area-inset-top) + 12px) 20px 12px;display:flex;align-items:center;gap:14px}
     .logo{font-weight:700;font-size:1.1rem;letter-spacing:.04em}
     .nav-buttons{display:flex;align-items:center;gap:10px;margin-left:20px;flex-wrap:wrap}
     .nav-button{background:var(--accent-soft);color:var(--accent);padding:8px 14px;border-radius:10px;box-shadow:none;transition:background .2s ease,color .2s ease}
@@ -81,16 +82,25 @@
     #accountBtn.frame-ice{border:1px solid rgba(122,170,255,0.5);box-shadow:0 0 24px rgba(122,170,255,0.35)}
     #accountBtn.frame-sakura{border:1px solid rgba(255,143,177,0.6);box-shadow:0 0 22px rgba(255,143,177,0.35)}
     #accountBtn.frame-festival999{border:1px solid transparent;box-shadow:0 0 28px rgba(255,180,232,0.45)}
-    main{max-width:1100px;margin:0 auto;padding:24px 20px 80px;display:grid;gap:32px}
+    main{max-width:1100px;margin:0 auto;padding:24px 20px calc(80px + env(safe-area-inset-bottom));display:grid;gap:32px}
     section{display:none;animation:fadeIn .4s ease forwards}
     section.active{display:block}
     @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-    @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+    @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}.bg-anim{opacity:.12}}
     .card{background:var(--card);border-radius:20px;padding:24px;box-shadow:var(--shadow);border:1px solid var(--border);position:relative;overflow:hidden}
     .card h2{margin-top:0;margin-bottom:16px}
     .grid{display:grid;gap:20px}
     .grid.two{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
     .muted{color:var(--muted)}
+    .bg-anim{position:absolute;inset:0;filter:blur(70px);opacity:.25;pointer-events:none;transition:opacity .4s ease}
+    .neon-green{background:radial-gradient(circle at 20% 30%,#29ffb4,#003);animation:m1 10s linear infinite}
+    .neon-pink{background:radial-gradient(circle at 80% 40%,#ff55ff,#002);animation:m2 9s linear infinite}
+    .neon-gold{background:radial-gradient(circle at 40% 60%,#ffd36b,#221);animation:m3 12s linear infinite}
+    .neon-violet{background:radial-gradient(circle at 70% 30%,#8f7bff,#112);animation:m4 11s linear infinite}
+    @keyframes m1{50%{background-position:80% 70%}}
+    @keyframes m2{50%{background-position:20% 30%}}
+    @keyframes m3{50%{background-position:60% 20%}}
+    @keyframes m4{50%{background-position:30% 80%}}
     .home-hero{position:relative;overflow:hidden;padding:36px 28px}
     .home-hero::before{content:"";position:absolute;inset:-30%;background:radial-gradient(circle at top right,rgba(95,141,255,0.5),rgba(15,24,46,0) 55%);filter:blur(0);opacity:.7}
     .home-hero::after{content:"";position:absolute;inset:-20%;background:radial-gradient(circle at bottom left,rgba(122,255,214,0.35),rgba(12,18,32,0) 50%);mix-blend-mode:screen;opacity:.8}
@@ -145,7 +155,9 @@
     .bank-card{padding:14px 16px;border-radius:14px;background:rgba(95,141,255,0.08);border:1px solid rgba(95,141,255,0.18)}
     .bank-card .han{font-weight:700;font-size:1.1rem}
     .status-line{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
-    .stat-box{background:rgba(255,255,255,0.05);padding:10px 16px;border-radius:12px}
+    .stat-box{background:rgba(255,255,255,0.05);padding:10px 16px;border-radius:12px;transition:box-shadow .3s ease}
+    .stat-box.glow{box-shadow:0 0 0 2px rgba(255,215,0,0.4),0 0 24px rgba(255,215,0,0.35)}
+    #streakStat.glow::after{content:'✨';margin-left:8px}
     .list-clean{list-style:none;padding:0;margin:0;display:grid;gap:6px}
     .store-grid{display:grid;gap:18px;margin-top:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
     .store-item{padding:20px;border-radius:20px;background:rgba(95,141,255,0.08);border:1px solid rgba(95,141,255,0.18);display:grid;gap:14px;align-content:start}
@@ -163,16 +175,16 @@
     @keyframes snow{to{transform:translateY(170px) translateX(-10px);opacity:.25}}
     .petal{position:absolute;top:-10px;width:10px;height:6px;background:#ffc0d0;border-radius:10px 10px 10px 2px;animation:petal 5.5s ease-in infinite}
     @keyframes petal{50%{transform:translate(12px,70px) rotate(180deg)}100%{transform:translate(-6px,150px) rotate(360deg);opacity:.12}}
-    #authModal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:90;background:rgba(0,0,0,.6);backdrop-filter:blur(8px)}
-    #authModal[hidden]{display:none!important}
-    #authCard{max-width:420px;width:calc(100% - 24px);background:var(--card);border:1px solid #213055;border-radius:16px;overflow:hidden}
-    @media(max-width:640px){#authModal{align-items:flex-end}#authCard{border-radius:16px 16px 0 0;animation:sheetIn .22s ease}}
-    @keyframes sheetIn{from{transform:translateY(16px)}to{transform:translateY(0)}}
-    .auth-header{display:flex}
-    .auth-tab{flex:1;padding:14px 0;text-align:center;background:rgba(255,255,255,0.06);cursor:pointer;color:var(--muted);font-weight:600;border:none}
-    .auth-tab.active{background:var(--accent);color:#fff}
-    .auth-body{padding:20px;display:grid;gap:12px}
-    .auth-body form{display:grid;gap:12px}
+    .modal-shell{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:95;background:rgba(10,12,20,.72);backdrop-filter:blur(10px)}
+    .modal-shell[hidden]{display:none!important}
+    .modal-card{max-width:420px;width:calc(100% - 24px);background:var(--card);border:1px solid #213055;border-radius:20px;padding:24px;display:grid;gap:16px;position:relative}
+    .modal-card h3{margin:0}
+    .modal-close{position:absolute;top:14px;right:14px;background:rgba(255,255,255,0.08);color:var(--text);box-shadow:none;padding:6px 10px;border-radius:10px}
+    .modal-close:hover{background:rgba(255,255,255,0.12)}
+    .modal-switch{color:var(--accent);background:transparent;box-shadow:none;padding:0;text-decoration:underline;cursor:pointer}
+    @media(max-width:640px){.modal-shell{align-items:flex-end}.modal-card{border-radius:20px 20px 0 0;animation:sheetIn .22s ease}}
+    @keyframes sheetIn{from{transform:translateY(18px)}to{transform:translateY(0)}}
+    #codeSheet .modal-card{max-width:360px}
     #accountSheet{position:fixed;inset:0;display:none;z-index:95;background:rgba(10,12,20,.6);backdrop-filter:blur(10px)}
     #accountSheet[hidden]{display:none!important}
     .account-backdrop{position:absolute;inset:0}
@@ -180,16 +192,20 @@
     #accountPanel.open{transform:translateX(0)}
     #acctNav{background:linear-gradient(180deg,#0c1326,#0a1122);border-right:1px solid #203055;padding:10px;display:flex;flex-direction:column;gap:10px;overflow:auto}
     .acct-item{border-radius:16px;padding:12px 14px;border:1px solid #223255;background:#0c1428;cursor:pointer;display:flex;align-items:center;gap:8px;font-weight:600;color:var(--text);transition:transform .2s ease,box-shadow .2s ease}
+    .acct-item .acct-icon{font-size:1.1rem}
     .acct-item:hover{transform:translateY(-1px);box-shadow:0 10px 28px rgba(9,15,33,0.35)}
     .acct-item[aria-selected="true"]{border-color:var(--accent);box-shadow:0 0 0 2px rgba(77,163,255,.15) inset}
     #acctBody{padding:16px;overflow:auto;display:grid;align-content:start;gap:20px}
-    .acct-page{display:none;gap:18px}
+    .acct-page{display:none;gap:18px;position:relative;overflow:hidden}
+    .acct-page > :not(.bg-anim){position:relative;z-index:1}
     .acct-page.active{display:grid}
     .acct-page h3{margin:0}
     .acct-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:12px;margin-bottom:12px;border-bottom:1px solid var(--border);position:sticky;top:0;background:inherit;z-index:2}
     .account-note{font-size:.95rem;color:var(--muted);border:1px dashed var(--border);padding:12px 14px;border-radius:12px}
     .account-inline{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
     .account-stat{background:rgba(255,255,255,0.05);padding:10px 14px;border-radius:12px}
+    .upload-json{display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border-radius:12px;border:1px dashed var(--border);background:rgba(255,255,255,0.04);cursor:pointer;gap:8px;color:var(--text)}
+    .upload-json:hover{background:rgba(255,255,255,0.07)}
     .profile-header{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
     .profile-header .avatar-wrap{margin:0}
     @media(max-width:820px){
@@ -197,6 +213,8 @@
       #acctNav{flex-direction:row;position:sticky;top:0;z-index:1;background:var(--card);border-right:0;border-bottom:1px solid #203055}
       .acct-item{flex:1;white-space:nowrap}
     }
+    .status-chip{position:fixed;right:16px;bottom:calc(env(safe-area-inset-bottom) + 16px);padding:8px 14px;border-radius:999px;background:rgba(12,20,36,0.85);border:1px solid rgba(95,141,255,0.25);font-size:.85rem;color:var(--muted);display:inline-flex;align-items:center;gap:6px;z-index:80;box-shadow:0 12px 28px rgba(5,10,20,0.35)}
+    .status-chip.online{color:#38ef7d;border-color:rgba(56,239,125,0.4)}
     #translateModal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:70;background:rgba(0,0,0,0.55);backdrop-filter:blur(8px)}
     #translateModal[hidden]{display:none!important}
     #translateCard{max-width:520px;width:calc(100% - 32px);background:var(--card);border-radius:20px;border:1px solid var(--border);padding:24px;display:grid;gap:16px}
@@ -214,6 +232,8 @@
     .tab-intro{margin-bottom:16px}
     .tab-desc{display:none;padding:14px 18px;border-radius:16px;background:rgba(95,141,255,0.12);border:1px solid var(--border);color:var(--muted);font-size:.95rem}
     .tab-desc.active{display:block;color:var(--text)}
+    .tab-panel{position:relative;overflow:hidden}
+    .tab-panel > :not(.bg-anim){position:relative;z-index:1}
     .leaderboard-tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
     .leaderboard-panel{display:none}
     .leaderboard-panel.active{display:block}
@@ -230,14 +250,10 @@
     .footer-links a:hover{text-decoration:underline}
     .download-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
     .download-row .pill{margin:0;background:var(--accent-soft);color:var(--accent)}
-    #tabReview,#tabPractice{position:relative;overflow:hidden;z-index:0}
-    #tabReview::before,#tabPractice::before{content:"";position:absolute;inset:-25%;border-radius:40%;background:radial-gradient(circle at 20% 20%,rgba(122,170,255,0.28),transparent 60%),radial-gradient(circle at 80% 60%,rgba(255,122,182,0.24),transparent 62%);filter:blur(80px);opacity:.35;pointer-events:none;z-index:-1;animation:slowPulse 16s ease-in-out infinite}
-    @keyframes slowPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
-    @media(prefers-reduced-motion:reduce){#tabReview::before,#tabPractice::before{opacity:.18;animation:none}}
   </style>
 </head>
 <body>
-  <header>
+  <header id="navbar">
     <div class="nav-wrap">
       <div class="logo">HoCCL</div>
       <div class="nav-buttons">
@@ -392,6 +408,7 @@
         <div class="tab-desc" data-tab-desc="bank">Tổng hợp từ vựng và câu đã học, hỗ trợ ẩn/hiện pinyin và thu gọn linh hoạt.</div>
         <div class="tab-desc" data-tab-desc="chat">Kết nối bạn bè qua Firebase để trò chuyện realtime ngay trong ứng dụng.</div>
         <div id="tabReview" class="tab-panel">
+          <div class="bg-anim neon-green" aria-hidden="true"></div>
           <div class="review-display">
             <div class="hanzi" id="reviewHan">你好</div>
             <div class="pinyin" id="reviewPin">nǐ hǎo</div>
@@ -415,11 +432,12 @@
           </div>
         </div>
         <div id="tabPractice" class="tab-panel" hidden>
+          <div class="bg-anim neon-pink" aria-hidden="true"></div>
           <div class="status-line">
             <div class="stat-box">⏱️ <span id="practiceTimer">60</span>s</div>
             <div class="stat-box">Đúng: <span id="practiceCorrect">0</span></div>
             <div class="stat-box">Sai: <span id="practiceWrong">0</span></div>
-            <div class="stat-box">Chuỗi: <span id="practiceStreak">0</span></div>
+            <div class="stat-box" id="streakStat">Chuỗi: <span id="practiceStreak">0</span></div>
             <div class="stat-box">Độ chính xác: <span id="practiceAccuracy">0%</span></div>
           </div>
           <div style="margin-top:18px" class="pill-row">
@@ -460,6 +478,7 @@
           </div>
         </div>
         <div id="tabBank" class="tab-panel" hidden>
+          <div class="bg-anim neon-gold" aria-hidden="true"></div>
           <div class="review-actions" style="margin-bottom:12px">
             <button class="ghost-btn" data-action="toggleBankPinyin">Hiện pinyin</button>
             <button class="ghost-btn" data-action="toggleAllBank">Thu gọn/Mở rộng tất cả</button>
@@ -476,6 +495,7 @@
           </div>
         </div>
         <div id="tabChat" class="tab-panel" hidden>
+          <div class="bg-anim neon-violet" aria-hidden="true"></div>
           <div id="chatUnavailable" class="muted">Bật khi cấu hình Firebase.</div>
           <div id="chatOnline" hidden>
             <div class="input-group">
@@ -493,25 +513,42 @@
     </section>
   </main>
 
-  <div id="authModal" hidden>
-    <div id="authCard">
-      <div class="auth-header">
-        <button class="auth-tab" id="tabLogin" aria-selected="true" data-auth="login">Đăng nhập</button>
-        <button class="auth-tab" id="tabRegister" aria-selected="false" data-auth="register">Đăng ký</button>
-      </div>
-      <div class="auth-body">
-        <form id="formLogin">
-          <input type="email" id="loginEmail" placeholder="Email" required autocomplete="email">
-          <input type="password" id="loginPassword" placeholder="Mật khẩu" required autocomplete="current-password">
-          <button type="submit">Đăng nhập</button>
-        </form>
-        <form id="formRegister" hidden>
-          <input type="text" id="signupName" placeholder="Tên hiển thị" required>
-          <input type="email" id="signupEmail" placeholder="Email" required autocomplete="email">
-          <input type="password" id="signupPassword" placeholder="Mật khẩu" required autocomplete="new-password">
-          <button type="submit">Tạo tài khoản</button>
-        </form>
-      </div>
+  <div class="modal-shell" id="loginModal" hidden>
+    <div class="modal-card" data-modal-card="login">
+      <button class="modal-close" data-action="closeLogin" aria-label="Đóng">×</button>
+      <h3>Đăng nhập HoCCL</h3>
+      <form id="formLogin" class="grid">
+        <input type="email" id="loginEmail" placeholder="Email" required autocomplete="email">
+        <input type="password" id="loginPassword" placeholder="Mật khẩu" required autocomplete="current-password">
+        <button type="submit">Đăng nhập</button>
+      </form>
+      <div class="muted">Chưa có tài khoản? <button class="modal-switch" data-action="openRegister">Tạo mới</button></div>
+    </div>
+  </div>
+
+  <div class="modal-shell" id="registerModal" hidden>
+    <div class="modal-card" data-modal-card="register">
+      <button class="modal-close" data-action="closeRegister" aria-label="Đóng">×</button>
+      <h3>Đăng ký HoCCL</h3>
+      <form id="formRegister" class="grid">
+        <input type="text" id="signupName" placeholder="Tên hiển thị" required autocomplete="name">
+        <input type="email" id="signupEmail" placeholder="Email" required autocomplete="email">
+        <input type="password" id="signupPassword" placeholder="Mật khẩu" required autocomplete="new-password">
+        <button type="submit">Đăng ký</button>
+      </form>
+      <div class="muted">Đã có tài khoản? <button class="modal-switch" data-action="openLogin">Đăng nhập</button></div>
+    </div>
+  </div>
+
+  <div class="modal-shell" id="codeSheet" hidden>
+    <div class="modal-card" data-modal-card="code">
+      <button class="modal-close" data-action="closeCode" aria-label="Đóng">×</button>
+      <h3>Mã truy cập</h3>
+      <p class="muted">Nhập mã do admin cung cấp để kích hoạt toàn bộ nội dung học.</p>
+      <form id="codeForm" class="grid">
+        <input type="text" id="codeInput" placeholder="Nhập mã truy cập" autocomplete="off">
+        <button type="submit">Kích hoạt</button>
+      </form>
     </div>
   </div>
 
@@ -521,7 +558,7 @@
       <nav id="acctNav">
         <button class="acct-item" data-acct="profile" aria-selected="true">Hồ sơ &amp; Cài đặt</button>
         <button class="acct-item" data-acct="utils" data-requires-activation="true">Tiện ích</button>
-        <button class="acct-item" data-acct="store" data-requires-activation="true">Cửa hàng khung</button>
+        <button class="acct-item" data-acct="store" data-requires-activation="true"><span class="acct-icon" aria-hidden="true">🛒</span><span>Cửa hàng khung</span></button>
         <button class="acct-item" data-acct="access">Mã truy cập</button>
         <button class="acct-item" data-acct="chat" id="acctChatItem" hidden>Bạn bè &amp; Chat</button>
       </nav>
@@ -580,6 +617,7 @@
           <button class="ghost-btn" data-action="logout">Đăng xuất</button>
         </section>
         <section id="pageUtilities" class="acct-page" data-acct-page="utils">
+          <div class="bg-anim neon-violet" aria-hidden="true"></div>
           <div class="account-note">Tiện ích mở nhanh giúp bạn dịch câu và xem thông tin quan trọng mà không rời khỏi bài học.</div>
           <div class="account-inline">
             <div class="account-stat">Email: <span id="utilitiesEmail">-</span></div>
@@ -590,8 +628,13 @@
             <button data-action="openTranslate" class="ghost-btn">🌐 Mở bộ dịch ZH↔VI</button>
             <div class="account-stat" style="flex:1">Trạng thái VIP: <strong id="utilitiesVip">VIP0</strong> · Xu: <strong id="utilitiesCoins">0</strong></div>
           </div>
+          <div class="grid two">
+            <button data-action="exportProgress" class="ghost-btn">⬇️ Xuất tiến độ JSON</button>
+            <label class="upload-json">⬆️ Nhập tiến độ JSON<input type="file" id="importProgress" accept="application/json" hidden></label>
+          </div>
         </section>
         <section id="pageStoreFrames" class="acct-page" data-acct-page="store">
+          <div class="bg-anim neon-gold" aria-hidden="true"></div>
           <div class="account-note">Coins do admin nạp; VIP chỉ do admin kích hoạt. Chọn khung yêu thích để làm nổi bật avatar của bạn.</div>
           <div class="account-stat">Xu hiện tại: <span id="storeCoinsAccount">0</span></div>
           <div class="store-grid" id="storeGridAccount"></div>
@@ -631,6 +674,8 @@
     </div>
   </div>
 
+  <div class="status-chip" id="statusChip">● Offline local</div>
+
   <script>
     const FB = {
       apiKey: "PASTE_API_KEY",
@@ -639,7 +684,7 @@
       projectId: "PASTE_PROJECT_ID",
       appId: "PASTE_APP_ID",
     };
-    const OWNER_EMAIL = "owner@hanzi.bridge";
+    const OWNER_EMAIL = "owner@hoccl.app";
     const ACT_CODE = ['HOC','MET','VCL','_CO','DE','123'].join('');
     const frames = [
       {id:'basic',name:'Khung cơ bản',price:0,ring:'basic',fx:'none'},
@@ -647,6 +692,19 @@
       {id:'sakura',name:'Khung Sakura',price:300,ring:'sakura',fx:'petal'},
       {id:'festival999',name:'Festival 999',price:999,ring:'festival999',fx:'none'}
     ];
+
+    const statusChip = document.getElementById('statusChip');
+    function setStatusChip(online){
+      if(!statusChip){return;}
+      if(online){
+        statusChip.textContent = '● Online Firebase';
+        statusChip.classList.add('online');
+      } else {
+        statusChip.textContent = '● Offline local';
+        statusChip.classList.remove('online');
+      }
+    }
+    setStatusChip(false);
 
     const navButtons = document.querySelectorAll('.nav-button');
     const sections = {
@@ -664,6 +722,19 @@
       setTheme(next);
     });
     setTheme(localStorage.getItem('hb:theme')||'dark');
+
+    let __y = 0;
+    addEventListener('scroll',()=>{
+      const y = scrollY;
+      const bar = document.querySelector('#navbar');
+      if(!bar){__y = y;return;}
+      if(y>__y+20){
+        bar.classList.add('hide');
+      } else if(y<__y-10){
+        bar.classList.remove('hide');
+      }
+      __y = y;
+    },{passive:true});
 
     function applyNavActive(hash){
       navButtons.forEach(btn=>{
@@ -717,31 +788,71 @@
       animatedEls.forEach(el=>observer.observe(el));
     }
 
-    (()=>{const m=document.getElementById('authModal'),c=document.getElementById('authCard');if(!m||!c)return;
-      const close=()=>{m.style.display='none';m.setAttribute('hidden','')}, open=()=>{m.style.display='flex';m.removeAttribute('hidden')};
-      m.addEventListener('click',e=>{if(e.target===m)close()});
-      let sy=0,dy=0,drag=false;
-      c.addEventListener('touchstart',e=>{sy=e.touches[0].clientY;dy=0;drag=true;c.style.transition='none'},{passive:true});
-      c.addEventListener('touchmove',e=>{if(!drag)return;dy=e.touches[0].clientY-sy;if(dy>0)c.style.transform=`translateY(${dy}px)`},{passive:true});
-      c.addEventListener('touchend',()=>{if(!drag)return;drag=false;if(dy>90)close();else{c.style.transition='transform .18s';c.style.transform=''}})
-      window.__openAuthModal=open; window.__closeAuthModal=close;
-    })();
+    const loginModal = document.getElementById('loginModal');
+    const registerModal = document.getElementById('registerModal');
+    const codeSheet = document.getElementById('codeSheet');
 
-    function openAuth(){ window.__openAuthModal && window.__openAuthModal(); }
-    function closeAuth(){ window.__closeAuthModal && window.__closeAuthModal(); }
-
-    function selectAuthTab(tab){
-      const isReg = tab==='register';
-      document.getElementById('tabLogin').setAttribute('aria-selected', String(!isReg));
-      document.getElementById('tabRegister').setAttribute('aria-selected', String(isReg));
-      document.getElementById('formLogin').hidden = isReg;
-      document.getElementById('formRegister').hidden = !isReg;
-      document.getElementById('tabLogin').classList.toggle('active', !isReg);
-      document.getElementById('tabRegister').classList.toggle('active', isReg);
+    function showModal(modal){
+      if(!modal) return;
+      modal.style.display = 'flex';
+      modal.removeAttribute('hidden');
     }
-    document.getElementById('tabLogin').addEventListener('click',()=>selectAuthTab('login'));
-    document.getElementById('tabRegister').addEventListener('click',()=>selectAuthTab('register'));
-    selectAuthTab('login');
+
+    function hideModal(modal){
+      if(!modal) return;
+      modal.style.display = 'none';
+      modal.setAttribute('hidden','');
+    }
+
+    function closeLoginModal(){ hideModal(loginModal); }
+    function closeRegisterModal(){ hideModal(registerModal); }
+    function closeCodeSheet(){ hideModal(codeSheet); pendingAppAccess = false; }
+
+    function focusFirstInput(modal){
+      if(!modal) return;
+      const input = modal.querySelector('input');
+      if(input){
+        setTimeout(()=>{try{input.focus({preventScroll:true});}catch{}},120);
+      }
+    }
+
+    function openLoginModal(){
+      closeRegisterModal();
+      showModal(loginModal);
+      focusFirstInput(loginModal);
+    }
+
+    function openRegisterModal(){
+      closeLoginModal();
+      showModal(registerModal);
+      const form = registerModal ? registerModal.querySelector('form') : null;
+      if(form){form.reset();}
+      focusFirstInput(registerModal);
+    }
+
+    function openCodeSheet(){
+      showModal(codeSheet);
+      const input = document.getElementById('codeInput');
+      if(input){
+        input.value='';
+        focusFirstInput(codeSheet);
+      }
+    }
+
+    function setupModalShell(modal, closeFn){
+      if(!modal) return;
+      modal.addEventListener('click',e=>{ if(e.target===modal){ closeFn(); } });
+      const card = modal.querySelector('.modal-card');
+      if(!card) return;
+      let startY=0, delta=0, dragging=false;
+      card.addEventListener('touchstart',e=>{startY=e.touches[0].clientY;delta=0;dragging=true;card.style.transition='none';},{passive:true});
+      card.addEventListener('touchmove',e=>{if(!dragging)return;delta=e.touches[0].clientY-startY;if(delta>0){card.style.transform=`translateY(${delta}px)`;}},{passive:true});
+      card.addEventListener('touchend',()=>{if(!dragging)return;dragging=false;if(delta>90){closeFn();}else{card.style.transition='transform .18s';card.style.transform='';}});
+    }
+
+    setupModalShell(loginModal, closeLoginModal);
+    setupModalShell(registerModal, closeRegisterModal);
+    setupModalShell(codeSheet, closeCodeSheet);
 
     async function sha256(str){
       const enc = new TextEncoder();
@@ -818,6 +929,7 @@
 
     function initFirebaseCore(){
       if(!firebaseReady || firebaseInitialized){
+        if(!firebaseReady){setStatusChip(false);} else if(firebaseInitialized){setStatusChip(true);}
         updateChatAvailability(usingFirebase());
         return;
       }
@@ -827,6 +939,7 @@
         firebaseAuth = firebase.app().auth();
         firebaseDb = firebase.app().database();
         firebaseInitialized = true;
+        setStatusChip(true);
         firebaseDb.ref('profiles').on('value', snap=>{profilesCache = snap.val()||{};});
         subscribeScores();
         firebaseAuth.onAuthStateChanged(user=>{
@@ -850,6 +963,7 @@
         });
       }catch(err){
         console.error('Firebase init failed', err);
+        setStatusChip(false);
         updateChatAvailability(false);
       }
     }
@@ -1048,7 +1162,8 @@
       if(email){
         openAccountSheet('profile');
       } else {
-        openAuth();
+        pendingAppAccess = false;
+        openLoginModal();
       }
     });
 
@@ -1058,7 +1173,11 @@
         if(!firebaseAuth){return;}
         try{
           await firebaseAuth.signInWithEmailAndPassword(email,pwd);
-          closeAuth();
+          closeLoginModal();
+          if(pendingAppAccess){
+            window.location.hash = '#app';
+            showSection('#app');
+          }
         }catch(err){
           alert('Đăng nhập thất bại: '+(err?.message||'Vui lòng thử lại.'));
         }
@@ -1069,10 +1188,15 @@
       const hash = await sha256(pwd);
       if(hash!==db[email].passHash){alert('Sai mật khẩu');return;}
       setSession(email);
-      closeAuth();
+      closeLoginModal();
       loadSessionData();
       updateAccountBtn();
-      guardAppAccess();
+      if(pendingAppAccess){
+        window.location.hash = '#app';
+        showSection('#app');
+      } else {
+        guardAppAccess();
+      }
     }
 
     async function handleRegister(name,email,pwd){
@@ -1094,7 +1218,7 @@
             frameId: 'basic'
           });
           await firebaseDb.ref(`frames/${cred.user.uid}/owned/basic`).set(true);
-          closeAuth();
+          closeRegisterModal();
         }catch(err){
           alert('Đăng ký thất bại: '+(err?.message||'Vui lòng thử lại.'));
         }
@@ -1113,7 +1237,8 @@
       };
       saveUsersDB(db);
       alert('Đăng ký thành công, mời đăng nhập.');
-      selectAuthTab('login');
+      closeRegisterModal();
+      openLoginModal();
     }
 
     document.getElementById('formLogin').addEventListener('submit',async e=>{
@@ -1137,6 +1262,7 @@
     const accountNav = document.getElementById('acctNav');
     const acctBody = document.getElementById('acctBody');
     let accountSheetVisible = false;
+    let pendingAppAccess = false;
 
     function isActivated(){
       if(usingFirebase()){
@@ -1221,7 +1347,7 @@
 
     function openAccountSheet(page='profile'){
       const email = getSession();
-      if(!email){openAuth();return;}
+      if(!email){openLoginModal();return;}
       if(accountSheetVisible){
         refreshAccountSheet();
         renderStore();
@@ -1249,21 +1375,34 @@
 
     function requireActivation(){
       if(isActivated()){return true;}
-      const code = prompt('Nhập mã truy cập HoCCL');
-      if(code===ACT_CODE){
-        if(usingFirebase() && firebaseDb){
+      openCodeSheet();
+      return false;
+    }
+
+    function applyActivationCode(code){
+      const cleaned = (code||'').trim();
+      if(!cleaned){return false;}
+      if(cleaned===ACT_CODE){
+        const wasPending = pendingAppAccess;
+        if(usingFirebase() && firebaseDb && firebaseAuthUser){
           firebaseDb.ref(`profiles/${firebaseAuthUser.uid}`).update({activated:true});
-          localStorage.setItem('hb:activated','1');
-        } else {
-          localStorage.setItem('hb:activated','1');
         }
+        localStorage.setItem('hb:activated','1');
         updateActivationStatus();
         renderStore();
         refreshAccountSheet();
+        closeCodeSheet();
+        pendingAppAccess = wasPending;
         alert('Đã kích hoạt thành công!');
+        renderOnlineLeaderboard();
+        if(wasPending){
+          pendingAppAccess = false;
+          window.location.hash = '#app';
+          showSection('#app');
+        }
         return true;
       }
-      if(code!==null){alert('Sai mã truy cập');}
+      alert('Sai mã truy cập');
       return false;
     }
 
@@ -1365,6 +1504,7 @@
       }
       chatId = null;
       setSession('');
+      pendingAppAccess = false;
       updateAccountBtn();
       loadSessionData();
       closeAccountSheet();
@@ -1406,39 +1546,41 @@
       refreshAccountSheet();
     });
 
-    document.getElementById('accessForm').addEventListener('submit',async e=>{
+    document.getElementById('accessForm').addEventListener('submit',e=>{
       e.preventDefault();
       const code = document.getElementById('accessCodeInput').value.trim();
-      if(code===ACT_CODE){
-        if(usingFirebase() && firebaseDb){
-          await firebaseDb.ref(`profiles/${firebaseAuthUser.uid}`).update({activated:true});
-          localStorage.setItem('hb:activated','1');
-        } else {
-          localStorage.setItem('hb:activated','1');
-        }
-        updateActivationStatus();
-        renderStore();
-        refreshAccountSheet();
-        alert('Đã kích hoạt thành công!');
-      } else {
-        alert('Sai mã truy cập');
-      }
+      if(!code){alert('Nhập mã truy cập');return;}
+      applyActivationCode(code);
       document.getElementById('accessCodeInput').value='';
     });
+
+    const codeForm = document.getElementById('codeForm');
+    if(codeForm){
+      codeForm.addEventListener('submit',e=>{
+        e.preventDefault();
+        const code = document.getElementById('codeInput').value.trim();
+        if(!code){alert('Nhập mã truy cập');return;}
+        applyActivationCode(code);
+        document.getElementById('codeInput').value='';
+      });
+    }
 
     function guardAppAccess(){
       if(window.location.hash!=='#app'){return;}
       const email = getSession();
       if(!email){
-        openAuth();
+        pendingAppAccess = true;
+        openLoginModal();
         window.location.hash = '#home';
         return;
       }
       if(!isActivated()){
-        if(!requireActivation()){
-          window.location.hash = '#home';
-        }
+        pendingAppAccess = true;
+        openCodeSheet();
+        window.location.hash = '#home';
+        return;
       }
+      pendingAppAccess = false;
     }
 
     function normalizeHan(str){
@@ -1490,7 +1632,7 @@
       {han:'忙',pinyin:'máng',vi:'bận'},
       {han:'难',pinyin:'nán',vi:'khó'},
       {han:'语',pinyin:'yǔ',vi:'ngữ'},
-      {han:'汉',pinyin:'hàn',vi:'Hán'},
+      {han:'汉',pinyin:'Hàn',vi:'Hán'},
       {han:'人',pinyin:'rén',vi:'người'},
       {han:'爸',pinyin:'bà',vi:'ba'},
       {han:'太',pinyin:'tài',vi:'quá'},
@@ -1499,14 +1641,14 @@
       {han:'哥',pinyin:'gē',vi:'anh trai'},
       {han:'妹',pinyin:'mèi',vi:'em gái'},
       {han:'学',pinyin:'xué',vi:'học'},
-      {han:'英',pinyin:'yīng',vi:'Anh'},
-      {han:'得',pinyin:'děi',vi:'phải'},
+      {han:'英',pinyin:'Yīng',vi:'Anh'},
+      {han:'得',pinyin:'de',vi:'phải'},
       {han:'饿',pinyin:'è',vi:'đói'},
       {han:'去',pinyin:'qù',vi:'đi'},
-      {han:'法',pinyin:'fǎ',vi:'Pháp'},
-      {han:'韩',pinyin:'hán',vi:'Hàn'},
+      {han:'法',pinyin:'Fǎ',vi:'Pháp'},
+      {han:'韩',pinyin:'Hán',vi:'Hàn'},
       {han:'国',pinyin:'guó',vi:'quốc'},
-      {han:'日',pinyin:'rì',vi:'Nhật'},
+      {han:'日',pinyin:'Rì',vi:'Nhật'},
       {han:'对',pinyin:'duì',vi:'đúng'},
       {han:'也',pinyin:'yě',vi:'cũng'},
       {han:'天',pinyin:'tiān',vi:'trời'},
@@ -1771,6 +1913,13 @@
         practiceState.streak += 1;
         practiceState.bestStreak = Math.max(practiceState.bestStreak, practiceState.streak);
         document.getElementById('practiceFeedback').textContent = 'Đúng rồi!';
+        if(practiceState.streak>0 && practiceState.streak%5===0){
+          const streakEl = document.getElementById('streakStat');
+          if(streakEl){
+            streakEl.classList.add('glow');
+            setTimeout(()=>streakEl.classList.remove('glow'),800);
+          }
+        }
       } else {
         practiceState.wrong += 1;
         practiceState.streak = 0;
@@ -2170,8 +2319,82 @@
       }
     }
 
+    function exportProgress(){
+      try{
+        const data = {
+          usersDB: getUsersDB(),
+          leaderboard: JSON.parse(localStorage.getItem('hb:leaderboard')||'{}'),
+          activated: localStorage.getItem('hb:activated')==='1',
+          sessionUser: getSession(),
+        };
+        const email = getSession();
+        if(email){
+          data.avatar = localStorage.getItem(`hb:avatar:${email}`)||null;
+        }
+        const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `hocccl-progress-${Date.now()}.json`;
+        document.body.appendChild(a);
+        a.click();
+        requestAnimationFrame(()=>{document.body.removeChild(a);URL.revokeObjectURL(url);});
+      }catch(err){
+        alert('Không thể xuất dữ liệu: '+(err?.message||'vui lòng thử lại.'));
+      }
+    }
+
+    function importProgressFile(file){
+      if(!file){return;}
+      const reader = new FileReader();
+      reader.onload = ()=>{
+        try{
+          const data = JSON.parse(reader.result);
+          if(data.usersDB){localStorage.setItem('usersDB', JSON.stringify(data.usersDB));}
+          if(data.leaderboard){localStorage.setItem('hb:leaderboard', JSON.stringify(data.leaderboard));}
+          if(data.activated){localStorage.setItem('hb:activated','1');} else {localStorage.removeItem('hb:activated');}
+          if(typeof data.sessionUser==='string'){setSession(data.sessionUser.toLowerCase());}
+          const email = getSession();
+          if(email && data.avatar){localStorage.setItem(`hb:avatar:${email}`, data.avatar);}
+          loadSessionData();
+          updateAccountBtn();
+          refreshAccountSheet();
+          renderStore();
+          renderLocalLeaderboard();
+          alert('Đã nhập dữ liệu tiến độ.');
+        }catch(err){
+          alert('Không thể đọc tệp: '+(err?.message||'Dữ liệu không hợp lệ.'));
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    const importInput = document.getElementById('importProgress');
+    if(importInput){
+      importInput.addEventListener('change',e=>{
+        const file = e.target.files && e.target.files[0];
+        if(file){importProgressFile(file);} else {alert('Không có tệp được chọn.');}
+        e.target.value='';
+      });
+    }
+
     function handleAppAction(action, el){
       switch(action){
+        case 'openRegister':
+          openRegisterModal();
+          break;
+        case 'openLogin':
+          openLoginModal();
+          break;
+        case 'closeLogin':
+          closeLoginModal();
+          break;
+        case 'closeRegister':
+          closeRegisterModal();
+          break;
+        case 'closeCode':
+          closeCodeSheet();
+          break;
         case 'toggleMeaning':
           reviewShowMeaning = !reviewShowMeaning;
           renderReview();
@@ -2263,6 +2486,9 @@
           break;
         case 'closeTranslate':
           closeTranslateModal();
+          break;
+        case 'exportProgress':
+          exportProgress();
           break;
       }
     }
@@ -2412,7 +2638,7 @@
         return;
       }
       const actionEl = e.target.closest('[data-action]');
-      if(actionEl && (actionEl.closest('#appSection') || actionEl.closest('#translateModal') || actionEl.closest('#accountSheet'))){
+      if(actionEl && (actionEl.closest('#appSection') || actionEl.closest('#translateModal') || actionEl.closest('#accountSheet') || actionEl.closest('.modal-shell'))){
         handleAppAction(actionEl.dataset.action, actionEl);
       }
     });
@@ -2498,7 +2724,7 @@
     updateAccountBtn();
     initApp();
 
-    console.log('HB_V16_4_READY');
+    console.log('HB_V16_5_READY');
   </script>
 </body>
 </html>
