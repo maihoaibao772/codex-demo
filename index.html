@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
   <meta name="format-detection" content="telephone=no">
-  <title>Hanzi Bridge</title>
+  <title>HoCCL</title>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
@@ -80,7 +80,7 @@
     #accountBtn.frame-basic{border:1px solid rgba(255,255,255,0.12);box-shadow:0 0 0 2px rgba(255,255,255,0.08) inset}
     #accountBtn.frame-ice{border:1px solid rgba(122,170,255,0.5);box-shadow:0 0 24px rgba(122,170,255,0.35)}
     #accountBtn.frame-sakura{border:1px solid rgba(255,143,177,0.6);box-shadow:0 0 22px rgba(255,143,177,0.35)}
-    #accountBtn.frame-festival{border:1px solid transparent;box-shadow:0 0 28px rgba(255,180,232,0.45)}
+    #accountBtn.frame-festival999{border:1px solid transparent;box-shadow:0 0 28px rgba(255,180,232,0.45)}
     main{max-width:1100px;margin:0 auto;padding:24px 20px 80px;display:grid;gap:32px}
     section{display:none;animation:fadeIn .4s ease forwards}
     section.active{display:block}
@@ -150,19 +150,19 @@
     .store-grid{display:grid;gap:18px;margin-top:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
     .store-item{padding:20px;border-radius:20px;background:rgba(95,141,255,0.08);border:1px solid rgba(95,141,255,0.18);display:grid;gap:14px;align-content:start}
     .avatar-wrap{position:relative;width:128px;height:128px;margin:0 auto}
-    .avatar{position:absolute;inset:10px;border-radius:18px;object-fit:cover;width:auto;height:auto;max-width:calc(100% - 20px);max-height:calc(100% - 20px);background:rgba(12,20,36,0.85)}
-    .frame{position:absolute;inset:0;border-radius:22px;pointer-events:none}
-    .frame-basic{box-shadow:0 0 0 3px #ffffff22 inset,0 0 16px #ffffff18}
-    .frame-ice{background:linear-gradient(180deg,#cfefff,#e9f6ff);box-shadow:0 0 22px #7fc8ff55 inset,0 0 28px #7fc8ff44}
-    .frame-sakura{background:conic-gradient(from 30deg,#ffbad2,#ffd6e6,#ffeef4,#ffd6e6,#ffbad2);box-shadow:0 0 20px #ff9bb977}
-    .frame-festival{background:radial-gradient(closest-side at 20% 20%,#ff8cc6 0 30%,#0000 32%),radial-gradient(closest-side at 80% 20%,#7aa6ff 0 28%,#0000 30%),radial-gradient(closest-side at 50% 80%,#ffd37a 0 34%,#0000 36%),conic-gradient(from 0deg,#ff7ab6,#7aa2ff,#7affc6,#ffec7a,#ff7ab6);-webkit-mask:radial-gradient(closest-side,transparent 64%,#000 66%);mask:radial-gradient(closest-side,transparent 64%,#000 66%);animation:ringSpin 8s linear infinite;box-shadow:0 0 18px #ffb0e855,0 0 24px #7aa2ff44 inset}
-    @keyframes ringSpin{to{transform:rotate(1turn)}}
+    .avatar{position:absolute;inset:12px;border-radius:18px;object-fit:cover;width:auto;height:auto;max-width:calc(100% - 24px);max-height:calc(100% - 24px);background:rgba(12,20,36,0.85)}
+    .frame{position:absolute;inset:0;border-radius:22px;pointer-events:none;-webkit-mask:radial-gradient(closest-side,transparent 66%,#000 68%);mask:radial-gradient(closest-side,transparent 66%,#000 68%)}
     .fx-layer{position:absolute;inset:0;overflow:hidden;border-radius:22px;pointer-events:none}
-    .snow{position:absolute;top:-8px;left:0;width:6px;height:6px;border-radius:50%;background:#fff8;filter:blur(.5px);animation:snow 6s linear infinite}
-    @keyframes snow{to{transform:translateY(160px) translateX(-12px);opacity:.2}}
-    .petal{position:absolute;top:-10px;width:10px;height:6px;background:#ffc0d0;border-radius:10px 10px 10px 2px;transform-origin:50% 50%;animation:petal 5.5s ease-in infinite}
-    @keyframes petal{50%{transform:translate(10px,68px) rotate(180deg)}100%{transform:translate(-6px,150px) rotate(360deg);opacity:.1}}
-    .vip-badge{position:absolute;top:-6px;right:-6px;background:#ffd54a;color:#111;font-weight:700;padding:2px 6px;border-radius:10px;font-size:12px;box-shadow:0 6px 18px rgba(0,0,0,0.35)}
+    .vip-badge{position:absolute;top:-6px;right:-6px;background:#ffd54a;color:#111;font-weight:700;padding:2px 6px;border-radius:10px;font-size:12px}
+    .ring.basic{box-shadow:0 0 0 3px #ffffff22 inset,0 0 18px #ffffff18}
+    .ring.ice{background:linear-gradient(180deg,#cfefff,#e9f6ff);box-shadow:0 0 22px #7fc8ff55 inset,0 0 24px #7fc8ff44}
+    .ring.sakura{background:conic-gradient(from 30deg,#ffbad2,#ffd6e6,#ffeef4,#ffd6e6,#ffbad2);box-shadow:0 0 20px #ff9bb977}
+    .ring.festival999{background:conic-gradient(from 0deg,#ff7ab6,#7aa2ff,#7affc6,#ffec7a,#ff7ab6);animation:ringspin 8s linear infinite;box-shadow:0 0 18px #ffb0e855,0 0 24px #7aa2ff44 inset}
+    @keyframes ringspin{to{transform:rotate(1turn)}}
+    .snow{position:absolute;top:-8px;width:6px;height:6px;border-radius:50%;background:#fff9;filter:blur(.5px);animation:snow 6s linear infinite}
+    @keyframes snow{to{transform:translateY(170px) translateX(-10px);opacity:.25}}
+    .petal{position:absolute;top:-10px;width:10px;height:6px;background:#ffc0d0;border-radius:10px 10px 10px 2px;animation:petal 5.5s ease-in infinite}
+    @keyframes petal{50%{transform:translate(12px,70px) rotate(180deg)}100%{transform:translate(-6px,150px) rotate(360deg);opacity:.12}}
     #authModal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:90;background:rgba(0,0,0,.6);backdrop-filter:blur(8px)}
     #authModal[hidden]{display:none!important}
     #authCard{max-width:420px;width:calc(100% - 24px);background:var(--card);border:1px solid #213055;border-radius:16px;overflow:hidden}
@@ -230,12 +230,16 @@
     .footer-links a:hover{text-decoration:underline}
     .download-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
     .download-row .pill{margin:0;background:var(--accent-soft);color:var(--accent)}
+    #tabReview,#tabPractice{position:relative;overflow:hidden;z-index:0}
+    #tabReview::before,#tabPractice::before{content:"";position:absolute;inset:-25%;border-radius:40%;background:radial-gradient(circle at 20% 20%,rgba(122,170,255,0.28),transparent 60%),radial-gradient(circle at 80% 60%,rgba(255,122,182,0.24),transparent 62%);filter:blur(80px);opacity:.35;pointer-events:none;z-index:-1;animation:slowPulse 16s ease-in-out infinite}
+    @keyframes slowPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+    @media(prefers-reduced-motion:reduce){#tabReview::before,#tabPractice::before{opacity:.18;animation:none}}
   </style>
 </head>
 <body>
   <header>
     <div class="nav-wrap">
-      <div class="logo">Hanzi Bridge</div>
+      <div class="logo">HoCCL</div>
       <div class="nav-buttons">
         <button class="nav-button" data-route="#home">Trang chủ</button>
         <button class="nav-button" data-route="#faq">FAQ</button>
@@ -253,10 +257,10 @@
           <div class="blob b1"></div>
           <div class="blob b2"></div>
           <div class="hash">#HoaiBaoBuild</div>
-          <div class="hash">#HanziBridge</div>
+          <div class="hash">#HoCCL</div>
         </div>
         <div class="pill">Lộ trình chữ Hán</div>
-        <h1 class="home-title">Hanzi Bridge giúp bạn luyện chữ Hán mượt mà và luôn có động lực.</h1>
+        <h1 class="home-title">HoCCL giúp bạn luyện chữ Hán mượt mà và luôn có động lực.</h1>
         <p class="home-sub">Từ ôn tập từ vựng, bài tập tốc độ đến ngân hàng câu linh hoạt – tất cả nằm trong một trang duy nhất, tối ưu cho mobile và an toàn dữ liệu.</p>
         <div class="home-quick">
           <span class="pill">60s Drill</span>
@@ -297,7 +301,7 @@
           <div class="knowledge-card" data-animate>
             <span>🔤</span>
             <h4>Pinyin là gì?</h4>
-            <p class="muted">Pinyin là hệ ký âm Latinh hóa tiếng Hán. Trong Hanzi Bridge, pinyin hiển thị không dấu thanh để bạn nhập nhanh trên di động.</p>
+            <p class="muted">Pinyin là hệ ký âm Latinh hóa tiếng Hán. Trong HoCCL, pinyin luôn đi kèm dấu thanh để phát âm chuẩn và vẫn tối ưu cho di động.</p>
           </div>
           <div class="knowledge-card" data-animate>
             <span>❓</span>
@@ -319,7 +323,7 @@
       <footer id="siteFooter" data-animate>
         <div class="footer-grid">
           <div class="footer-col">
-            <h3>Hanzi Bridge</h3>
+            <h3>HoCCL</h3>
             <p>Cầu nối luyện chữ Hán đa nền tảng, tối ưu cho di động và bảo mật cục bộ.</p>
           </div>
           <div class="footer-col">
@@ -342,7 +346,7 @@
           </div>
           <div class="footer-col">
             <h4>Liên hệ</h4>
-            <p>Email: <a href="mailto:support@hanzibridge.app">support@hanzibridge.app</a></p>
+            <p>Email: <a href="mailto:stingsk662@gmail.com">stingsk662@gmail.com</a></p>
             <div class="download-row">
               <button class="pill">Google Play</button>
               <button class="pill">App Store</button>
@@ -362,7 +366,7 @@
           </div>
           <div class="faq-item">
             <h3>Tại sao cần mã truy cập?</h3>
-            <p>Đây là lớp bảo vệ giúp cộng đồng học tập an toàn. Nhập mã <strong>HOCMETVCL_CODE123</strong> để mở khoá nội dung học.</p>
+            <p>Đây là lớp bảo vệ giúp cộng đồng học tập an toàn. Chỉ những ai được admin cung cấp mã mới mở khoá toàn bộ nội dung học.</p>
           </div>
           <div class="faq-item">
             <h3>Làm sao nhận xu và VIP?</h3>
@@ -390,7 +394,7 @@
         <div id="tabReview" class="tab-panel">
           <div class="review-display">
             <div class="hanzi" id="reviewHan">你好</div>
-            <div class="pinyin" id="reviewPin">ni hao</div>
+            <div class="pinyin" id="reviewPin">nǐ hǎo</div>
             <div class="viet" id="reviewVi">Xin chào</div>
           </div>
           <div class="review-actions" style="margin-top:18px">
@@ -524,7 +528,7 @@
       <div id="acctBody">
         <div class="acct-head">
           <div>
-            <h3 style="margin:0">Bảng điều khiển Hanzi Bridge</h3>
+            <h3 style="margin:0">Bảng điều khiển HoCCL</h3>
             <div class="muted" id="accountEmailLabel">Đăng nhập để quản lý tài khoản.</div>
           </div>
           <button class="ghost-btn" data-action="closeAccount">Đóng</button>
@@ -533,7 +537,7 @@
           <div class="profile-header">
             <div class="avatar-wrap" id="profileAvatarWrap">
               <img class="avatar" id="profileAvatar" alt="Ảnh đại diện">
-              <div class="frame frame-basic" id="profileFrameRing"></div>
+              <div class="frame ring basic" id="profileFrameRing"></div>
               <div class="fx-layer" id="profileFxLayer"></div>
               <div class="vip-badge" id="vipBadge" hidden>VIP</div>
             </div>
@@ -593,7 +597,7 @@
           <div class="store-grid" id="storeGridAccount"></div>
         </section>
         <section id="pageAccess" class="acct-page" data-acct-page="access">
-          <div class="account-note">Nhập hoặc đổi mã truy cập để mở toàn bộ trải nghiệm học Hanzi Bridge.</div>
+          <div class="account-note">Nhập hoặc đổi mã truy cập để mở toàn bộ trải nghiệm học HoCCL.</div>
           <form id="accessForm" class="grid">
             <input type="text" id="accessCodeInput" placeholder="Nhập mã truy cập" autocomplete="off">
             <button type="submit">Kích hoạt</button>
@@ -636,12 +640,12 @@
       appId: "PASTE_APP_ID",
     };
     const OWNER_EMAIL = "owner@hanzi.bridge";
-    const ACT_CODE = 'HOCMETVCL_CODE123';
+    const ACT_CODE = ['HOC','MET','VCL','_CO','DE','123'].join('');
     const frames = [
-      {id:'basic',name:'Khung cơ bản',price:0,className:'frame-basic',fx:'none'},
-      {id:'ice',name:'Khung Băng',price:200,className:'frame-ice',fx:'snow'},
-      {id:'sakura',name:'Khung Sakura',price:300,className:'frame-sakura',fx:'petal'},
-      {id:'festival999',name:'Festival 999',price:999,className:'frame-festival',fx:'none'}
+      {id:'basic',name:'Khung cơ bản',price:0,ring:'basic',fx:'none'},
+      {id:'ice',name:'Khung Băng',price:200,ring:'ice',fx:'snow'},
+      {id:'sakura',name:'Khung Sakura',price:300,ring:'sakura',fx:'petal'},
+      {id:'festival999',name:'Festival 999',price:999,ring:'festival999',fx:'none'}
     ];
 
     const navButtons = document.querySelectorAll('.nav-button');
@@ -720,7 +724,6 @@
       c.addEventListener('touchstart',e=>{sy=e.touches[0].clientY;dy=0;drag=true;c.style.transition='none'},{passive:true});
       c.addEventListener('touchmove',e=>{if(!drag)return;dy=e.touches[0].clientY-sy;if(dy>0)c.style.transform=`translateY(${dy}px)`},{passive:true});
       c.addEventListener('touchend',()=>{if(!drag)return;drag=false;if(dy>90)close();else{c.style.transition='transform .18s';c.style.transform=''}})
-      let last=scrollY; addEventListener('scroll',()=>{ if(m.style.display==='flex' && Math.abs(scrollY-last)>8) close(); last=scrollY },{passive:true});
       window.__openAuthModal=open; window.__closeAuthModal=close;
     })();
 
@@ -864,7 +867,7 @@
       if(!usingFirebase() || !firebaseDb){return;}
       const uid = firebaseAuthUser.uid;
       const email = (firebaseAuthUser.email||'').toLowerCase();
-      const displayName = firebaseAuthUser.displayName || (email?email.split('@')[0]:'Hanzi Learner');
+      const displayName = firebaseAuthUser.displayName || (email?email.split('@')[0]:'HoCCL Learner');
       const profileRef = firebaseDb.ref(`profiles/${uid}`);
       profileRef.once('value').then(snap=>{
         if(!snap.exists()){
@@ -979,13 +982,13 @@
       ctx.font = 'bold 150px sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      const letter = (seed||'HB').charAt(0).toUpperCase() || 'H';
+      const letter = (seed||'HC').charAt(0).toUpperCase() || 'H';
       ctx.fillText(letter,128,140);
       return canvas.toDataURL('image/png');
     }
 
     function getAvatarUrl(email){
-      if(!email){return generateInitialAvatar('HB');}
+      if(!email){return generateInitialAvatar('HC');}
       const stored = localStorage.getItem(`hb:avatar:${email}`);
       if(stored){return stored;}
       return generateInitialAvatar(email);
@@ -1195,12 +1198,12 @@
         if(email){
           avatarImg.src = getAvatarUrl(email);
         } else {
-          avatarImg.src = generateInitialAvatar('HB');
+          avatarImg.src = generateInitialAvatar('HC');
         }
       }
       const frameRing = document.getElementById('profileFrameRing');
       if(frameRing){
-        frameRing.className = `frame ${frameConfig.className}`;
+        frameRing.className = `frame ring ${frameConfig.ring}`;
       }
       applyFrameFx(document.getElementById('profileAvatarWrap'), frameId);
       const badge = document.getElementById('vipBadge');
@@ -1246,7 +1249,7 @@
 
     function requireActivation(){
       if(isActivated()){return true;}
-      const code = prompt('Nhập mã truy cập Hanzi Bridge');
+      const code = prompt('Nhập mã truy cập HoCCL');
       if(code===ACT_CODE){
         if(usingFirebase() && firebaseDb){
           firebaseDb.ref(`profiles/${firebaseAuthUser.uid}`).update({activated:true});
@@ -1442,98 +1445,119 @@
       return str.replace(/[\s　]/g,'').replace(/[。！？!?，,.]/g,'');
     }
     function normalizeVi(str){
-      return str.toLowerCase().trim().replace(/\s+/g,' ');
+      return str.toLowerCase().trim().replace(/[.!?,]/g,'').replace(/\s+/g,' ');
     }
     function capitalizeSentence(str){
       if(!str) return str;
       return str.charAt(0).toUpperCase()+str.slice(1);
     }
 
+    function stripPinyinTones(str){
+      if(!str) return '';
+      let base = str.toLowerCase();
+      base = base.replace(/[üǖǘǚǜ]/g,'v');
+      if(base.normalize){
+        base = base.normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+      }
+      return base.replace(/[^a-z0-9\s]/g,' ').replace(/\s+/g,' ').trim();
+    }
+
+    function normalizePinyin(str){
+      return stripPinyinTones(str).replace(/\s+/g,'');
+    }
+
+    function isLikelyPinyin(str){
+      if(!str){return false;}
+      return /^[a-zA-ZāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜüÜ\s',.!?]+$/.test(str.trim());
+    }
+
     const vocab = [
-      {han:'你',pinyin:'ni',vi:'bạn'},
-      {han:'好',pinyin:'hao',vi:'tốt'},
-      {han:'我',pinyin:'wo',vi:'tôi'},
-      {han:'不',pinyin:'bu',vi:'không'},
-      {han:'五',pinyin:'wu',vi:'năm'},
-      {han:'他',pinyin:'ta',vi:'anh ấy'},
-      {han:'她',pinyin:'ta',vi:'cô ấy'},
-      {han:'大',pinyin:'da',vi:'lớn'},
-      {han:'口',pinyin:'kou',vi:'miệng'},
-      {han:'白',pinyin:'bai',vi:'trắng'},
+      {han:'你',pinyin:'nǐ',vi:'bạn'},
+      {han:'好',pinyin:'hǎo',vi:'tốt'},
+      {han:'我',pinyin:'wǒ',vi:'tôi'},
+      {han:'不',pinyin:'bù',vi:'không'},
+      {han:'五',pinyin:'wǔ',vi:'năm'},
+      {han:'他',pinyin:'tā',vi:'anh ấy'},
+      {han:'她',pinyin:'tā',vi:'cô ấy'},
+      {han:'大',pinyin:'dà',vi:'lớn'},
+      {han:'口',pinyin:'kǒu',vi:'miệng'},
+      {han:'白',pinyin:'bái',vi:'trắng'},
       {han:'吗',pinyin:'ma',vi:'phải không'},
-      {han:'马',pinyin:'ma',vi:'ngựa'},
-      {han:'妈',pinyin:'ma',vi:'mẹ'},
-      {han:'八',pinyin:'ba',vi:'tám'},
-      {han:'很',pinyin:'hen',vi:'rất'},
-      {han:'忙',pinyin:'mang',vi:'bận'},
-      {han:'难',pinyin:'nan',vi:'khó'},
-      {han:'语',pinyin:'yu',vi:'ngữ'},
-      {han:'汉',pinyin:'han',vi:'Hán'},
-      {han:'人',pinyin:'ren',vi:'người'},
-      {han:'爸',pinyin:'ba',vi:'ba'},
-      {han:'太',pinyin:'tai',vi:'quá'},
-      {han:'弟',pinyin:'di',vi:'em trai'},
-      {han:'男',pinyin:'nan',vi:'nam'},
-      {han:'哥',pinyin:'ge',vi:'anh trai'},
-      {han:'妹',pinyin:'mei',vi:'em gái'},
-      {han:'学',pinyin:'xue',vi:'học'},
-      {han:'英',pinyin:'ying',vi:'Anh'},
-      {han:'得',pinyin:'dei',vi:'phải'},
-      {han:'饿',pinyin:'e',vi:'đói'},
-      {han:'去',pinyin:'qu',vi:'đi'},
-      {han:'法',pinyin:'fa',vi:'Pháp'},
-      {han:'韩',pinyin:'han',vi:'Hàn'},
-      {han:'国',pinyin:'guo',vi:'quốc'},
-      {han:'日',pinyin:'ri',vi:'Nhật'},
-      {han:'对',pinyin:'dui',vi:'đúng'},
-      {han:'也',pinyin:'ye',vi:'cũng'},
-      {han:'天',pinyin:'tian',vi:'trời'},
-      {han:'明',pinyin:'ming',vi:'sáng'},
-      {han:'见',pinyin:'jian',vi:'gặp'},
-      {han:'邮局',pinyin:'you ju',vi:'bưu điện'},
-      {han:'寄',pinyin:'ji',vi:'gửi'},
-      {han:'信',pinyin:'xin',vi:'thư'}
+      {han:'马',pinyin:'mǎ',vi:'ngựa'},
+      {han:'妈',pinyin:'mā',vi:'mẹ'},
+      {han:'八',pinyin:'bā',vi:'tám'},
+      {han:'很',pinyin:'hěn',vi:'rất'},
+      {han:'忙',pinyin:'máng',vi:'bận'},
+      {han:'难',pinyin:'nán',vi:'khó'},
+      {han:'语',pinyin:'yǔ',vi:'ngữ'},
+      {han:'汉',pinyin:'hàn',vi:'Hán'},
+      {han:'人',pinyin:'rén',vi:'người'},
+      {han:'爸',pinyin:'bà',vi:'ba'},
+      {han:'太',pinyin:'tài',vi:'quá'},
+      {han:'弟',pinyin:'dì',vi:'em trai'},
+      {han:'男',pinyin:'nán',vi:'nam'},
+      {han:'哥',pinyin:'gē',vi:'anh trai'},
+      {han:'妹',pinyin:'mèi',vi:'em gái'},
+      {han:'学',pinyin:'xué',vi:'học'},
+      {han:'英',pinyin:'yīng',vi:'Anh'},
+      {han:'得',pinyin:'děi',vi:'phải'},
+      {han:'饿',pinyin:'è',vi:'đói'},
+      {han:'去',pinyin:'qù',vi:'đi'},
+      {han:'法',pinyin:'fǎ',vi:'Pháp'},
+      {han:'韩',pinyin:'hán',vi:'Hàn'},
+      {han:'国',pinyin:'guó',vi:'quốc'},
+      {han:'日',pinyin:'rì',vi:'Nhật'},
+      {han:'对',pinyin:'duì',vi:'đúng'},
+      {han:'也',pinyin:'yě',vi:'cũng'},
+      {han:'天',pinyin:'tiān',vi:'trời'},
+      {han:'明',pinyin:'míng',vi:'sáng'},
+      {han:'见',pinyin:'jiàn',vi:'gặp'},
+      {han:'邮局',pinyin:'yóujú',vi:'bưu điện'},
+      {han:'寄',pinyin:'jì',vi:'gửi'},
+      {han:'信',pinyin:'xìn',vi:'thư'}
     ];
 
     const sentences = [];
     const sentenceMapZh = {};
     const sentenceMapVi = {};
+    const sentenceMapPy = {};
 
     function addSentence(han,pinyin,vi,level='easy'){
       const entry = {han,pinyin,vi,level};
       sentences.push(entry);
       sentenceMapZh[normalizeHan(han)] = entry;
       sentenceMapVi[normalizeVi(vi)] = entry;
+      sentenceMapPy[normalizePinyin(pinyin)] = entry;
     }
 
     const subjects = [
-      {han:'我',pin:'wo',vi:'Tôi'},
-      {han:'你',pin:'ni',vi:'Bạn'},
-      {han:'他',pin:'ta',vi:'Anh ấy'},
-      {han:'她',pin:'ta',vi:'Cô ấy'},
-      {han:'爸',pin:'ba',vi:'Ba'},
-      {han:'妈',pin:'ma',vi:'Mẹ'},
-      {han:'哥哥',pin:'ge ge',vi:'Anh trai'},
-      {han:'弟弟',pin:'di di',vi:'Em trai'},
-      {han:'妹妹',pin:'mei mei',vi:'Em gái'}
+      {han:'我',pin:'wǒ',vi:'Tôi'},
+      {han:'你',pin:'nǐ',vi:'Bạn'},
+      {han:'他',pin:'tā',vi:'Anh ấy'},
+      {han:'她',pin:'tā',vi:'Cô ấy'},
+      {han:'爸',pin:'bà',vi:'Ba'},
+      {han:'妈',pin:'mā',vi:'Mẹ'},
+      {han:'哥哥',pin:'gē gē',vi:'Anh trai'},
+      {han:'弟弟',pin:'dì dì',vi:'Em trai'},
+      {han:'妹妹',pin:'mèi mèi',vi:'Em gái'}
     ];
 
     const statusTemplates = [
-      {han:'很好。',pin:'hen hao.',vi:'rất tốt.',level:'easy'},
-      {han:'很忙。',pin:'hen mang.',vi:'rất bận.',level:'easy'},
-      {han:'不忙。',pin:'bu mang.',vi:'không bận.',level:'easy'},
-      {han:'很饿。',pin:'hen e.',vi:'rất đói.',level:'easy'},
-      {han:'不饿。',pin:'bu e.',vi:'không đói.',level:'easy'},
-      {han:'也很忙。',pin:'ye hen mang.',vi:'cũng rất bận.',level:'easy'},
-      {han:'也不忙。',pin:'ye bu mang.',vi:'cũng không bận.',level:'easy'}
+      {han:'很好。',pin:'hěn hǎo.',vi:'rất tốt.',level:'easy'},
+      {han:'很忙。',pin:'hěn máng.',vi:'rất bận.',level:'easy'},
+      {han:'不忙。',pin:'bù máng.',vi:'không bận.',level:'easy'},
+      {han:'很饿。',pin:'hěn è.',vi:'rất đói.',level:'easy'},
+      {han:'不饿。',pin:'bù è.',vi:'không đói.',level:'easy'},
+      {han:'也很忙。',pin:'yě hěn máng.',vi:'cũng rất bận.',level:'easy'},
+      {han:'也不忙。',pin:'yě bù máng.',vi:'cũng không bận.',level:'easy'}
     ];
 
     const questionTemplates = [
-      {han:'好吗？',pin:'hao ma?',vi:'tốt phải không?',level:'easy'},
-      {han:'很忙吗？',pin:'hen mang ma?',vi:'rất bận phải không?',level:'easy'},
-      {han:'不忙吗？',pin:'bu mang ma?',vi:'không bận phải không?',level:'easy'},
-      {han:'饿吗？',pin:'e ma?',vi:'đói phải không?',level:'easy'},
-      {han:'也很忙吗？',pin:'ye hen mang ma?',vi:'cũng rất bận phải không?',level:'easy'}
+      {han:'好吗？',pin:'hǎo ma?',vi:'tốt phải không?',level:'easy'},
+      {han:'很忙吗？',pin:'hěn máng ma?',vi:'rất bận phải không?',level:'easy'},
+      {han:'不忙吗？',pin:'bù máng ma?',vi:'không bận phải không?',level:'easy'},
+      {han:'饿吗？',pin:'è ma?',vi:'đói phải không?',level:'easy'},
+      {han:'也很忙吗？',pin:'yě hěn máng ma?',vi:'cũng rất bận phải không?',level:'easy'}
     ];
 
     subjects.forEach(sub=>{
@@ -1548,54 +1572,54 @@
     });
 
     const langs = [
-      {han:'汉语',pin:'han yu',vi:'tiếng Hán'},
-      {han:'英语',pin:'ying yu',vi:'tiếng Anh'},
-      {han:'法语',pin:'fa yu',vi:'tiếng Pháp'},
-      {han:'韩语',pin:'han yu',vi:'tiếng Hàn'},
-      {han:'日语',pin:'ri yu',vi:'tiếng Nhật'}
+      {han:'汉语',pin:'hàn yǔ',vi:'tiếng Hán'},
+      {han:'英语',pin:'yīng yǔ',vi:'tiếng Anh'},
+      {han:'法语',pin:'fǎ yǔ',vi:'tiếng Pháp'},
+      {han:'韩语',pin:'hán yǔ',vi:'tiếng Hàn'},
+      {han:'日语',pin:'rì yǔ',vi:'tiếng Nhật'}
     ];
 
     subjects.forEach(sub=>{
       langs.forEach(lang=>{
-        addSentence(`${sub.han}学${lang.han}。`, `${sub.pin} xue ${lang.pin}.`, `${sub.vi} học ${lang.vi}.`, 'easy');
-        addSentence(`${sub.han}学${lang.han}吗？`, `${sub.pin} xue ${lang.pin} ma?`, `${sub.vi} học ${lang.vi} phải không?`, 'easy');
+        addSentence(`${sub.han}学${lang.han}。`, `${sub.pin} xué ${lang.pin}.`, `${sub.vi} học ${lang.vi}.`, 'easy');
+        addSentence(`${sub.han}学${lang.han}吗？`, `${sub.pin} xué ${lang.pin} ma?`, `${sub.vi} học ${lang.vi} phải không?`, 'easy');
       });
     });
 
     langs.forEach(lang=>{
-      addSentence(`${lang.han}很难。`, `${lang.pin} hen nan.`, `${capitalizeSentence(lang.vi)} rất khó.`, 'easy');
-      addSentence(`${lang.han}太难吗？`, `${lang.pin} tai nan ma?`, `${capitalizeSentence(lang.vi)} quá khó phải không?`, 'hard');
+      addSentence(`${lang.han}很难。`, `${lang.pin} hěn nán.`, `${capitalizeSentence(lang.vi)} rất khó.`, 'easy');
+      addSentence(`${lang.han}太难吗？`, `${lang.pin} tài nán ma?`, `${capitalizeSentence(lang.vi)} quá khó phải không?`, 'hard');
     });
 
     const extras = [
-      {han:'白马很大。',pin:'bai ma hen da.',vi:'Con ngựa trắng rất lớn.',level:'easy'},
-      {han:'白马好吗？',pin:'bai ma hao ma?',vi:'Con ngựa trắng tốt phải không?',level:'easy'},
-      {han:'白天很忙。',pin:'bai tian hen mang.',vi:'Ban ngày rất bận.',level:'easy'},
-      {han:'白天不忙吗？',pin:'bai tian bu mang ma?',vi:'Ban ngày không bận phải không?',level:'easy'},
-      {han:'八人很忙。',pin:'ba ren hen mang.',vi:'Tám người rất bận.',level:'easy'},
-      {han:'五人也不忙。',pin:'wu ren ye bu mang.',vi:'Năm người cũng không bận.',level:'easy'},
-      {han:'男人也学汉语。',pin:'nan ren ye xue han yu.',vi:'Đàn ông cũng học tiếng Hán.',level:'easy'},
-      {han:'哥哥很饿。',pin:'ge ge hen e.',vi:'Anh trai rất đói.',level:'easy'},
-      {han:'妹妹也很忙。',pin:'mei mei ye hen mang.',vi:'Em gái cũng rất bận.',level:'easy'},
-      {han:'弟弟不饿吗？',pin:'di di bu e ma?',vi:'Em trai không đói phải không?',level:'easy'},
-      {han:'爸妈很忙，对吗？',pin:'ba ma hen mang, dui ma?',vi:'Ba mẹ rất bận, phải không?',level:'hard'},
-      {han:'你很忙，对吗？',pin:'ni hen mang, dui ma?',vi:'Bạn rất bận, phải không?',level:'hard'},
-      {han:'我得去邮局寄信。',pin:'wo dei qu you ju ji xin.',vi:'Tôi phải đi bưu điện gửi thư.',level:'hard'},
-      {han:'你得去邮局寄信吗？',pin:'ni dei qu you ju ji xin ma?',vi:'Bạn phải đi bưu điện gửi thư phải không?',level:'hard'},
-      {han:'他也去邮局寄信。',pin:'ta ye qu you ju ji xin.',vi:'Anh ấy cũng đi bưu điện gửi thư.',level:'hard'},
-      {han:'她得学汉语。',pin:'ta dei xue han yu.',vi:'Cô ấy phải học tiếng Hán.',level:'hard'},
-      {han:'明天见！',pin:'ming tian jian!',vi:'Hẹn gặp ngày mai!',level:'easy'},
-      {han:'明天你见他吗？',pin:'ming tian ni jian ta ma?',vi:'Ngày mai bạn gặp anh ấy phải không?',level:'hard'},
-      {han:'韩国人口很大。',pin:'han guo ren kou hen da.',vi:'Dân số Hàn Quốc rất lớn.',level:'hard'},
-      {han:'法国人很白吗？',pin:'fa guo ren hen bai ma?',vi:'Người Pháp rất trắng phải không?',level:'hard'},
-      {han:'日语也很难。',pin:'ri yu ye hen nan.',vi:'Tiếng Nhật cũng rất khó.',level:'hard'},
-      {han:'汉语口语很难。',pin:'han yu kou yu hen nan.',vi:'Khẩu ngữ tiếng Hán rất khó.',level:'hard'},
-      {han:'口语难吗？',pin:'kou yu nan ma?',vi:'Khẩu ngữ khó phải không?',level:'hard'},
-      {han:'我不太忙。',pin:'wo bu tai mang.',vi:'Tôi không quá bận.',level:'easy'},
-      {han:'你太忙吗？',pin:'ni tai mang ma?',vi:'Bạn quá bận phải không?',level:'easy'},
-      {han:'他也不太忙。',pin:'ta ye bu tai mang.',vi:'Anh ấy cũng không quá bận.',level:'easy'},
-      {han:'她很白。',pin:'ta hen bai.',vi:'Cô ấy rất trắng.',level:'easy'},
-      {han:'白马也很忙吗？',pin:'bai ma ye hen mang ma?',vi:'Con ngựa trắng cũng rất bận phải không?',level:'easy'}
+      {han:'白马很大。',pin:'bái mǎ hěn dà.',vi:'Con ngựa trắng rất lớn.',level:'easy'},
+      {han:'白马好吗？',pin:'bái mǎ hǎo ma?',vi:'Con ngựa trắng tốt phải không?',level:'easy'},
+      {han:'白天很忙。',pin:'bái tiān hěn máng.',vi:'Ban ngày rất bận.',level:'easy'},
+      {han:'白天不忙吗？',pin:'bái tiān bù máng ma?',vi:'Ban ngày không bận phải không?',level:'easy'},
+      {han:'八人很忙。',pin:'bā rén hěn máng.',vi:'Tám người rất bận.',level:'easy'},
+      {han:'五人也不忙。',pin:'wǔ rén yě bù máng.',vi:'Năm người cũng không bận.',level:'easy'},
+      {han:'男人也学汉语。',pin:'nán rén yě xué hàn yǔ.',vi:'Đàn ông cũng học tiếng Hán.',level:'easy'},
+      {han:'哥哥很饿。',pin:'gē gē hěn è.',vi:'Anh trai rất đói.',level:'easy'},
+      {han:'妹妹也很忙。',pin:'mèi mèi yě hěn máng.',vi:'Em gái cũng rất bận.',level:'easy'},
+      {han:'弟弟不饿吗？',pin:'dì dì bù è ma?',vi:'Em trai không đói phải không?',level:'easy'},
+      {han:'爸妈很忙，对吗？',pin:'bà mā hěn máng, duì ma?',vi:'Ba mẹ rất bận, phải không?',level:'hard'},
+      {han:'你很忙，对吗？',pin:'nǐ hěn máng, duì ma?',vi:'Bạn rất bận, phải không?',level:'hard'},
+      {han:'我得去邮局寄信。',pin:'wǒ děi qù yóujú jì xìn.',vi:'Tôi phải đi bưu điện gửi thư.',level:'hard'},
+      {han:'你得去邮局寄信吗？',pin:'nǐ děi qù yóujú jì xìn ma?',vi:'Bạn phải đi bưu điện gửi thư phải không?',level:'hard'},
+      {han:'他也去邮局寄信。',pin:'tā yě qù yóujú jì xìn.',vi:'Anh ấy cũng đi bưu điện gửi thư.',level:'hard'},
+      {han:'她得学汉语。',pin:'tā děi xué hàn yǔ.',vi:'Cô ấy phải học tiếng Hán.',level:'hard'},
+      {han:'明天见！',pin:'míng tiān jiàn!',vi:'Hẹn gặp ngày mai!',level:'easy'},
+      {han:'明天你见他吗？',pin:'míng tiān nǐ jiàn tā ma?',vi:'Ngày mai bạn gặp anh ấy phải không?',level:'hard'},
+      {han:'韩国人口很大。',pin:'hán guó rén kǒu hěn dà.',vi:'Dân số Hàn Quốc rất lớn.',level:'hard'},
+      {han:'法国人很白吗？',pin:'fǎ guó rén hěn bái ma?',vi:'Người Pháp rất trắng phải không?',level:'hard'},
+      {han:'日语也很难。',pin:'rì yǔ yě hěn nán.',vi:'Tiếng Nhật cũng rất khó.',level:'hard'},
+      {han:'汉语口语很难。',pin:'hàn yǔ kǒu yǔ hěn nán.',vi:'Khẩu ngữ tiếng Hán rất khó.',level:'hard'},
+      {han:'口语难吗？',pin:'kǒu yǔ nán ma?',vi:'Khẩu ngữ khó phải không?',level:'hard'},
+      {han:'我不太忙。',pin:'wǒ bù tài máng.',vi:'Tôi không quá bận.',level:'easy'},
+      {han:'你太忙吗？',pin:'nǐ tài máng ma?',vi:'Bạn quá bận phải không?',level:'easy'},
+      {han:'他也不太忙。',pin:'tā yě bù tài máng.',vi:'Anh ấy cũng không quá bận.',level:'easy'},
+      {han:'她很白。',pin:'tā hěn bái.',vi:'Cô ấy rất trắng.',level:'easy'},
+      {han:'白马也很忙吗？',pin:'bái mǎ yě hěn máng ma?',vi:'Con ngựa trắng cũng rất bận phải không?',level:'easy'}
     ];
     extras.forEach(item=>addSentence(item.han,item.pin,item.vi,item.level));
 
@@ -1848,7 +1872,7 @@
         return;
       }
       if(!isActivated()){
-        grid.innerHTML = '<div class="account-note">Nhập mã truy cập <strong>HOCMETVCL_CODE123</strong> để mở cửa hàng khung.</div>';
+        grid.innerHTML = '<div class="account-note">Nhập mã truy cập do admin cung cấp để mở cửa hàng khung.</div>';
         return;
       }
       const ownedSet = new Set(getOwnedFrames());
@@ -1864,7 +1888,7 @@
         return `<div class="store-item">
             <div class="avatar-wrap" data-frame="${frame.id}">
               <img class="avatar" src="${avatarSrc}" alt="Khung xem trước">
-              <div class="frame ${frame.className}"></div>
+              <div class="frame ring ${frame.ring}"></div>
               <div class="fx-layer"></div>
             </div>
             <div><strong>${frame.name}</strong></div>
@@ -1876,7 +1900,7 @@
         const id = wrap.dataset.frame;
         const frameConfig = frames.find(f=>f.id===id);
         if(frameConfig){
-          wrap.querySelector('.frame').className = `frame ${frameConfig.className}`;
+          wrap.querySelector('.frame').className = `frame ring ${frameConfig.ring}`;
         }
         applyFrameFx(wrap, id);
       });
@@ -1935,6 +1959,7 @@
     }
 
     const zhPhraseMap = {
+      '你好':'xin chào',
       '汉语':'tiếng Hán',
       '英语':'tiếng Anh',
       '法语':'tiếng Pháp',
@@ -1959,6 +1984,12 @@
     };
 
     const viPhraseMap = {
+      'xin chào':'你好',
+      'bạn khỏe không':'你好吗？',
+      'tôi rất khỏe':'我很好。',
+      'bạn bận không':'你忙吗？',
+      'tiếng hán rất khó':'汉语很难。',
+      'hẹn gặp ngày mai':'明天见！',
       'tiếng hán':'汉语',
       'tiếng anh':'英语',
       'tiếng pháp':'法语',
@@ -1984,28 +2015,107 @@
     };
 
     const viSingleMap = {};
+    const hanToVi = {};
     vocab.forEach(item=>{
       const key = item.vi.toLowerCase();
       if(!viSingleMap[key]){viSingleMap[key]=item.han;}
+      if(!hanToVi[item.han]){hanToVi[item.han]=item.vi;}
     });
 
+    const pinyinWordMap = {};
+    vocab.forEach(item=>{
+      const key = normalizePinyin(item.pinyin);
+      if(key){pinyinWordMap[key] = item.han;}
+    });
+    const pinyinKeys = Object.keys(pinyinWordMap).sort((a,b)=>b.length-a.length);
+
+    const phraseBank = [
+      {han:'你好',pinyin:'nǐ hǎo',vi:'xin chào'},
+      {han:'你好吗？',pinyin:'nǐ hǎo ma?',vi:'bạn khỏe không?'},
+      {han:'我很好。',pinyin:'wǒ hěn hǎo.',vi:'tôi rất khỏe.'},
+      {han:'你忙吗？',pinyin:'nǐ máng ma?',vi:'bạn bận không?'},
+      {han:'汉语很难。',pinyin:'hàn yǔ hěn nán.',vi:'tiếng Hán rất khó.'},
+      {han:'明天见！',pinyin:'míng tiān jiàn!',vi:'hẹn gặp ngày mai!'}
+    ];
+    const phraseMapZh = {};
+    const phraseMapVi = {};
+    const phraseMapPy = {};
+    phraseBank.forEach(item=>{
+      phraseMapZh[normalizeHan(item.han)] = item;
+      phraseMapVi[normalizeVi(item.vi)] = item;
+      phraseMapPy[normalizePinyin(item.pinyin)] = item;
+    });
+
+    function convertPinyinToHan(text){
+      if(!text){return '';}
+      const stripped = stripPinyinTones(text);
+      if(!stripped){return '';}
+      const tokens = stripped.split(' ').filter(Boolean);
+      if(tokens.length>1){
+        return tokens.map(tok=>{
+          const norm = tok.replace(/[^a-z0-9]/g,'');
+          return norm && pinyinWordMap[norm] ? pinyinWordMap[norm] : tok;
+        }).join('');
+      }
+      const fullNorm = normalizePinyin(text);
+      if(pinyinWordMap[fullNorm]){
+        return pinyinWordMap[fullNorm];
+      }
+      let working = fullNorm;
+      let output = '';
+      let guard = 0;
+      while(working && guard<200){
+        let matched = false;
+        for(const key of pinyinKeys){
+          if(key && working.startsWith(key)){
+            output += pinyinWordMap[key] || '';
+            working = working.slice(key.length);
+            matched = true;
+            break;
+          }
+        }
+        if(!matched){
+          output += working[0] || '';
+          working = working.slice(1);
+        }
+        guard++;
+      }
+      return output;
+    }
+
     function translateZh(text){
-      const normalized = normalizeHan(text);
-      if(sentenceMapZh[normalized]){
-        return sentenceMapZh[normalized].vi;
+      const raw = text.trim();
+      if(!raw){return 'Không tìm thấy bản dịch phù hợp.';}
+      const hasHan = /[\u3400-\u9FFF\uF900-\uFAFF]/.test(raw);
+      if(hasHan){
+        const normalizedHan = normalizeHan(raw);
+        if(phraseMapZh[normalizedHan]){return phraseMapZh[normalizedHan].vi;}
+        if(sentenceMapZh[normalizedHan]){return sentenceMapZh[normalizedHan].vi;}
+      }
+      if(!hasHan && isLikelyPinyin(raw)){
+        const pyKey = normalizePinyin(raw);
+        if(phraseMapPy[pyKey]){return phraseMapPy[pyKey].vi;}
+        if(sentenceMapPy[pyKey]){return sentenceMapPy[pyKey].vi;}
+        const converted = convertPinyinToHan(raw);
+        if(converted && converted!==raw){
+          const normConverted = normalizeHan(converted);
+          if(phraseMapZh[normConverted]){return phraseMapZh[normConverted].vi;}
+          if(sentenceMapZh[normConverted]){return sentenceMapZh[normConverted].vi;}
+          return translateZh(converted);
+        }
       }
       let result = '';
       let i=0;
-      while(i<text.length){
-        const two = text.slice(i,i+2);
+      while(i<raw.length){
+        const two = raw.slice(i,i+2);
         if(zhPhraseMap[two]){
           result += zhPhraseMap[two] + ' ';
           i+=2;continue;
         }
-        const char = text[i];
+        const char = raw[i];
         if(/[\u3400-\u9FFF\uF900-\uFAFF]/.test(char)){
-          const vocabItem = vocab.find(v=>v.han===char);
-          result += (vocabItem?vocabItem.vi:char) + ' ';
+          const meaning = hanToVi[char];
+          result += (meaning?meaning:char) + ' ';
         } else {
           result += char;
         }
@@ -2017,10 +2127,19 @@
     }
 
     function translateVi(text){
-      const normalized = normalizeVi(text);
-      if(sentenceMapVi[normalized]){
-        return sentenceMapVi[normalized].han;
+      const raw = text.trim();
+      if(!raw){return 'Không tìm thấy bản dịch phù hợp.';}
+      if(/[\u3400-\u9FFF\uF900-\uFAFF]/.test(raw)){return translateZh(raw);}
+      if(isLikelyPinyin(raw) && !/[\u3400-\u9FFF\uF900-\uFAFF]/.test(raw)){
+        const pyKey = normalizePinyin(raw);
+        if(phraseMapPy[pyKey]){return phraseMapPy[pyKey].han;}
+        if(sentenceMapPy[pyKey]){return sentenceMapPy[pyKey].han;}
+        const converted = convertPinyinToHan(raw);
+        return converted || 'Không tìm thấy bản dịch phù hợp.';
       }
+      const normalized = normalizeVi(raw);
+      if(phraseMapVi[normalized]){return phraseMapVi[normalized].han;}
+      if(sentenceMapVi[normalized]){return sentenceMapVi[normalized].han;}
       let working = normalized;
       const keys = Object.keys(viPhraseMap).sort((a,b)=>b.length-a.length);
       keys.forEach(key=>{
@@ -2031,7 +2150,7 @@
       const tokens = working.split(' ');
       const result = tokens.map(tok=>{
         if(!tok){return '';}
-        if(/^[\u3400-\u9FFF\uF900-\uFAFF]+$/.test(tok)){return tok;}
+        if(/[\u3400-\u9FFF\uF900-\uFAFF]+/.test(tok)){return tok;}
         const mapped = viSingleMap[tok];
         return mapped || tok;
       }).join('');
@@ -2379,7 +2498,7 @@
     updateAccountBtn();
     initApp();
 
-    console.log('HB_V16_3_READY');
+    console.log('HB_V16_4_READY');
   </script>
 </body>
 </html>
