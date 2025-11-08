@@ -10,8 +10,18 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
-    import { getDatabase, ref, get, set, update, child } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-database.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      sendEmailVerification,
+      signInWithEmailAndPassword,
+      signOut,
+      GoogleAuthProvider,
+      signInWithPopup,
+      onAuthStateChanged,
+      updateProfile
+    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
+    import { getDatabase, ref, set, update, get, child } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-database.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyArz7yEzhmVJ8nQ2QiID9kpZkgy6HOM8mY",
@@ -25,9 +35,29 @@
     };
 
     const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
     const auth = getAuth(app);
-    window.HOCCL_FB = { app, db, auth, ref, get, set, update, child, onAuthStateChanged, config: firebaseConfig };
+    const db = getDatabase(app);
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'select_account' });
+    window.HOCCL_FB = {
+      app,
+      auth,
+      db,
+      provider,
+      ref,
+      set,
+      update,
+      get,
+      child,
+      createUserWithEmailAndPassword,
+      sendEmailVerification,
+      signInWithEmailAndPassword,
+      signOut,
+      signInWithPopup,
+      onAuthStateChanged,
+      updateProfile,
+      config: firebaseConfig
+    };
     console.log("🔥 Firebase connected hoccl-44ec1");
   </script>
   <style>
@@ -230,6 +260,16 @@
     .modal-close{position:absolute;top:14px;right:14px;background:rgba(255,255,255,0.08);color:var(--text);box-shadow:none;padding:6px 10px;border-radius:10px}
     .modal-close:hover{background:rgba(255,255,255,0.12)}
     .modal-switch{color:var(--accent);background:transparent;box-shadow:none;padding:0;text-decoration:underline;cursor:pointer}
+    .modal-divider{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:.9rem}
+    .modal-divider::before,.modal-divider::after{content:"";flex:1;height:1px;background:rgba(255,255,255,0.16)}
+    body[data-theme="light"] .modal-divider::before,body[data-theme="light"] .modal-divider::after{background:rgba(18,32,60,0.16)}
+    .btn.google-btn{background:#fff;color:#1b1b1b;display:flex;align-items:center;justify-content:center;gap:10px;border:1px solid rgba(0,0,0,0.08);box-shadow:none}
+    body[data-theme="light"] .btn.google-btn{background:#fff;color:#1b1b1b}
+    .btn.google-btn:hover{background:#f4f4f4}
+    .btn.google-btn:focus-visible{outline:3px solid rgba(95,141,255,0.4)}
+    .google-icon{display:inline-flex}
+    .google-icon svg{width:18px;height:18px;display:block}
+    .small-note{font-size:.85rem}
     @media(max-width:640px){.modal-shell{align-items:flex-end}.modal-card{border-radius:20px 20px 0 0;animation:sheetIn .22s ease}}
     @keyframes sheetIn{from{transform:translateY(18px)}to{transform:translateY(0)}}
     #codeSheet .modal-card{max-width:360px}
@@ -625,6 +665,19 @@
         <input type="password" id="loginPassword" placeholder="Mật khẩu" required autocomplete="current-password">
         <button type="submit">Đăng nhập</button>
       </form>
+      <div class="modal-divider"><span>hoặc</span></div>
+      <button type="button" class="btn google-btn" data-action="googleLogin">
+        <span class="google-icon" aria-hidden="true">
+          <svg viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg" focusable="false">
+            <path fill="#4285F4" d="M17.64 9.2045c0-.638-.0573-1.2518-.1636-1.8409H9v3.4814h4.8436c-.2091 1.125-.8436 2.0782-1.7968 2.7173v2.2582h2.9086c1.7023-1.5673 2.6846-3.8746 2.6846-6.616"/>
+            <path fill="#34A853" d="M9 18c2.43 0 4.4673-.8059 5.9564-2.1795l-2.9086-2.2582c-.8059.54-1.8368.8582-3.0478.8582-2.3445 0-4.3296-1.5831-5.0382-3.7104H.9573v2.3318C2.4382 15.9832 5.4818 18 9 18Z"/>
+            <path fill="#FBBC05" d="M3.9618 10.71c-.18-.54-.2823-1.1168-.2823-1.71s.1023-1.17.2823-1.71V4.9582H.9573C.3477 6.1691 0 7.5436 0 9s.3477 2.8309.9573 4.0418l3.0045-2.3318Z"/>
+            <path fill="#EA4335" d="M9 3.5795c1.3209 0 2.5068.4545 3.4391 1.3446l2.5796-2.5796C13.4627.8882 11.4255 0 9 0 5.4818 0 2.4382 2.0168.9573 4.9582l3.0045 2.3318C4.6704 5.1627 6.6555 3.5795 9 3.5795Z"/>
+          </svg>
+        </span>
+        <span>Đăng nhập với Google</span>
+      </button>
+      <div class="muted small-note">* Đăng nhập email cần xác minh qua email trước khi sử dụng đầy đủ tính năng.</div>
       <div class="muted">Chưa có tài khoản? <button class="modal-switch" data-action="openRegister">Tạo mới</button></div>
     </div>
   </div>
@@ -639,6 +692,7 @@
         <input type="password" id="signupPassword" placeholder="Mật khẩu" required autocomplete="new-password">
         <button type="submit">Đăng ký</button>
       </form>
+      <div class="muted small-note">Sau khi đăng ký, bạn cần xác minh email trước khi đăng nhập lần đầu.</div>
       <div class="muted">Đã có tài khoản? <button class="modal-switch" data-action="openLogin">Đăng nhập</button></div>
     </div>
   </div>
@@ -1005,6 +1059,25 @@
     let profilesCache = {};
     let chatListener = null;
     let chatId = null;
+    let firebaseGoogleProvider = null;
+
+    function updateUserRecord(partial){
+      if(!(usingFirebase() && firebaseDb && firebaseAuthUser)){
+        return Promise.resolve();
+      }
+      return firebaseDb.ref(`users/${firebaseAuthUser.uid}`).update(partial).catch(err=>{
+        console.warn('Firebase user update failed', err);
+      });
+    }
+
+    function updateUserRecordByUid(uid, partial){
+      if(!firebaseDb || !uid){
+        return Promise.resolve();
+      }
+      return firebaseDb.ref(`users/${uid}`).update(partial).catch(err=>{
+        console.warn('Firebase user update failed', err);
+      });
+    }
 
     function usingFirebase(){
       return firebaseInitialized && !!firebaseAuthUser;
@@ -1050,6 +1123,10 @@
         window.__fb = firebaseApp;
         firebaseAuth = firebase.app().auth();
         firebaseDb = firebase.app().database();
+        if(!firebaseGoogleProvider){
+          firebaseGoogleProvider = new firebase.auth.GoogleAuthProvider();
+          firebaseGoogleProvider.setCustomParameters({prompt:'select_account'});
+        }
         firebaseInitialized = true;
         setStatusChip(true);
         firebaseDb.ref('profiles').on('value', snap=>{profilesCache = snap.val()||{};});
@@ -1113,6 +1190,32 @@
           });
         }
       });
+      const userRef = firebaseDb.ref(`users/${uid}`);
+      userRef.once('value').then(snap=>{
+        const base = {
+          email,
+          displayName,
+          coins: 0,
+          vip: 0,
+          frameId: 'basic',
+          activated: false,
+          avatar: '',
+          verified: !!firebaseAuthUser.emailVerified,
+          joinDate: Date.now(),
+          authType: (firebaseAuthUser.providerData && firebaseAuthUser.providerData[0]?.providerId) || 'password'
+        };
+        if(!snap.exists()){
+          userRef.set(base);
+        } else {
+          const current = snap.val()||{};
+          const updates = {};
+          if(!current.email && email){updates.email = email;}
+          if(!current.displayName && displayName){updates.displayName = displayName;}
+          if(firebaseAuthUser.emailVerified && !current.verified){updates.verified = true;}
+          if(current.frameId == null){updates.frameId = (firebaseProfile && firebaseProfile.frameId) || 'basic';}
+          if(Object.keys(updates).length){userRef.update(updates).catch(err=>console.warn('Firebase user sync failed', err));}
+        }
+      });
       const ownedRef = firebaseDb.ref(`frames/${uid}/owned/basic`);
       ownedRef.once('value').then(snap=>{ if(!snap.exists()){ ownedRef.set(true); } });
     }
@@ -1127,6 +1230,15 @@
         if(firebaseProfile && !firebaseProfile.frameId){
           firebaseProfile.frameId = 'basic';
           ref.update({frameId:'basic'});
+        }
+        if(firebaseProfile){
+          updateUserRecord({
+            displayName: firebaseProfile.displayName || '',
+            coins: firebaseProfile.coins || 0,
+            vip: firebaseProfile.vip || 0,
+            frameId: firebaseProfile.frameId || 'basic',
+            activated: !!firebaseProfile.activated
+          });
         }
         updateAccountBtn();
         if(accountSheetVisible){refreshAccountSheet();}
@@ -1258,10 +1370,9 @@
       const img = await fileToImage(file);
       const dataUrl = imageToSquareDataURL(img,256);
       localStorage.setItem(`hb:avatar:${email}`, dataUrl);
-      if(usingFirebase() && window.HOCCL_FB?.db){
+      if(usingFirebase() && firebaseDb && firebaseAuthUser){
         try{
-          const uid = btoa(email);
-          await window.HOCCL_FB.update(window.HOCCL_FB.ref(window.HOCCL_FB.db, `users/${uid}`), { avatar: dataUrl });
+          await firebaseDb.ref(`users/${firebaseAuthUser.uid}`).update({ avatar: dataUrl });
         }catch(err){
           console.warn('Không thể đồng bộ avatar Firebase', err);
         }
@@ -1270,11 +1381,10 @@
     }
 
     async function loadAvatarFromFirebase(email){
-      if(!email || !window.HOCCL_FB?.db){return null;}
+      if(!email || !firebaseDb || !firebaseAuthUser){return null;}
       try{
-        const uid = btoa(email);
-        const snapshot = await window.HOCCL_FB.get(window.HOCCL_FB.child(window.HOCCL_FB.ref(window.HOCCL_FB.db), `users/${uid}/avatar`));
-        if(snapshot.exists()){ 
+        const snapshot = await firebaseDb.ref(`users/${firebaseAuthUser.uid}/avatar`).once('value');
+        if(snapshot.exists()){
           const val = snapshot.val();
           if(val){
             localStorage.setItem(`hb:avatar:${email}`, val);
@@ -1351,7 +1461,16 @@
         initFirebaseCore();
         if(!firebaseAuth){return;}
         try{
-          await firebaseAuth.signInWithEmailAndPassword(email,pwd);
+          const cred = await firebaseAuth.signInWithEmailAndPassword(email,pwd);
+          if(cred.user && !cred.user.emailVerified){
+            try{await cred.user.sendEmailVerification();}catch(err){console.warn('Resend verify failed', err);}
+            alert('Email chưa được xác minh. Vui lòng kiểm tra hộp thư và xác nhận trước khi đăng nhập.');
+            await firebaseAuth.signOut();
+            return;
+          }
+          if(cred.user){
+            await updateUserRecordByUid(cred.user.uid, { verified: true, email: (cred.user.email||email) });
+          }
           closeLoginModal();
           if(pendingAppAccess){
             window.location.hash = '#app';
@@ -1396,8 +1515,24 @@
             vip: 0,
             frameId: 'basic'
           });
+          await firebaseDb.ref(`users/${cred.user.uid}`).set({
+            email,
+            displayName: name || email.split('@')[0],
+            coins: 0,
+            vip: 0,
+            frameId: 'basic',
+            activated: false,
+            avatar: '',
+            verified: false,
+            joinDate: Date.now(),
+            authType: 'email'
+          });
           await firebaseDb.ref(`frames/${cred.user.uid}/owned/basic`).set(true);
+          try{await cred.user.sendEmailVerification();}catch(err){console.warn('Send verify email failed', err);}
+          alert('Đăng ký thành công! Vui lòng kiểm tra email để xác minh trước khi đăng nhập.');
+          await firebaseAuth.signOut();
           closeRegisterModal();
+          openLoginModal();
         }catch(err){
           alert('Đăng ký thất bại: '+(err?.message||'Vui lòng thử lại.'));
         }
@@ -1435,6 +1570,65 @@
       if(!name){alert('Nhập tên hiển thị');return;}
       await handleRegister(name,email,pwd);
     });
+
+    async function handleGoogleLogin(){
+      if(!firebaseReady){
+        alert('Tính năng này yêu cầu Firebase.');
+        return;
+      }
+      initFirebaseCore();
+      if(!firebaseAuth || !firebaseGoogleProvider){
+        alert('Firebase chưa sẵn sàng, vui lòng thử lại.');
+        return;
+      }
+      try{
+        const cred = await firebaseAuth.signInWithPopup(firebaseGoogleProvider);
+        const user = cred.user;
+        if(user && firebaseDb){
+          const emailLower = (user.email||'').toLowerCase();
+          const displayName = user.displayName || (emailLower?emailLower.split('@')[0]:'HoCCL Learner');
+          const profileRef = firebaseDb.ref(`profiles/${user.uid}`);
+          profileRef.once('value').then(snap=>{
+            if(!snap.exists()){
+              profileRef.set({
+                email: emailLower,
+                displayName,
+                createdAt: Date.now(),
+                activated: false,
+                coins: 0,
+                vip: 0,
+                frameId: 'basic'
+              });
+            } else {
+              profileRef.update({ email: emailLower, displayName });
+            }
+          });
+          await updateUserRecordByUid(user.uid, {
+            email: emailLower,
+            displayName,
+            verified: true,
+            authType: 'google'
+          });
+          firebaseDb.ref(`frames/${user.uid}/owned/basic`).set(true);
+        }
+        closeLoginModal();
+        if(pendingAppAccess){
+          window.location.hash = '#app';
+          showSection('#app');
+        }
+      }catch(err){
+        alert('Đăng nhập Google thất bại: '+(err?.message||'Vui lòng thử lại.'));
+      }
+    }
+
+    const googleLoginBtn = document.querySelector('[data-action="googleLogin"]');
+    if(googleLoginBtn){
+      if(!firebaseReady){
+        googleLoginBtn.disabled = true;
+        googleLoginBtn.title = 'Yêu cầu cấu hình Firebase';
+      }
+      googleLoginBtn.addEventListener('click', handleGoogleLogin);
+    }
 
     const accountSheetEl = document.getElementById('accountSheet');
     const accountPanel = document.getElementById('accountPanel');
@@ -1564,7 +1758,8 @@
       if(cleaned===ACT_CODE){
         const wasPending = pendingAppAccess;
         if(usingFirebase() && firebaseDb && firebaseAuthUser){
-          firebaseDb.ref(`profiles/${firebaseAuthUser.uid}`).update({activated:true});
+          firebaseDb.ref(`profiles/${firebaseAuthUser.uid}`).update({activated:true}).catch(err=>console.warn('Không cập nhật kích hoạt', err));
+          updateUserRecord({activated:true});
         }
         localStorage.setItem('hb:activated','1');
         updateActivationStatus();
@@ -1626,6 +1821,7 @@
           if(Object.keys(updates).length){
             await firebaseDb.ref(`profiles/${firebaseAuthUser.uid}`).update(updates);
             if(newName){await firebaseAuthUser.updateProfile({displayName:newName});}
+            if(newName){await updateUserRecord({displayName:newName});}
           }
         } else {
           const db = getUsersDB();
@@ -1689,8 +1885,10 @@
       const profile = getCurrentUser();
       if(!profile){return;}
       if(usingFirebase() && firebaseDb){
-        await firebaseDb.ref(`profiles/${firebaseAuthUser.uid}`).update({coins:(profile.coins||0)+amount});
-        if(firebaseProfile){firebaseProfile = {...firebaseProfile, coins:(profile.coins||0)+amount};}
+        const newCoins = (profile.coins||0)+amount;
+        await firebaseDb.ref(`profiles/${firebaseAuthUser.uid}`).update({coins:newCoins});
+        await updateUserRecord({coins:newCoins});
+        if(firebaseProfile){firebaseProfile = {...firebaseProfile, coins:newCoins};}
       } else {
         const db = getUsersDB();
         db[email].coins = (db[email].coins||0)+amount;
@@ -1707,6 +1905,7 @@
       if(!profile){return;}
       if(usingFirebase() && firebaseDb){
         await firebaseDb.ref(`profiles/${firebaseAuthUser.uid}`).update({vip:level});
+        await updateUserRecord({vip:level});
         if(firebaseProfile){firebaseProfile = {...firebaseProfile, vip:level};}
       } else {
         const db = getUsersDB();
@@ -2804,13 +3003,15 @@
         return;
       }
       if(usingFirebase() && firebaseDb && firebaseAuthUser){
+        const newCoins = (profile.coins||0)-frame.price;
         await firebaseDb.ref(`profiles/${firebaseAuthUser.uid}`).update({
-          coins:(profile.coins||0)-frame.price,
+          coins:newCoins,
           frameId
         });
+        await updateUserRecord({coins:newCoins, frameId});
         await firebaseDb.ref(`frames/${firebaseAuthUser.uid}/owned/${frameId}`).set(true);
         firebaseFramesOwned.add(frameId);
-        if(firebaseProfile){firebaseProfile = {...firebaseProfile, coins:(profile.coins||0)-frame.price, frameId};}
+        if(firebaseProfile){firebaseProfile = {...firebaseProfile, coins:newCoins, frameId};}
       } else {
         const db = getUsersDB();
         const user = db[email];
@@ -2845,6 +3046,7 @@
       }
       if(usingFirebase() && firebaseDb && firebaseAuthUser){
         await firebaseDb.ref(`profiles/${firebaseAuthUser.uid}`).update({frameId});
+        await updateUserRecord({frameId});
         if(firebaseProfile){firebaseProfile = {...firebaseProfile, frameId};}
       } else {
         const db = getUsersDB();
@@ -3091,7 +3293,7 @@
     updateAccountBtn();
     initApp();
 
-    console.log('HB_V16_9_READY');
+    console.log('HB_V17_READY');
   </script>
 </body>
 </html>
