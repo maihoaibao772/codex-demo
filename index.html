@@ -86,6 +86,7 @@
     html,body{height:100%;overflow-x:hidden;overscroll-behavior-y:contain;touch-action:manipulation}
     body{
       margin:0;
+      padding-top:70px;
       font-family:"Inter",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
       background:var(--bg);
       color:var(--text);
@@ -131,9 +132,14 @@
     .theme-toggle:hover{background:rgba(95,141,255,0.24)}
     .theme-toggle:focus-visible{outline:3px solid rgba(95,141,255,0.45)}
     .theme-toggle *{pointer-events:none}
-    #navbar{position:fixed;top:0;left:0;right:0;width:100%;z-index:1000;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);background:rgba(10,15,25,0.8);border-bottom:1px solid rgba(255,255,255,0.1);box-shadow:0 18px 38px rgba(50,120,255,0.12);transition:transform .3s ease,background .3s ease}
+    .neon-bg,.bg-anim,.fx-layer,.glow-veil,.particles,.hero::before,.hero::after{pointer-events:none!important}
+    [hidden],.is-hidden{display:none!important}
+    .modal-shell:not(.open){display:none!important;pointer-events:none!important}
+    .modal-shell.open{display:flex!important;pointer-events:auto!important}
+    main,section,.tab-card,.content-wrapper{pointer-events:auto}
+    #navbar{position:fixed;top:0;left:0;right:0;width:100%;z-index:1000;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);background:rgba(10,15,25,0.8);border-bottom:1px solid rgba(255,255,255,0.1);box-shadow:0 18px 38px rgba(50,120,255,0.12);transition:transform .28s ease,background .3s ease;pointer-events:auto}
+    #navbar.nav-hidden{transform:translateY(-100%);pointer-events:none}
     body[data-theme="light"] #navbar{background:rgba(242,245,255,0.92);border-bottom:1px solid rgba(20,30,70,0.12);box-shadow:0 16px 32px rgba(30,40,80,0.12)}
-    #navbar.hide{transform:translateY(-100%)}
     .nav-inner{width:min(92%,1100px);margin:0 auto;padding:calc(env(safe-area-inset-top) + clamp(10px,2vw,16px)) clamp(14px,4vw,22px) clamp(10px,2vw,16px);display:flex;align-items:center;justify-content:space-between;gap:clamp(12px,4vw,20px)}
     .nav-actions{display:flex;align-items:center;gap:clamp(8px,3vw,18px);flex-wrap:wrap;justify-content:flex-end}
     .nav-button{background:transparent;color:var(--muted);padding:clamp(6px,1.8vh,10px) clamp(10px,2.8vw,16px);border-radius:12px;box-shadow:none;font-size:clamp(.9rem,0.85rem + .2vw,1rem);transition:color .2s ease,background .2s ease,transform .2s ease}
@@ -141,7 +147,7 @@
     .nav-button.active{background:rgba(95,141,255,0.22);color:#fff;box-shadow:0 12px 24px rgba(51,87,255,0.24)}
     .nav-button[data-route="#app"]{background:var(--accent);color:#fff;box-shadow:0 14px 28px rgba(51,87,255,0.28)}
     .nav-button[data-route="#app"]:hover{background:rgba(95,141,255,0.92)}
-    .nav-offset{height:clamp(64px,8vh,82px)}
+    .nav-offset{height:0}
     main,.content-wrapper,body>section{margin-top:0!important}
     #accountBtn{position:relative;width:40px;height:40px;border-radius:16px;overflow:hidden;padding:0;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;color:var(--accent);border:1px solid rgba(95,141,255,0.32);box-shadow:none;transition:transform .2s ease,box-shadow .2s ease}
     #accountBtn:active{transform:scale(.96)}
@@ -308,6 +314,8 @@
     .to-top-btn.hidden{opacity:0;pointer-events:none}
     #translateModal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:1100;background:rgba(0,0,0,0.55);backdrop-filter:blur(8px)}
     #translateModal[hidden]{display:none!important}
+    #translateModal:not(.open){display:none!important;pointer-events:none!important}
+    #translateModal.open{display:flex!important;pointer-events:auto!important}
     #translateCard{max-width:520px;width:calc(100% - 32px);background:var(--card);border-radius:20px;border:1px solid var(--border);padding:24px;display:grid;gap:16px}
     .translate-tabs{display:flex;gap:10px}
     .translate-tab{flex:1;background:rgba(95,141,255,0.14);color:var(--accent);border-radius:12px;padding:10px;font-weight:600}
@@ -913,30 +921,82 @@
     });
     setTheme(localStorage.getItem('hb:theme')||'dark');
 
-    let lastScrollY = window.scrollY;
-    const navBar = document.getElementById('navbar');
-    if(navBar){navBar.style.transform = 'translateY(0)';}
-    window.addEventListener('scroll',()=>{
-      if(navBar){
-        if(window.scrollY > lastScrollY && window.scrollY > 50){
-          navBar.style.transform = 'translateY(-100%)';
-        } else {
-          navBar.style.transform = 'translateY(0)';
+    (function safeNavbar(){
+      const nav = document.getElementById('navbar');
+      if(!nav) return;
+      let lastY = window.scrollY;
+      let ticking = false;
+      const handle = () => {
+        const y = window.scrollY;
+        if(y - lastY > 8 && y > 64){
+          nav.classList.add('nav-hidden');
+        } else if(lastY - y > 8){
+          nav.classList.remove('nav-hidden');
         }
-      }
-      const toTopBtn = document.getElementById('toTop');
-      if(toTopBtn){
-        if(window.scrollY > 300){
-          toTopBtn.classList.remove('hidden');
-        } else {
-          toTopBtn.classList.add('hidden');
+        const toTopBtn = document.getElementById('toTop');
+        if(toTopBtn){
+          if(y > 300){
+            toTopBtn.classList.remove('hidden');
+          } else {
+            toTopBtn.classList.add('hidden');
+          }
         }
-      }
-      lastScrollY = window.scrollY;
-    },{passive:true});
+        lastY = y;
+      };
+      window.addEventListener('scroll',()=>{
+        if(!ticking){
+          requestAnimationFrame(()=>{ handle(); ticking = false; });
+          ticking = true;
+        }
+      },{passive:true});
+      handle();
+    })();
     document.getElementById('toTop')?.addEventListener('click',()=>{
       window.scrollTo({top:0,behavior:'smooth'});
     });
+
+    (function killGhostOverlays(){
+      function run(){
+        const W = innerWidth;
+        const H = innerHeight;
+        const candidates = Array.from(document.body.children).filter(el=>{
+          const cs = getComputedStyle(el);
+          if(!/fixed|absolute/i.test(cs.position)) return false;
+          const r = el.getBoundingClientRect();
+          if(r.width < W*0.95 || r.height < H*0.95) return false;
+          if(el.id === 'navbar' || el.id === 'accountSheet' || el.id === 'translateModal') return false;
+          if(el.classList.contains('modal-shell') || el.closest('.modal-shell')) return false;
+          return cs.pointerEvents !== 'none';
+        });
+        candidates.forEach(el=>{
+          el.style.pointerEvents = 'none';
+          el.classList.add('__ghost_fixed');
+        });
+      }
+      window.addEventListener('load', run);
+      document.addEventListener('visibilitychange',()=>{ if(!document.hidden) setTimeout(run,200); });
+      setTimeout(run,800);
+    })();
+
+    (function safeModeHotkey(){
+      let timer = null;
+      const disableDecor = () => {
+        document.querySelectorAll('.neon-bg,.bg-anim,.fx-layer,.glow-veil,.particles').forEach(el=>{
+          el.style.display = 'none';
+          el.style.pointerEvents = 'none';
+        });
+        document.querySelectorAll('.__ghost_fixed').forEach(el=>{ el.style.pointerEvents = 'none'; });
+        alert('SAFE MODE: đã tắt lớp trang trí & lớp phủ.');
+      };
+      window.addEventListener('touchstart',e=>{
+        const touch = e.touches[0];
+        if(!touch) return;
+        if(touch.clientX > innerWidth * 0.8 && touch.clientY > innerHeight * 0.8){
+          timer = setTimeout(disableDecor,900);
+        }
+      },{passive:true});
+      window.addEventListener('touchend',()=>{ if(timer) clearTimeout(timer); });
+    })();
 
     function applyNavActive(hash){
       navButtons.forEach(btn=>{
@@ -996,13 +1056,13 @@
 
     function showModal(modal){
       if(!modal) return;
-      modal.style.display = 'flex';
+      modal.classList.add('open');
       modal.removeAttribute('hidden');
     }
 
     function hideModal(modal){
       if(!modal) return;
-      modal.style.display = 'none';
+      modal.classList.remove('open');
       modal.setAttribute('hidden','');
     }
 
@@ -2594,7 +2654,7 @@
     function openTranslateModal(){
       const modal = document.getElementById('translateModal');
       modal.hidden = false;
-      modal.style.display='flex';
+      modal.classList.add('open');
       document.getElementById('translateResult').textContent='';
       document.getElementById('translateInput').value='';
       setTranslateMode('zh2vi');
@@ -2602,7 +2662,7 @@
     function closeTranslateModal(){
       const modal = document.getElementById('translateModal');
       modal.hidden = true;
-      modal.style.display='none';
+      modal.classList.remove('open');
     }
 
     document.getElementById('translateModal').addEventListener('click',e=>{
