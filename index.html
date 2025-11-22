@@ -18,6 +18,8 @@
       signOut,
       GoogleAuthProvider,
       signInWithPopup,
+      signInWithRedirect,
+      getRedirectResult,
       onAuthStateChanged,
       updateProfile
     } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
@@ -54,8 +56,12 @@
       signInWithEmailAndPassword,
       signOut,
       signInWithPopup,
+      signInWithRedirect,
+      getRedirectResult,
       onAuthStateChanged,
       updateProfile,
+      signInWithRedirect,
+      getRedirectResult,
       config: firebaseConfig
     };
     console.log("🔥 Firebase connected hoccl-44ec1");
@@ -1157,6 +1163,14 @@
     let chatId = null;
     let firebaseGoogleProvider = null;
 
+    const authInstance = ()=> HOCCL_FB?.auth || firebaseAuth;
+    const fbEmailSignIn = (email,pwd)=> HOCCL_FB?.signInWithEmailAndPassword ? HOCCL_FB.signInWithEmailAndPassword(authInstance(), email, pwd) : firebaseAuth.signInWithEmailAndPassword(email,pwd);
+    const fbEmailCreate = (email,pwd)=> HOCCL_FB?.createUserWithEmailAndPassword ? HOCCL_FB.createUserWithEmailAndPassword(authInstance(), email, pwd) : firebaseAuth.createUserWithEmailAndPassword(email,pwd);
+    const fbSendVerify = (user)=> HOCCL_FB?.sendEmailVerification ? HOCCL_FB.sendEmailVerification(user,{url:"https://hocclmetvcl.netlify.app/?verified=1",handleCodeInApp:false}) : user.sendEmailVerification();
+    const fbSignout = ()=> HOCCL_FB?.signOut ? HOCCL_FB.signOut(authInstance()) : firebaseAuth.signOut();
+    const fbPopup = ()=> HOCCL_FB?.signInWithPopup ? HOCCL_FB.signInWithPopup(authInstance(), firebaseGoogleProvider) : firebaseAuth.signInWithPopup(firebaseGoogleProvider);
+    const fbRedirect = ()=> HOCCL_FB?.signInWithRedirect ? HOCCL_FB.signInWithRedirect(authInstance(), firebaseGoogleProvider) : firebaseAuth.signInWithRedirect(firebaseGoogleProvider);
+
     function updateUserRecord(partial){
       if(!(usingFirebase() && firebaseDb && firebaseAuthUser)){
         return Promise.resolve();
@@ -1215,19 +1229,20 @@
         return;
       }
       try{
-        firebaseApp = window.__fb || firebase.initializeApp(FB);
-        window.__fb = firebaseApp;
-        firebaseAuth = firebase.app().auth();
+        firebaseApp = window.__fbApp || (firebase.apps?.length ? firebase.app() : firebase.initializeApp(FB));
+        window.__fbApp = firebaseApp;
         firebaseDb = firebase.app().database();
+        firebaseAuth = HOCCL_FB?.auth || firebase.app().auth();
         if(!firebaseGoogleProvider){
-          firebaseGoogleProvider = new firebase.auth.GoogleAuthProvider();
+          firebaseGoogleProvider = HOCCL_FB?.provider || new firebase.auth.GoogleAuthProvider();
           firebaseGoogleProvider.setCustomParameters({prompt:'select_account'});
         }
         firebaseInitialized = true;
         setStatusChip(true);
+        try{HOCCL_FB?.getRedirectResult?.(firebaseAuth).catch(()=>{});}catch{}
         firebaseDb.ref('profiles').on('value', snap=>{profilesCache = snap.val()||{};});
         subscribeScores();
-        firebaseAuth.onAuthStateChanged(user=>{
+        const handleUser = (user)=>{
           firebaseAuthUser = user;
           if(user && user.email){
             const email = (user.email||'').toLowerCase();
@@ -1250,7 +1265,12 @@
           }
           updateAccountBtn();
           loadSessionData();
-        });
+        };
+        if(HOCCL_FB?.onAuthStateChanged){
+          HOCCL_FB.onAuthStateChanged(firebaseAuth, handleUser);
+        } else if(firebaseAuth?.onAuthStateChanged){
+          firebaseAuth.onAuthStateChanged(handleUser);
+        }
       }catch(err){
         console.error('Firebase init failed', err);
         setStatusChip(false);
@@ -1557,11 +1577,11 @@
         initFirebaseCore();
         if(!firebaseAuth){return;}
         try{
-          const cred = await firebaseAuth.signInWithEmailAndPassword(email,pwd);
+          const cred = await fbEmailSignIn(email,pwd);
           if(cred.user && !cred.user.emailVerified){
-            try{await cred.user.sendEmailVerification();}catch(err){console.warn('Resend verify failed', err);}
+            try{await fbSendVerify(cred.user);}catch(err){console.warn('Resend verify failed', err);}
             alert('Email chưa được xác minh. Vui lòng kiểm tra hộp thư và xác nhận trước khi đăng nhập.');
-            await firebaseAuth.signOut();
+            await fbSignout();
             return;
           }
           if(cred.user){
@@ -1598,9 +1618,9 @@
         initFirebaseCore();
         if(!firebaseAuth || !firebaseDb){return;}
         try{
-          const cred = await firebaseAuth.createUserWithEmailAndPassword(email,pwd);
+          const cred = await fbEmailCreate(email,pwd);
           if(name){
-            await cred.user.updateProfile({displayName:name});
+            await (HOCCL_FB?.updateProfile ? HOCCL_FB.updateProfile(cred.user,{displayName:name}) : cred.user.updateProfile({displayName:name}));
           }
           await firebaseDb.ref(`profiles/${cred.user.uid}`).set({
             email,
@@ -1624,9 +1644,9 @@
             authType: 'email'
           });
           await firebaseDb.ref(`frames/${cred.user.uid}/owned/basic`).set(true);
-          try{await cred.user.sendEmailVerification();}catch(err){console.warn('Send verify email failed', err);}
+          try{await fbSendVerify(cred.user);}catch(err){console.warn('Send verify email failed', err);}
           alert('Đăng ký thành công! Vui lòng kiểm tra email để xác minh trước khi đăng nhập.');
-          await firebaseAuth.signOut();
+          await fbSignout();
           closeRegisterModal();
           openLoginModal();
         }catch(err){
@@ -1678,7 +1698,13 @@
         return;
       }
       try{
-        const cred = await firebaseAuth.signInWithPopup(firebaseGoogleProvider);
+        let cred;
+        try{
+          cred = await fbPopup();
+        }catch(err){
+          await fbRedirect();
+          return;
+        }
         const user = cred.user;
         if(user && firebaseDb){
           const emailLower = (user.email||'').toLowerCase();
@@ -1963,7 +1989,7 @@
 
     document.querySelector('[data-action="logout"]').addEventListener('click',async ()=>{
       if(usingFirebase() && firebaseAuth){
-        await firebaseAuth.signOut();
+        await fbSignout();
       }
       chatId = null;
       setSession('');
@@ -3400,7 +3426,7 @@
     updateAccountBtn();
     initApp();
 
-    console.log('HB_V17_3_UI_SMOOTH');
+    console.log('HoCCL_v18.0_AuthFix_UIStable');
   </script>
 </body>
 </html>
