@@ -13,13 +13,8 @@
     import {
       getAuth,
       createUserWithEmailAndPassword,
-      sendEmailVerification,
       signInWithEmailAndPassword,
       signOut,
-      GoogleAuthProvider,
-      signInWithPopup,
-      signInWithRedirect,
-      getRedirectResult,
       onAuthStateChanged,
       updateProfile
     } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
@@ -39,29 +34,20 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getDatabase(app);
-    const provider = new GoogleAuthProvider();
-    provider.setCustomParameters({ prompt: 'select_account' });
     window.HOCCL_FB = {
       app,
       auth,
       db,
-      provider,
       ref,
       set,
       update,
       get,
       child,
       createUserWithEmailAndPassword,
-      sendEmailVerification,
       signInWithEmailAndPassword,
       signOut,
-      signInWithPopup,
-      signInWithRedirect,
-      getRedirectResult,
       onAuthStateChanged,
       updateProfile,
-      signInWithRedirect,
-      getRedirectResult,
       config: firebaseConfig
     };
     console.log("🔥 Firebase connected hoccl-44ec1");
@@ -274,12 +260,6 @@
     .modal-divider{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:.9rem}
     .modal-divider::before,.modal-divider::after{content:"";flex:1;height:1px;background:rgba(255,255,255,0.16)}
     body[data-theme="light"] .modal-divider::before,body[data-theme="light"] .modal-divider::after{background:rgba(18,32,60,0.16)}
-    .btn.google-btn{background:#fff;color:#1b1b1b;display:flex;align-items:center;justify-content:center;gap:10px;border:1px solid rgba(0,0,0,0.08);box-shadow:none}
-    body[data-theme="light"] .btn.google-btn{background:#fff;color:#1b1b1b}
-    .btn.google-btn:hover{background:#f4f4f4}
-    .btn.google-btn:focus-visible{outline:3px solid rgba(95,141,255,0.4)}
-    .google-icon{display:inline-flex}
-    .google-icon svg{width:18px;height:18px;display:block}
     .small-note{font-size:.85rem}
     @media(max-width:640px){.modal-shell{align-items:flex-end}.modal-card{border-radius:20px 20px 0 0;animation:sheetIn .22s ease}}
     @keyframes sheetIn{from{transform:translateY(18px)}to{transform:translateY(0)}}
@@ -708,19 +688,6 @@
         <input type="password" id="loginPassword" placeholder="Mật khẩu" required autocomplete="current-password">
         <button type="submit">Đăng nhập</button>
       </form>
-      <div class="modal-divider"><span>hoặc</span></div>
-      <button type="button" class="btn google-btn" data-action="googleLogin">
-        <span class="google-icon" aria-hidden="true">
-          <svg viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg" focusable="false">
-            <path fill="#4285F4" d="M17.64 9.2045c0-.638-.0573-1.2518-.1636-1.8409H9v3.4814h4.8436c-.2091 1.125-.8436 2.0782-1.7968 2.7173v2.2582h2.9086c1.7023-1.5673 2.6846-3.8746 2.6846-6.616"/>
-            <path fill="#34A853" d="M9 18c2.43 0 4.4673-.8059 5.9564-2.1795l-2.9086-2.2582c-.8059.54-1.8368.8582-3.0478.8582-2.3445 0-4.3296-1.5831-5.0382-3.7104H.9573v2.3318C2.4382 15.9832 5.4818 18 9 18Z"/>
-            <path fill="#FBBC05" d="M3.9618 10.71c-.18-.54-.2823-1.1168-.2823-1.71s.1023-1.17.2823-1.71V4.9582H.9573C.3477 6.1691 0 7.5436 0 9s.3477 2.8309.9573 4.0418l3.0045-2.3318Z"/>
-            <path fill="#EA4335" d="M9 3.5795c1.3209 0 2.5068.4545 3.4391 1.3446l2.5796-2.5796C13.4627.8882 11.4255 0 9 0 5.4818 0 2.4382 2.0168.9573 4.9582l3.0045 2.3318C4.6704 5.1627 6.6555 3.5795 9 3.5795Z"/>
-          </svg>
-        </span>
-        <span>Đăng nhập với Google</span>
-      </button>
-      <div class="muted small-note">* Đăng nhập email cần xác minh qua email trước khi sử dụng đầy đủ tính năng.</div>
       <div class="muted">Chưa có tài khoản? <button class="modal-switch" data-action="openRegister">Tạo mới</button></div>
     </div>
   </div>
@@ -735,7 +702,6 @@
         <input type="password" id="signupPassword" placeholder="Mật khẩu" required autocomplete="new-password">
         <button type="submit">Đăng ký</button>
       </form>
-      <div class="muted small-note">Sau khi đăng ký, bạn cần xác minh email trước khi đăng nhập lần đầu.</div>
       <div class="muted">Đã có tài khoản? <button class="modal-switch" data-action="openLogin">Đăng nhập</button></div>
     </div>
   </div>
@@ -1161,15 +1127,10 @@
     let profilesCache = {};
     let chatListener = null;
     let chatId = null;
-    let firebaseGoogleProvider = null;
-
     const authInstance = ()=> HOCCL_FB?.auth || firebaseAuth;
     const fbEmailSignIn = (email,pwd)=> HOCCL_FB?.signInWithEmailAndPassword ? HOCCL_FB.signInWithEmailAndPassword(authInstance(), email, pwd) : firebaseAuth.signInWithEmailAndPassword(email,pwd);
     const fbEmailCreate = (email,pwd)=> HOCCL_FB?.createUserWithEmailAndPassword ? HOCCL_FB.createUserWithEmailAndPassword(authInstance(), email, pwd) : firebaseAuth.createUserWithEmailAndPassword(email,pwd);
-    const fbSendVerify = (user)=> HOCCL_FB?.sendEmailVerification ? HOCCL_FB.sendEmailVerification(user,{url:"https://hocclmetvcl.netlify.app/?verified=1",handleCodeInApp:false}) : user.sendEmailVerification();
     const fbSignout = ()=> HOCCL_FB?.signOut ? HOCCL_FB.signOut(authInstance()) : firebaseAuth.signOut();
-    const fbPopup = ()=> HOCCL_FB?.signInWithPopup ? HOCCL_FB.signInWithPopup(authInstance(), firebaseGoogleProvider) : firebaseAuth.signInWithPopup(firebaseGoogleProvider);
-    const fbRedirect = ()=> HOCCL_FB?.signInWithRedirect ? HOCCL_FB.signInWithRedirect(authInstance(), firebaseGoogleProvider) : firebaseAuth.signInWithRedirect(firebaseGoogleProvider);
 
     function updateUserRecord(partial){
       if(!(usingFirebase() && firebaseDb && firebaseAuthUser)){
@@ -1233,13 +1194,8 @@
         window.__fbApp = firebaseApp;
         firebaseDb = firebase.app().database();
         firebaseAuth = HOCCL_FB?.auth || firebase.app().auth();
-        if(!firebaseGoogleProvider){
-          firebaseGoogleProvider = HOCCL_FB?.provider || new firebase.auth.GoogleAuthProvider();
-          firebaseGoogleProvider.setCustomParameters({prompt:'select_account'});
-        }
         firebaseInitialized = true;
         setStatusChip(true);
-        try{HOCCL_FB?.getRedirectResult?.(firebaseAuth).catch(()=>{});}catch{}
         firebaseDb.ref('profiles').on('value', snap=>{profilesCache = snap.val()||{};});
         subscribeScores();
         const handleUser = (user)=>{
@@ -1578,15 +1534,6 @@
         if(!firebaseAuth){return;}
         try{
           const cred = await fbEmailSignIn(email,pwd);
-          if(cred.user && !cred.user.emailVerified){
-            try{await fbSendVerify(cred.user);}catch(err){console.warn('Resend verify failed', err);}
-            alert('Email chưa được xác minh. Vui lòng kiểm tra hộp thư và xác nhận trước khi đăng nhập.');
-            await fbSignout();
-            return;
-          }
-          if(cred.user){
-            await updateUserRecordByUid(cred.user.uid, { verified: true, email: (cred.user.email||email) });
-          }
           closeLoginModal();
           if(pendingAppAccess){
             window.location.hash = '#app';
@@ -1644,9 +1591,7 @@
             authType: 'email'
           });
           await firebaseDb.ref(`frames/${cred.user.uid}/owned/basic`).set(true);
-          try{await fbSendVerify(cred.user);}catch(err){console.warn('Send verify email failed', err);}
-          alert('Đăng ký thành công! Vui lòng kiểm tra email để xác minh trước khi đăng nhập.');
-          await fbSignout();
+          alert('Đăng ký thành công! Bạn có thể đăng nhập ngay.');
           closeRegisterModal();
           openLoginModal();
         }catch(err){
@@ -1686,71 +1631,6 @@
       if(!name){alert('Nhập tên hiển thị');return;}
       await handleRegister(name,email,pwd);
     });
-
-    async function handleGoogleLogin(){
-      if(!firebaseReady){
-        alert('Tính năng này yêu cầu Firebase.');
-        return;
-      }
-      initFirebaseCore();
-      if(!firebaseAuth || !firebaseGoogleProvider){
-        alert('Firebase chưa sẵn sàng, vui lòng thử lại.');
-        return;
-      }
-      try{
-        let cred;
-        try{
-          cred = await fbPopup();
-        }catch(err){
-          await fbRedirect();
-          return;
-        }
-        const user = cred.user;
-        if(user && firebaseDb){
-          const emailLower = (user.email||'').toLowerCase();
-          const displayName = user.displayName || (emailLower?emailLower.split('@')[0]:'HoCCL Learner');
-          const profileRef = firebaseDb.ref(`profiles/${user.uid}`);
-          profileRef.once('value').then(snap=>{
-            if(!snap.exists()){
-              profileRef.set({
-                email: emailLower,
-                displayName,
-                createdAt: Date.now(),
-                activated: false,
-                coins: 0,
-                vip: 0,
-                frameId: 'basic'
-              });
-            } else {
-              profileRef.update({ email: emailLower, displayName });
-            }
-          });
-          await updateUserRecordByUid(user.uid, {
-            email: emailLower,
-            displayName,
-            verified: true,
-            authType: 'google'
-          });
-          firebaseDb.ref(`frames/${user.uid}/owned/basic`).set(true);
-        }
-        closeLoginModal();
-        if(pendingAppAccess){
-          window.location.hash = '#app';
-          showSection('#app');
-        }
-      }catch(err){
-        alert('Đăng nhập Google thất bại: '+(err?.message||'Vui lòng thử lại.'));
-      }
-    }
-
-    const googleLoginBtn = document.querySelector('[data-action="googleLogin"]');
-    if(googleLoginBtn){
-      if(!firebaseReady){
-        googleLoginBtn.disabled = true;
-        googleLoginBtn.title = 'Yêu cầu cấu hình Firebase';
-      }
-      googleLoginBtn.addEventListener('click', handleGoogleLogin);
-    }
 
     const accountSheetEl = document.getElementById('accountSheet');
     const accountPanel = document.getElementById('accountPanel');
@@ -3426,7 +3306,7 @@
     updateAccountBtn();
     initApp();
 
-    console.log('HoCCL_v18.0_AuthFix_UIStable');
+    console.log('HoCCL_v19_READY');
   </script>
 </body>
 </html>
